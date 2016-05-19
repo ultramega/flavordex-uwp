@@ -128,7 +128,7 @@
                     Grid.Row="4"
                     Grid.ColumnSpan="2"
                     MaxWidth="{StaticResource MaxWidth}"
-                    ItemsSource="{x:Bind Category.Extras, Mode=OneWay}">
+                    ItemsSource="{x:Bind Category.CustomFields, Mode=OneWay}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate
                             x:DataType="vm:ExtraItemViewModel">
