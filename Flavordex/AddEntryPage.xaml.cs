@@ -248,6 +248,8 @@ namespace Flavordex
             {
                 var extra = new EntryExtra();
                 extra.ExtraID = item.Model.ID;
+                extra.IsPreset = item.Model.IsPreset;
+                extra.Name = item.Model.Name;
                 Entry.Extras.Add(new EntryExtraItemViewModel(extra));
             }
 
