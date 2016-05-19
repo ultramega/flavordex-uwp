@@ -18,7 +18,11 @@ namespace Flavordex.ViewModels
             }
             set
             {
-                Model.Name = value;
+                if (Model.IsPreset)
+                {
+                    return;
+                }
+                Model.Name = value.TrimStart('_');
                 RaisePropertyChanged();
             }
         }

@@ -26,8 +26,9 @@ namespace Flavordex.ViewModels
                 {
                     return;
                 }
-                Model.Name = value;
+                Model.Name = value.TrimStart('_');
                 RaisePropertyChanged();
+                RaisePropertyChanged("IsValid");
             }
         }
 
