@@ -72,7 +72,7 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of ExtraItemViewModels for the Category.
         /// </summary>
-        private Collection<ExtraItemViewModel> _extras = new Collection<ExtraItemViewModel>();
+        private ObservableCollection<ExtraItemViewModel> _extras = new ObservableCollection<ExtraItemViewModel>();
 
         /// <summary>
         /// Gets or sets the list of ExtraItemViewModels for the Category.
@@ -85,11 +85,9 @@ namespace Flavordex.ViewModels
             }
             set
             {
-                _extras = value;
-                if (value is ObservableCollection<ExtraItemViewModel>)
-                {
-                    (value as ObservableCollection<ExtraItemViewModel>).CollectionChanged += ExtrasCollectionChanged;
-                }
+                _extras.CollectionChanged -= OnExtrasCollectionChanged;
+                _extras = new ObservableCollection<ExtraItemViewModel>(value);
+                _extras.CollectionChanged += OnExtrasCollectionChanged;
                 RaisePropertyChanged();
             }
         }
@@ -97,7 +95,7 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of FlavorItemViewModels for the Category.
         /// </summary>
-        private Collection<FlavorItemViewModel> _flavors = new Collection<FlavorItemViewModel>();
+        private ObservableCollection<FlavorItemViewModel> _flavors = new ObservableCollection<FlavorItemViewModel>();
 
         /// <summary>
         /// Gets or sets the list of FlavorItemViewModels for the Category.
@@ -110,7 +108,7 @@ namespace Flavordex.ViewModels
             }
             set
             {
-                _flavors = value;
+                _flavors = new ObservableCollection<FlavorItemViewModel>(value);
                 RaisePropertyChanged();
             }
         }
@@ -126,7 +124,7 @@ namespace Flavordex.ViewModels
         /// </summary>
         /// <param name="sender">The Extras ObservableCollection.</param>
         /// <param name="e">The event arguments.</param>
-        private void ExtrasCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnExtrasCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("CustomFields");
         }

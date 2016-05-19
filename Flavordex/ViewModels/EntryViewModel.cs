@@ -169,7 +169,7 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of ExtraItemViewModels for the Entry.
         /// </summary>
-        private Collection<EntryExtraItemViewModel> _extras = new Collection<EntryExtraItemViewModel>();
+        private ObservableCollection<EntryExtraItemViewModel> _extras = new ObservableCollection<EntryExtraItemViewModel>();
 
         /// <summary>
         /// Gets or sets the list of ExtraItemViewModels for the Entry.
@@ -182,11 +182,9 @@ namespace Flavordex.ViewModels
             }
             set
             {
-                _extras = value;
-                if (value is ObservableCollection<EntryExtraItemViewModel>)
-                {
-                    (value as ObservableCollection<EntryExtraItemViewModel>).CollectionChanged += ExtrasCollectionChanged;
-                }
+                _extras.CollectionChanged -= OnExtrasCollectionChanged;
+                _extras = new ObservableCollection<EntryExtraItemViewModel>(value);
+                _extras.CollectionChanged += OnExtrasCollectionChanged;
                 RaisePropertyChanged();
             }
         }
@@ -202,7 +200,7 @@ namespace Flavordex.ViewModels
         /// </summary>
         /// <param name="sender">The Extras ObservableCollection.</param>
         /// <param name="e">The event arguments.</param>
-        private void ExtrasCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnExtrasCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("CustomFields");
         }
