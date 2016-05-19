@@ -513,6 +513,7 @@ namespace Flavordex.Models.Data
                     }
                     else
                     {
+                        extra.Model.CategoryID = category.Model.ID;
                         await Database.Insert(Tables.Extras.TABLE_NAME, extra.Model.GetData());
                     }
                 }
