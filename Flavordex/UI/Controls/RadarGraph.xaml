@@ -1,0 +1,215 @@
+﻿<UserControl
+    x:Class="Flavordex.UI.Controls.RadarGraph"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex.UI.Controls"
+    xmlns:ui="using:Flavordex.UI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    SizeChanged="OnRootSizeChanged">
+    <UserControl.Resources>
+        <ui:CircleWidthConverter
+            x:Key="CircleWidthConverter" />
+
+        <Style
+            x:Key="CircleStyle"
+            TargetType="Ellipse">
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Center" />
+
+            <Setter
+                Property="VerticalAlignment"
+                Value="Center" />
+
+            <Setter
+                Property="Stroke"
+                Value="LightGray" />
+
+            <Setter
+                Property="StrokeThickness"
+                Value="2" />
+        </Style>
+
+        <Style
+            x:Key="OuterCircleStyle"
+            TargetType="Ellipse"
+            BasedOn="{StaticResource CircleStyle}">
+            <Setter
+                Property="StrokeThickness"
+                Value="3" />
+        </Style>
+
+        <Style
+            x:Name="SelectedLineStyle"
+            TargetType="Line">
+            <Setter
+                Property="Stroke"
+                Value="#FFEFAC1D" />
+
+            <Setter
+                Property="StrokeThickness"
+                Value="3" />
+        </Style>
+
+        <Style
+            x:Name="SelectedLabelStyle"
+            TargetType="TextBlock">
+            <Setter
+                Property="Foreground"
+                Value="#FFEFAC1D" />
+
+            <Setter
+                Property="FontWeight"
+                Value="Bold" />
+        </Style>
+
+        <Style
+            x:Name="DefaultLineStyle"
+            x:Key="DefaultLineStyle"
+            TargetType="Line">
+            <Setter
+                Property="Stroke"
+                Value="LightGray" />
+
+            <Setter
+                Property="StrokeThickness"
+                Value="1" />
+        </Style>
+
+        <Style
+            x:Name="DefaultTextStyle"
+            x:Key="DefaultTextStyle"
+            TargetType="TextBlock">
+            <Setter
+                Property="Foreground"
+                Value="White" />
+        </Style>
+
+        <Storyboard
+            x:Name="RotateStoryboard"
+            Completed="OnRotationCompleted">
+            <DoubleAnimation
+                x:Name="RotateAnimation"
+                Storyboard.TargetName="RotateTransform"
+                Storyboard.TargetProperty="Angle"
+                Duration="0:0:0.3" />
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Grid
+        x:Name="ContentGrid"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Top"
+        SizeChanged="OnSizeChanged"
+        Background="Transparent">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup
+                x:Name="VisualStates">
+                <VisualState
+                    x:Name="NormalState" />
+
+                <VisualState
+                    x:Name="InteractiveState">
+                    <VisualState.Setters>
+                        <Setter
+                            Target="Polygon.Stroke"
+                            Value="#DDFF66FF" />
+
+                        <Setter
+                            Target="Polygon.StrokeThickness"
+                            Value="4" />
+
+                        <Setter
+                            Target="CenterCircle.Fill"
+                            Value="#FFEFAC1D" />
+
+                        <Setter
+                            Target="SelectionCircle.StrokeThickness"
+                            Value="3" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Ellipse
+            Style="{StaticResource CircleStyle}"
+            Height="{Binding Width, RelativeSource={RelativeSource Mode=Self}}"
+            Width="{x:Bind OuterCircleRadius, ConverterParameter=0.2, Converter={StaticResource CircleWidthConverter}, Mode=OneWay}" />
+
+        <Ellipse
+            Style="{StaticResource CircleStyle}"
+            Height="{Binding Width, RelativeSource={RelativeSource Mode=Self}}"
+            Width="{x:Bind OuterCircleRadius, ConverterParameter=0.4, Converter={StaticResource CircleWidthConverter}, Mode=OneWay}" />
+
+        <Ellipse
+            Style="{StaticResource CircleStyle}"
+            Height="{Binding Width, RelativeSource={RelativeSource Mode=Self}}"
+            Width="{x:Bind OuterCircleRadius, ConverterParameter=0.6, Converter={StaticResource CircleWidthConverter}, Mode=OneWay}" />
+
+        <Ellipse
+            Style="{StaticResource CircleStyle}"
+            Height="{Binding Width, RelativeSource={RelativeSource Mode=Self}}"
+            Width="{x:Bind OuterCircleRadius, ConverterParameter=0.8, Converter={StaticResource CircleWidthConverter}, Mode=OneWay}" />
+
+        <Ellipse
+            Style="{StaticResource OuterCircleStyle}"
+            Height="{Binding Width, RelativeSource={RelativeSource Mode=Self}}"
+            Width="{x:Bind OuterCircleRadius, ConverterParameter=1.0, Converter={StaticResource CircleWidthConverter}, Mode=OneWay}" />
+
+        <Canvas
+            x:Name="LabelCanvas">
+            <Canvas.Resources>
+                <Style
+                    TargetType="TextBlock"
+                    BasedOn="{StaticResource DefaultTextStyle}" />
+            </Canvas.Resources>
+        </Canvas>
+
+        <Canvas
+            x:Name="ActiveCanvas"
+            RenderTransformOrigin="0.5,0.5">
+            <Canvas.RenderTransform>
+                <RotateTransform
+                    x:Name="RotateTransform" />
+            </Canvas.RenderTransform>
+
+            <Grid
+                x:Name="LineGrid">
+                <Grid.Resources>
+                    <Style
+                        TargetType="Line"
+                        BasedOn="{StaticResource DefaultLineStyle}" />
+                </Grid.Resources>
+            </Grid>
+
+            <Polyline
+                x:Name="Polygon"
+                Points="{x:Bind PolygonPoints, Mode=OneWay}"
+                Stroke="#DD0066FF"
+                StrokeThickness="5"
+                StrokeLineJoin="Round" />
+
+            <Ellipse
+                x:Name="SelectionCircle"
+                Canvas.Left="{x:Bind SelectedPosition.X, Mode=OneWay}"
+                Canvas.Top="{x:Bind SelectedPosition.Y, Mode=OneWay}"
+                Height="16"
+                Width="16"
+                Margin="-8,-8,0,0"
+                Stroke="#FFEFAC1D"
+                StrokeThickness="0" />
+        </Canvas>
+
+        <Ellipse
+            x:Name="CenterCircle"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Fill="#FFCCCCCC"
+            Width="12"
+            Height="12" />
+    </Grid>
+</UserControl>

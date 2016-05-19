@@ -1,0 +1,812 @@
+﻿<Page
+    x:Class="Flavordex.ViewDetailsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex"
+    xmlns:ui="using:Flavordex.UI"
+    xmlns:c="using:Flavordex.UI.Controls"
+    xmlns:rating="using:Bratched.Tools.RatingControl"
+    xmlns:vm="using:Flavordex.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <ui:ValueUnitsConverter
+            x:Key="ValueUnitsConverter" />
+
+        <ui:ExtraLabelConverter
+            x:Key="ExtraLabelConverter" />
+
+        <Style
+            TargetType="c:TextPair">
+            <Setter
+                Property="PrimaryStyle"
+                Value="{StaticResource ValueStyle}" />
+
+            <Setter
+                Property="SecondaryStyle">
+                <Setter.Value>
+                    <Style
+                        BasedOn="{StaticResource CaptionTextBlockStyle}"
+                        TargetType="TextBlock">
+                        <Setter
+                            Property="IsTextSelectionEnabled"
+                            Value="True" />
+
+                        <Setter
+                            Property="TextWrapping"
+                            Value="WrapWholeWords" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate
+            x:Key="ExtraItemTemplate"
+            x:DataType="vm:EntryExtraItemViewModel">
+            <Border
+                Style="{StaticResource DividerStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        Style="{StaticResource EntryDetailsLabelStyle}"
+                        Text="{x:Bind Name, Converter={StaticResource ExtraLabelConverter}}" />
+
+                    <TextBlock
+                        Grid.Column="1"
+                        Style="{StaticResource ValueStyle}"
+                        Text="{x:Bind Value}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="GenericDetailsTemplate"
+            x:DataType="vm:EntryViewModel">
+            <StackPanel>
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Style="{StaticResource EntryDetailsLabelStyle}"
+                            x:Uid="ms-resource:///Entry/Label/Maker" />
+
+                        <c:TextPair
+                            PrimaryText="{x:Bind Maker, Mode=OneWay}"
+                            SecondaryText="{x:Bind Origin, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Price"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Price, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Tasted"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <c:TextPair
+                            PrimaryText="{x:Bind Location, Mode=OneWay}"
+                            SecondaryText="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter=Long, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind CustomFields, Mode=OneWay}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="BeerDetailsTemplate"
+            x:DataType="vm:BeerEntryViewModel">
+            <StackPanel>
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Beer/Label/Style"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Style, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Style="{StaticResource EntryDetailsLabelStyle}"
+                            x:Uid="ms-resource:///Beer/Label/Maker" />
+
+                        <c:TextPair
+                            PrimaryText="{x:Bind Maker, Mode=OneWay}"
+                            SecondaryText="{x:Bind Origin, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Price"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Price, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Beer/Label/Served"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind ServingTypeName, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Tasted"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <c:TextPair
+                            PrimaryText="{x:Bind Location, Mode=OneWay}"
+                            SecondaryText="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter=Long, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind CustomFields, Mode=OneWay}" />
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Beer/Header/Stats"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        x:Uid="ms-resource:///Beer/Label/IBU"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind IBU, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        x:Uid="ms-resource:///Beer/Label/ABV"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind ABV, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Column="2"
+                        x:Uid="ms-resource:///Beer/Label/OG"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Column="3"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind OG, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        x:Uid="ms-resource:///Beer/Label/FG"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind FG, Mode=OneWay}" />
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="CoffeeDetailsTemplate"
+            x:DataType="vm:CoffeeEntryViewModel">
+            <StackPanel>
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Style="{StaticResource EntryDetailsLabelStyle}"
+                            x:Uid="ms-resource:///Coffee/Label/Maker" />
+
+                        <c:TextPair
+                            Grid.Column="1"
+                            PrimaryText="{x:Bind Maker, Mode=OneWay}"
+                            SecondaryText="{x:Bind Origin, Mode=OneWay}" />
+                    </Grid>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            x:Uid="ms-resource:///Coffee/Label/Roaster"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Roaster, Mode=OneWay}" />
+                    </Grid>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Coffee/Label/RoastDate"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind RoastDate, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Coffee/Label/Grind"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Grind, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Price"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Price, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Coffee/Label/BrewMethod"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind BrewMethodName, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Tasted"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <c:TextPair
+                            PrimaryText="{x:Bind Location, Mode=OneWay}"
+                            SecondaryText="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter=Long, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind CustomFields, Mode=OneWay}" />
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Coffee/Header/Stats"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        x:Uid="ms-resource:///Coffee/Label/Dose"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind Dose, Converter={StaticResource ValueUnitsConverter}, ConverterParameter=g, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        x:Uid="ms-resource:///Coffee/Label/WaterMass"
+                        Style="{StaticResource LabelStyle}"
+                        Visibility="{x:Bind IsEspresso, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!, Mode=OneWay}" />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        x:Uid="ms-resource:///Coffee/Label/EspressoMass"
+                        Style="{StaticResource LabelStyle}"
+                        Visibility="{x:Bind IsEspresso, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}" />
+
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind Mass, Converter={StaticResource ValueUnitsConverter}, ConverterParameter=g, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Row="2"
+                        x:Uid="ms-resource:///Coffee/Label/CBR"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind CBR, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Row="3"
+                        x:Uid="ms-resource:///Coffee/Label/Temperature"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind Temperature, Converter={StaticResource ValueUnitsConverter}, ConverterParameter=°C, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Row="4"
+                        x:Uid="ms-resource:///Coffee/Label/ExtractionTime"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind ExtractionTimeString, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Row="5"
+                        x:Uid="ms-resource:///Coffee/Label/TDS"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind TDS, Converter={StaticResource ValueUnitsConverter}, ConverterParameter=%, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Row="6"
+                        x:Uid="ms-resource:///Coffee/Label/Yield"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind Yield, Converter={StaticResource ValueUnitsConverter}, ConverterParameter=%, Mode=OneWay}" />
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="WhiskeyDetailsTemplate"
+            x:DataType="vm:WhiskeyEntryViewModel">
+            <StackPanel>
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Whiskey/Label/Type"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Type, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Style="{StaticResource EntryDetailsLabelStyle}"
+                            x:Uid="ms-resource:///Whiskey/Label/Maker" />
+
+                        <c:TextPair
+                            PrimaryText="{x:Bind Maker, Mode=OneWay}"
+                            SecondaryText="{x:Bind Origin, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Price"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Price, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Tasted"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <c:TextPair
+                            PrimaryText="{x:Bind Location, Mode=OneWay}"
+                            SecondaryText="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter=Long, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind CustomFields, Mode=OneWay}" />
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Whiskey/Header/Stats"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        x:Uid="ms-resource:///Whiskey/Label/Age"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind Age, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Column="2"
+                        x:Uid="ms-resource:///Whiskey/Label/ABV"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Column="3"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind ABV, Mode=OneWay}" />
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="WineDetailsTemplate"
+            x:DataType="vm:WineEntryViewModel">
+            <StackPanel>
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Wine/Label/Varietal"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Varietal, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Style="{StaticResource EntryDetailsLabelStyle}"
+                            x:Uid="ms-resource:///Wine/Label/Maker" />
+
+                        <c:TextPair
+                            PrimaryText="{x:Bind Maker, Mode=OneWay}"
+                            SecondaryText="{x:Bind Origin, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Price"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <TextBlock
+                            Style="{StaticResource ValueStyle}"
+                            Text="{x:Bind Price, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <TextBlock
+                            x:Uid="ms-resource:///Entry/Label/Tasted"
+                            Style="{StaticResource EntryDetailsLabelStyle}" />
+
+                        <c:TextPair
+                            PrimaryText="{x:Bind Location, Mode=OneWay}"
+                            SecondaryText="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter=Long, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind CustomFields, Mode=OneWay}" />
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Wine/Header/Stats"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        x:Uid="ms-resource:///Wine/Label/Vintage"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Column="1"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind Vintage, Mode=OneWay}" />
+                    </Border>
+
+                    <TextBlock
+                        Grid.Column="2"
+                        x:Uid="ms-resource:///Wine/Label/ABV"
+                        Style="{StaticResource LabelStyle}" />
+
+                    <Border
+                        Grid.Column="3"
+                        Style="{StaticResource EntryStatsBorderStyle}">
+                        <TextBlock
+                            Style="{StaticResource EntryStatsTextStyle}"
+                            Text="{x:Bind ABV, Mode=OneWay}" />
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <ui:EntryTemplateSelector
+            x:Key="EntryTemplateSelector"
+            GenericTemplate="{StaticResource GenericDetailsTemplate}"
+            BeerTemplate="{StaticResource BeerDetailsTemplate}"
+            CoffeeTemplate="{StaticResource CoffeeDetailsTemplate}"
+            WhiskeyTemplate="{StaticResource WhiskeyDetailsTemplate}"
+            WineTemplate="{StaticResource WineDetailsTemplate}" />
+    </Page.Resources>
+
+    <ScrollViewer>
+        <StackPanel
+            Margin="12,0">
+            <TextBlock
+                Style="{ThemeResource TitleTextBlockStyle}"
+                HorizontalAlignment="Center"
+                Text="{x:Bind Entry.Title, Mode=OneWay}"
+                IsTextSelectionEnabled="True" />
+
+            <rating:RatingControl
+                HorizontalAlignment="Center"
+                Height="30"
+                RoundValueSlice="0.5"
+                Value="{x:Bind Entry.Rating, Mode=OneWay}">
+                <rating:RatingControl.FullItemsDefinition>
+                    <rating:RateItemDefinition
+                        BackgroundColor="{ThemeResource SystemControlHighlightAccentBrush}"
+                        OutlineColor="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                </rating:RatingControl.FullItemsDefinition>
+
+                <rating:RatingControl.EmptyItemsDefinition>
+                    <rating:RateItemDefinition
+                        BackgroundColor="{ThemeResource SystemControlBackgroundBaseMediumBrush}"
+                        OutlineColor="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                </rating:RatingControl.EmptyItemsDefinition>
+            </rating:RatingControl>
+
+            <ContentControl
+                ContentTemplateSelector="{StaticResource EntryTemplateSelector}"
+                Content="{x:Bind Entry, Mode=OneWay}"
+                HorizontalContentAlignment="Stretch" />
+
+            <Border
+                Style="{StaticResource DividerStyle}">
+                <TextBlock
+                    x:Uid="ms-resource:///Entry/Header/Notes"
+                    Style="{ThemeResource SubtitleTextBlockStyle}"
+                    HorizontalAlignment="Center" />
+            </Border>
+
+            <TextBlock
+                Style="{ThemeResource BodyTextBlockStyle}"
+                Margin="6"
+                MaxWidth="500"
+                Text="{x:Bind Entry.Notes, Mode=OneWay}"
+                IsTextSelectionEnabled="True" />
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,358 @@
+﻿<Page
+    x:Class="Flavordex.EntryListPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex"
+    xmlns:c="using:Flavordex.UI.Controls"
+    xmlns:vm="using:Flavordex.ViewModels"
+    xmlns:rating="using:Bratched.Tools.RatingControl"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <Style
+            x:Key="ListItemStyle"
+            TargetType="ListViewItem">
+            <Setter
+                Property="HorizontalContentAlignment"
+                Value="Stretch" />
+
+            <Setter
+                Property="Padding"
+                Value="4" />
+
+            <Setter
+                Property="BorderBrush"
+                Value="{ThemeResource AppBarSeparatorForegroundThemeBrush}" />
+
+            <Setter
+                Property="BorderThickness"
+                Value="0,0,0,1" />
+        </Style>
+
+        <DataTemplate
+            x:Key="CategoryItemTemplate"
+            x:DataType="vm:CategoryItemViewModel">
+            <StackPanel
+                RightTapped="OnRequestCategoryContextMenu"
+                Holding="OnRequestCategoryContextMenu">
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem
+                            x:Uid="ms-resource:///EntryList/Menu/EditCategory"
+                            Click="OnEditCategory" />
+
+                        <MenuFlyoutItem
+                            x:Uid="ms-resource:///EntryList/Menu/DeleteCategory"
+                            Visibility="{x:Bind IsPreset, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!}"
+                            Click="OnDeleteCategory" />
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+
+                <TextBlock
+                    Style="{ThemeResource BodyTextBlockStyle}"
+                    Text="{x:Bind Name, Mode=OneWay}" />
+
+                <TextBlock
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Text="{x:Bind EntryCount, Mode=OneWay}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="EntryItemTemplate"
+            x:DataType="vm:EntryItemViewModel">
+            <Grid
+                RightTapped="OnRequestEntryContextMenu"
+                Holding="OnRequestEntryContextMenu">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem
+                            x:Uid="ms-resource:///EntryList/Menu/ShareEntry"
+                            Click="OnShareEntry" />
+
+                        <MenuFlyoutItem
+                            x:Uid="ms-resource:///EntryList/Menu/EditEntry"
+                            Click="OnEditEntry" />
+
+                        <MenuFlyoutItem
+                            x:Uid="ms-resource:///EntryList/Menu/DeleteEntry"
+                            Click="OnDeleteEntry" />
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+
+                <Image
+                    Width="40"
+                    Height="40"
+                    VerticalAlignment="Top"
+                    Source="{x:Bind Thumbnail, Mode=OneWay}" />
+
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="4,0">
+                    <TextBlock
+                        Style="{ThemeResource BaseTextBlockStyle}"
+                        Text="{x:Bind Title, Mode=OneWay}" />
+
+                    <TextBlock
+                        Style="{ThemeResource BodyTextBlockStyle}"
+                        Text="{x:Bind Maker, Mode=OneWay}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="2">
+                    <rating:RatingControl
+                        Height="12"
+                        RoundValueSlice="0.5"
+                        Value="{x:Bind Rating, Mode=OneWay}">
+                        <rating:RatingControl.FullItemsDefinition>
+                            <rating:RateItemDefinition
+                                BackgroundColor="{ThemeResource ApplicationForegroundThemeBrush}"
+                                OutlineColor="Transparent" />
+                        </rating:RatingControl.FullItemsDefinition>
+
+                        <rating:RatingControl.EmptyItemsDefinition>
+                            <rating:RateItemDefinition
+                                BackgroundColor="#AA000000"
+                                OutlineColor="Transparent" />
+                        </rating:RatingControl.EmptyItemsDefinition>
+                    </rating:RatingControl>
+
+                    <TextBlock
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, Mode=OneWay}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup
+                x:Name="AdaptiveStates"
+                CurrentStateChanged="OnStateChanged">
+                <VisualState
+                    x:Name="DefaultState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger
+                            MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+
+                <VisualState
+                    x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger
+                            MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter
+                            Target="MasterColumn.Width"
+                            Value="*" />
+
+                        <Setter
+                            Target="DetailColumn.Width"
+                            Value="0" />
+
+                        <Setter
+                            Target="MasterList.SelectionMode"
+                            Value="None" />
+
+                        <Setter
+                            Target="MasterList.IsItemClickEnabled"
+                            Value="True" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                x:Name="MasterColumn"
+                Width="2*" />
+            <ColumnDefinition
+                x:Name="DetailColumn"
+                Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <CommandBar
+            Content="{x:Bind List.ListTitle, Mode=OneWay}">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton
+                    x:Uid="ms-resource:///EntryList/Command/AddCategory"
+                    Icon="NewFolder"
+                    Visibility="{Binding IsZoomedInViewActive, ConverterParameter=!, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Zoom}"
+                    Click="OnAddCategory" />
+
+                <AppBarButton
+                    x:Uid="ms-resource:///EntryList/Command/AddEntry"
+                    Icon="Add"
+                    Visibility="{Binding IsZoomedInViewActive, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Zoom}"
+                    Click="OnAddEntry" />
+
+                <AppBarButton
+                    x:Uid="ms-resource:///EntryList/Command/Filter"
+                    Icon="Filter"
+                    Visibility="{Binding IsZoomedInViewActive, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Zoom}"
+                    Click="OnFilterClick" />
+
+                <AppBarButton
+                    x:Uid="ms-resource:///EntryList/Command/Sort"
+                    Visibility="{Binding IsZoomedInViewActive, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Zoom}"
+                    Icon="Sort">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                x:Uid="ms-resource:///EntryList/Title/Sort"
+                                IsEnabled="False" />
+
+                            <ToggleMenuFlyoutItem
+                                x:Name="SortNameButton"
+                                x:Uid="ms-resource:///EntryList/Menu/SortName"
+                                Click="OnSortButtonClick" />
+
+                            <ToggleMenuFlyoutItem
+                                x:Name="SortDateButton"
+                                x:Uid="ms-resource:///EntryList/Menu/SortDate"
+                                Click="OnSortButtonClick" />
+
+                            <ToggleMenuFlyoutItem
+                                x:Name="SortRatingButton"
+                                x:Uid="ms-resource:///EntryList/Menu/SortRating"
+                                Click="OnSortButtonClick" />
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+            </CommandBar.PrimaryCommands>
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton
+                    x:Uid="Command/ImportExport"
+                    Visibility="{Binding IsZoomedInViewActive, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Zoom}">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                x:Uid="Menu/Export" />
+
+                            <MenuFlyoutItem
+                                x:Uid="Menu/Import" />
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+
+                <AppBarButton
+                    x:Uid="Command/Settings">
+                    <AppBarButton.Flyout>
+                        <Flyout>
+
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+
+                <AppBarButton
+                    x:Uid="Command/About" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+
+        <SemanticZoom
+            Grid.Row="1"
+            x:Name="Zoom"
+            ViewChangeStarted="OnListViewChange"
+            IsZoomedInViewActive="{x:Bind List.IsCategorySelected}"
+            IsZoomOutButtonEnabled="True">
+            <SemanticZoom.ZoomedOutView>
+                <ListView
+                    ItemContainerStyle="{StaticResource ListItemStyle}"
+                    ItemTemplate="{StaticResource CategoryItemTemplate}"
+                    ItemsSource="{x:Bind List.Categories}" />
+            </SemanticZoom.ZoomedOutView>
+
+            <SemanticZoom.ZoomedInView>
+                <ListView
+                    x:Name="MasterList"
+                    ItemContainerStyle="{StaticResource ListItemStyle}"
+                    ItemTemplate="{StaticResource EntryItemTemplate}"
+                    ItemsSource="{x:Bind List.Entries}"
+                    SelectedItem="{x:Bind List.SelectedEntry, Mode=OneWay}"
+                    SelectionChanged="OnItemSelected"
+                    ItemClick="OnItemClicked">
+                    <ListView.Header>
+                        <RelativePanel
+                            Visibility="{x:Bind List.FilterMessageVisibility, Mode=OneWay}"
+                            Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
+                            <TextBlock
+                                RelativePanel.AlignVerticalCenterWithPanel="True"
+                                Margin="4,0"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{x:Bind List.FilterMessage, Mode=OneWay}" />
+
+                            <Button
+                                RelativePanel.AlignRightWithPanel="True"
+                                Click="OnClearFilterClick">
+                                <Button.Content>
+                                    <SymbolIcon
+                                        Symbol="Clear" />
+                                </Button.Content>
+                            </Button>
+                        </RelativePanel>
+                    </ListView.Header>
+                </ListView>
+            </SemanticZoom.ZoomedInView>
+        </SemanticZoom>
+
+        <Frame
+            x:Name="DetailFrame"
+            Grid.Column="1"
+            Grid.RowSpan="2"
+            SourcePageType="local:WelcomePage"
+            BorderBrush="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
+            BorderThickness="1,0,0,0"
+            Navigated="OnDetailFrameNavigated" />
+
+        <ContentDialog
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            x:Name="FilterDialog"
+            x:Uid="ms-resource:///EntryList/Dialog/Filter">
+            <ContentDialog.TitleTemplate>
+                <DataTemplate>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <SymbolIcon
+                            Symbol="Filter" />
+
+                        <TextBlock
+                            x:Uid="ms-resource:///EntryList/Title/Filter"
+                            Style="{ThemeResource TitleTextBlockStyle}"
+                            Margin="10,0,0,0" />
+                    </StackPanel>
+                </DataTemplate>
+            </ContentDialog.TitleTemplate>
+
+            <c:EntryListFilterForm
+                x:Name="FilterControl"
+                Margin="0,8,0,0" />
+        </ContentDialog>
+    </Grid>
+</Page>

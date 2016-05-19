@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="Flavordex.ViewFlavorsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex"
+    xmlns:c="using:Flavordex.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <MenuFlyout
+            x:Name="RadarFlyout">
+            <MenuFlyoutItem
+                x:Uid="ms-resource:///Flavors/Menu/EditFlavors"
+                Click="OnEdit" />
+
+            <MenuFlyoutItem
+                x:Uid="ms-resource:///Flavors/Menu/ResetFlavors"
+                Click="OnReset" />
+        </MenuFlyout>
+    </Page.Resources>
+
+    <Grid>
+        <c:RadarGraph
+            x:Name="Radar"
+            Items="{x:Bind Flavors, Mode=OneWay}"
+            Holding="OnHolding"
+            RightTapped="OnRightTapped" />
+
+        <c:RadarGraphEditor
+            Target="{Binding ElementName=Radar}"
+            VerticalAlignment="Bottom"
+            Save="OnSaveFlavors" />
+
+        <ContentDialog
+            x:Uid="ms-resource:///Flavors/Dialog/ResetFlavors"
+            x:Name="ResetDialog" />
+    </Grid>
+</Page>

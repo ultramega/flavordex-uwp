@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Category.All" xml:space="preserve">
+    <value>All Categories</value>
+  </data>
+  <data name="Command.AddCategory.Label" xml:space="preserve">
+    <value>Create Category</value>
+  </data>
+  <data name="Command.AddEntry.Label" xml:space="preserve">
+    <value>Add Entry</value>
+  </data>
+  <data name="Command.Filter.Label" xml:space="preserve">
+    <value>Filter List</value>
+  </data>
+  <data name="Command.Sort.Label" xml:space="preserve">
+    <value>Sort List</value>
+  </data>
+  <data name="Dialog.Filter.PrimaryButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Dialog.Filter.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Filter.Date" xml:space="preserve">
+    <value>Entry Date</value>
+  </data>
+  <data name="Filter.Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="Filter.Maker" xml:space="preserve">
+    <value>Maker</value>
+  </data>
+  <data name="Filter.Origin" xml:space="preserve">
+    <value>Origin</value>
+  </data>
+  <data name="Filter.Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Menu.DeleteCategory.Text" xml:space="preserve">
+    <value>Delete Category</value>
+  </data>
+  <data name="Menu.DeleteEntry.Text" xml:space="preserve">
+    <value>Delete Entry</value>
+  </data>
+  <data name="Menu.EditCategory.Text" xml:space="preserve">
+    <value>Edit Category</value>
+  </data>
+  <data name="Menu.EditEntry.Text" xml:space="preserve">
+    <value>Edit Entry</value>
+  </data>
+  <data name="Menu.ShareEntry.Text" xml:space="preserve">
+    <value>Share Entry</value>
+  </data>
+  <data name="Menu.SortDate.Text" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Menu.SortName.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Menu.SortRating.Text" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="Message.ActiveFilters" xml:space="preserve">
+    <value>Filtered by {0}.</value>
+  </data>
+  <data name="Title.Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="Title.EntriesList" xml:space="preserve">
+    <value>{0} Entries</value>
+  </data>
+  <data name="Title.Filter.Text" xml:space="preserve">
+    <value>Filter Entries</value>
+  </data>
+  <data name="Title.Sort.Text" xml:space="preserve">
+    <value>Sort by…</value>
+  </data>
+</root>

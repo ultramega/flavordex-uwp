@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Fields" xml:space="preserve">
+    <value>Whiskey Name;Type;Distiller;Origin;Price;Tasting Location;Date/Time;Age;ABV</value>
+  </data>
+  <data name="FlavorNames" xml:space="preserve">
+    <value>Body;Charcoal;Oak;Leather;Spice;Alcohol;Astringent;Linger;Sweet;Maple;Fruit;Vanilla;Smoke;Peat;Nut</value>
+  </data>
+  <data name="Header.Stats.Text" xml:space="preserve">
+    <value>Stats</value>
+  </data>
+  <data name="Input.ABV.Header" xml:space="preserve">
+    <value>ABV</value>
+  </data>
+  <data name="Input.Age.Header" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="Input.Maker.Header" xml:space="preserve">
+    <value>Distiller</value>
+  </data>
+  <data name="Input.Title.PlaceholderText" xml:space="preserve">
+    <value>Whiskey Name</value>
+  </data>
+  <data name="Input.Type.Header" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Label.ABV.Text" xml:space="preserve">
+    <value>ABV: </value>
+  </data>
+  <data name="Label.Age.Text" xml:space="preserve">
+    <value>Age: </value>
+  </data>
+  <data name="Label.Maker.Text" xml:space="preserve">
+    <value>Distiller: </value>
+  </data>
+  <data name="Label.Type.Text" xml:space="preserve">
+    <value>Type: </value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>American - Blend;American - Single Malt;American - White Dog;Canadian - Blend;Irish - Blend;Irish - Single Malt;Scotch - Blend;Scotch - Single Malt;Straight Bourbon;Straight Rye</value>
+  </data>
+</root>

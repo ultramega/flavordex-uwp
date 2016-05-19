@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Fields">
+    <value>Beer Name;Style;Brewer;Origin;Price;Serving Type;Tasting Location;Date/Time;ABV;IBU;OG;FG</value>
+  </data>
+  <data name="FlavorNames" xml:space="preserve">
+    <value>Body;Syrup;Fruit;Citrus;Hops;Linger;Spice;Herb;Malt;Alcohol;Sweet;Sour;Bitter;Astringent</value>
+  </data>
+  <data name="Header.Stats.Text" xml:space="preserve">
+    <value>Stats</value>
+  </data>
+  <data name="Input.ABV.Header" xml:space="preserve">
+    <value>ABV</value>
+  </data>
+  <data name="Input.FG.Header" xml:space="preserve">
+    <value>FG</value>
+  </data>
+  <data name="Input.IBU.Header" xml:space="preserve">
+    <value>IBU</value>
+  </data>
+  <data name="Input.Maker.Header" xml:space="preserve">
+    <value>Brewer</value>
+  </data>
+  <data name="Input.OG.Header" xml:space="preserve">
+    <value>OG</value>
+  </data>
+  <data name="Input.ServingType.Header" xml:space="preserve">
+    <value>Serving Type</value>
+  </data>
+  <data name="Input.Style.Header" xml:space="preserve">
+    <value>Style</value>
+  </data>
+  <data name="Input.Title.PlaceholderText" xml:space="preserve">
+    <value>Beer Name</value>
+  </data>
+  <data name="Label.ABV.Text" xml:space="preserve">
+    <value>ABV: </value>
+  </data>
+  <data name="Label.FG.Text" xml:space="preserve">
+    <value>FG: </value>
+  </data>
+  <data name="Label.IBU.Text" xml:space="preserve">
+    <value>IBU: </value>
+  </data>
+  <data name="Label.Maker.Text" xml:space="preserve">
+    <value>Brewer: </value>
+  </data>
+  <data name="Label.OG.Text" xml:space="preserve">
+    <value>OG: </value>
+  </data>
+  <data name="Label.Served.Text" xml:space="preserve">
+    <value>Served: </value>
+  </data>
+  <data name="Label.Style.Text" xml:space="preserve">
+    <value>Style: </value>
+  </data>
+  <data name="ServingTypes" xml:space="preserve">
+    <value>Unknown;Draft;Cask;Bottle;Can;Growler</value>
+  </data>
+  <data name="Styles" xml:space="preserve">
+    <value>Adjunct Lager;Altbier;Amber Ale;Amber Lager;Ancient Herbed Ale;Baltic Porter;Barley Wine;Barleywine;Belgian Dark Ale;Belgian IPA;Belgian Pale Ale;Belgian Strong Dark Ale;Belgian Strong Pale Ale;Berliner Weisse;Bière Brut;Bière de Champagne;Bière De Garde;Bitter;Black &amp; Tan;Black Ale;Blonde Ale;Bock;Braggot;Brown Ale;California Common;Chile Beer;Cream Ale;Czech Pilsener;Dark Wheat Ale;Doppelbock;Dortmunder Lager;Double IPA;Double Pilsner;Double Stout;Dubbel;Dunkel;Dunkelweizen;Eisbock;English Barleywine;English Bitter;English Brown Ale;English Dark Mild Ale;English India Pale Ale;English IPA;English Pale Ale;English Pale Mild Ale;English Porter;English Stout;English Strong Ale;Euro Dark Lager;Euro Pale Lager;Euro Strong Lager;Export Lager;Export Stout;Extra Special Bitter;Extra Strong Bitter;Farmhouse Ale;Faro;Flanders Oud Bruin;Flanders Red Ale;Foreign Stout;Fruit Beer;Fruit Lambic;German Pilsener;Golden Ale;Gose;Gueuze;Happoshu;Hefeweizen;Helles Bock;Herbed Beer;Imperial IPA;Imperial Pilsner;Imperial Stout;India Pale Ale;IPA;Irish Dry Stout;Irish Red Ale;Japanese Rice Lager;Kölsch;Keller Bier;Kristalweizen;Kvass;Lambic;Light Ale;Light Lager;Low Alcohol Beer;Märzen;Märzenbier;Maibock;Malt Liquor;Mild;Milk Stout;Munich Dunkel Lager;Munich Helles Lager;Oatmeal Stout;Oktoberfestbier;Old Ale;Oud Bruin;Pale Ale;Pale Lager;Pale Wheat Ale;Pilsener;Porter;Porter;Pumpkin Ale;Quadrupel;Rauchbier;Red Ale;Red Lager;Roggenbier;Russian Imperial Stout;Rye Beer;Sahti;Saison;Schwarzbier;Scottish Ale;Scottish Gruit;Smoked Beer;Spiced Beer;Steam Beer;Stout;Strong Ale;Sweet Stout;Traditional Bock;Tripel;Unblended Lambic;Vegetable Beer;Vienna Lager;Wee Heavy;Weissbier;Weizenbock;Wheatwine;Wild Ale;Winter Warmer;Witbier;Zwickel Bier</value>
+  </data>
+</root>

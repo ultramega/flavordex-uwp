@@ -1,0 +1,181 @@
+﻿<Page
+    x:Class="Flavordex.AddEntryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex"
+    xmlns:vm="using:Flavordex.ViewModels"
+    xmlns:c="using:Flavordex.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <Style
+            x:Key="PhotoItemStyle"
+            TargetType="Grid">
+            <Setter
+                Property="Width"
+                Value="200" />
+
+            <Setter
+                Property="Height"
+                Value="200" />
+
+            <Setter
+                Property="Background"
+                Value="#333333" />
+
+            <Setter
+                Property="BorderBrush"
+                Value="Gray" />
+
+            <Setter
+                Property="BorderThickness"
+                Value="2" />
+
+            <Setter
+                Property="CornerRadius"
+                Value="2" />
+        </Style>
+    </Page.Resources>
+
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <CommandBar
+            Content="{x:Bind PageTitle, Mode=OneWay}">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton
+                    x:Uid="ms-resource:///Entry/Command/TakePhoto"
+                    Icon="Camera"
+                    Visibility="{x:Bind PhotoCommandVisibility, Mode=OneWay}"
+                    Click="OnTakePhoto" />
+
+                <AppBarButton
+                    x:Uid="ms-resource:///AddEntry/Command/SelectPhoto"
+                    Icon="BrowsePhotos"
+                    Visibility="{x:Bind PhotoCommandVisibility, Mode=OneWay}"
+                    Click="OnSelectPhoto" />
+
+                <AppBarButton
+                    x:Uid="ms-resource:///AddEntry/Command/SaveEntry"
+                    Icon="Save"
+                    IsEnabled="{x:Bind Entry.IsValid, FallbackValue=False, Mode=OneWay}"
+                    Click="OnSaveEntry" />
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+
+        <ListView
+            x:Name="CategoryList"
+            x:DeferLoadStrategy="Lazy"
+            Grid.Row="1"
+            MaxWidth="800"
+            SelectionMode="None"
+            IsItemClickEnabled="True"
+            ItemClick="OnCategorySelected">
+            <ListView.ItemTemplate>
+                <DataTemplate
+                    x:DataType="vm:CategoryItemViewModel">
+                    <TextBlock
+                        Text="{x:Bind Name}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Pivot
+            x:Name="Pivot"
+            x:DeferLoadStrategy="Lazy"
+            Grid.Row="1"
+            MaxWidth="800"
+            HorizontalContentAlignment="Stretch"
+            SelectionChanged="OnTabChanged">
+            <PivotItem
+                x:Uid="ms-resource:///AddEntry/Tab/AddDetails">
+                <ScrollViewer>
+                    <c:EditEntryForm
+                        Entry="{x:Bind Entry, Mode=OneWay}" />
+                </ScrollViewer>
+            </PivotItem>
+
+            <PivotItem
+                x:Uid="ms-resource:///AddEntry/Tab/RateFlavors">
+                <Grid>
+                    <c:RadarGraph
+                        x:Name="Radar"
+                        Items="{x:Bind Flavors, Mode=OneWay}"
+                        IsInteractive="True"
+                        HorizontalContentAlignment="Stretch" />
+
+                    <c:RadarGraphEditor
+                        VerticalAlignment="Bottom"
+                        Target="{Binding ElementName=Radar}"
+                        ShowCommands="False" />
+                </Grid>
+            </PivotItem>
+
+            <PivotItem
+                x:Uid="ms-resource:///AddEntry/Tab/AddPhotos">
+                <GridView
+                    ItemsSource="{x:Bind Photos}"
+                    CanReorderItems="True"
+                    AllowDrop="True"
+                    SelectionMode="None"
+                    IsItemClickEnabled="False">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid
+                                Style="{StaticResource PhotoItemStyle}">
+                                <Image
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Stretch="UniformToFill"
+                                    Source="{Binding Value}" />
+
+                                <Button
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+                                    Margin="3"
+                                    Click="OnRemovePhoto">
+                                    <SymbolIcon
+                                        Symbol="Cancel" />
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+
+                    <GridView.Footer>
+                        <Button
+                            Padding="0"
+                            Background="Transparent">
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem
+                                        x:Uid="ms-resource:///Photos/Menu/TakePhoto"
+                                        Click="OnTakePhoto" />
+
+                                    <MenuFlyoutItem
+                                        x:Uid="ms-resource:///Photos/Menu/SelectPhoto"
+                                        Click="OnSelectPhoto" />
+                                </MenuFlyout>
+                            </Button.Flyout>
+
+                            <Grid
+                                Style="{StaticResource PhotoItemStyle}">
+                                <SymbolIcon
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Margin="12"
+                                    Symbol="Add" />
+                            </Grid>
+                        </Button>
+                    </GridView.Footer>
+                </GridView>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>

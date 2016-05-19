@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BrewMethods" xml:space="preserve">
+    <value>Unknown;Press;Drip;Percolator;Espresso;Vacuum;Pour-over;Turkish;Cupping</value>
+  </data>
+  <data name="Fields" xml:space="preserve">
+    <value>Coffee Name;Roaster;Roast Date;Grind Setting;Producer;Origin;Price;Brew Method;Tasting Location;Date/Time;Dose (grams);Water/Espresso Mass (grams);Temperature (°C);Extraction Time;TDS (%);Extraction Yield (%)</value>
+  </data>
+  <data name="FlavorNames" xml:space="preserve">
+    <value>Body;Citrus;Berry;Floral;Spice;Smoke;Nut;Chocolate;Caramel;Sweet;Sour;Bitter;Salt;Finish</value>
+  </data>
+  <data name="Header.ExtractionTime.Text" xml:space="preserve">
+    <value>Extraction Time</value>
+  </data>
+  <data name="Header.Stats.Text" xml:space="preserve">
+    <value>Brew Stats</value>
+  </data>
+  <data name="Input.BrewMethod.Header" xml:space="preserve">
+    <value>Brew Method</value>
+  </data>
+  <data name="Input.Dose.Header" xml:space="preserve">
+    <value>Dose (grams)</value>
+  </data>
+  <data name="Input.EspressoMass.Header" xml:space="preserve">
+    <value>Espresso Mass (grams)</value>
+  </data>
+  <data name="Input.ExtractionTimeMinutes.PlaceholderText" xml:space="preserve">
+    <value>mm</value>
+  </data>
+  <data name="Input.ExtractionTimeSeconds.PlaceholderText" xml:space="preserve">
+    <value>ss</value>
+  </data>
+  <data name="Input.Grind.Header" xml:space="preserve">
+    <value>Grind Setting</value>
+  </data>
+  <data name="Input.Maker.Header" xml:space="preserve">
+    <value>Producer</value>
+  </data>
+  <data name="Input.Roaster.Header" xml:space="preserve">
+    <value>Roaster</value>
+  </data>
+  <data name="Input.RoastDate.Header" xml:space="preserve">
+    <value>Roast Date</value>
+  </data>
+  <data name="Input.TDS.Header" xml:space="preserve">
+    <value>TDS (%)</value>
+  </data>
+  <data name="Input.Temperature.Header" xml:space="preserve">
+    <value>Temperature (°C)</value>
+  </data>
+  <data name="Input.Title.PlaceholderText" xml:space="preserve">
+    <value>Coffee Name</value>
+  </data>
+  <data name="Input.WaterMass.Header" xml:space="preserve">
+    <value>Water Mass (grams)</value>
+  </data>
+  <data name="Input.Yield.Header" xml:space="preserve">
+    <value>Extraction Yield (%)</value>
+  </data>
+  <data name="Label.BrewMethod.Text" xml:space="preserve">
+    <value>Brewed: </value>
+  </data>
+  <data name="Label.CBR.Text" xml:space="preserve">
+    <value>CBR: </value>
+  </data>
+  <data name="Label.Dose.Text" xml:space="preserve">
+    <value>Dose: </value>
+  </data>
+  <data name="Label.EBF.Text" xml:space="preserve">
+    <value>EBF: </value>
+  </data>
+  <data name="Label.EspressoMass.Text" xml:space="preserve">
+    <value>Espresso Mass: </value>
+  </data>
+  <data name="Label.ExtractionTime.Text" xml:space="preserve">
+    <value>Extraction Time: </value>
+  </data>
+  <data name="Label.Grind.Text" xml:space="preserve">
+    <value>Grind: </value>
+  </data>
+  <data name="Label.Maker.Text" xml:space="preserve">
+    <value>Producer: </value>
+  </data>
+  <data name="Label.RoastDate.Text" xml:space="preserve">
+    <value>Roast Date: </value>
+  </data>
+  <data name="Label.Roaster.Text" xml:space="preserve">
+    <value>Roaster: </value>
+  </data>
+  <data name="Label.TDS.Text" xml:space="preserve">
+    <value>TDS: </value>
+  </data>
+  <data name="Label.Temperature.Text" xml:space="preserve">
+    <value>Temperature: </value>
+  </data>
+  <data name="Label.WaterMass.Text" xml:space="preserve">
+    <value>Water Mass: </value>
+  </data>
+  <data name="Label.Yield.Text" xml:space="preserve">
+    <value>Extraction Yield: </value>
+  </data>
+</root>

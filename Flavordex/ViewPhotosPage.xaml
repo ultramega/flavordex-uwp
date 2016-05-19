@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="Flavordex.ViewPhotosPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex"
+    xmlns:vm="using:Flavordex.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <MenuFlyout
+            x:Name="PhotoFlyout">
+            <MenuFlyoutItem
+                x:Uid="ms-resource:///Photos/Menu/RemovePhoto"
+                Click="OnRemoveClick" />
+        </MenuFlyout>
+    </Page.Resources>
+
+    <Grid>
+        <FlipView
+            x:Name="FlipView"
+            Background="Transparent"
+            ItemsSource="{x:Bind Photos}"
+            Holding="OnHolding"
+            RightTapped="OnRightTapped">
+            <FlipView.ItemTemplate>
+                <DataTemplate
+                    x:DataType="vm:PhotoItemViewModel">
+                    <Image
+                        Source="{x:Bind Bitmap, Mode=OneWay}" />
+                </DataTemplate>
+            </FlipView.ItemTemplate>
+        </FlipView>
+
+        <ContentDialog
+            x:Name="RemoveDialog"
+            x:Uid="ms-resource:///Photos/Dialog/ConfirmRemove" />
+    </Grid>
+</Page>

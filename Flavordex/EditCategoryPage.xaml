@@ -1,0 +1,200 @@
+﻿<Page
+    x:Class="Flavordex.EditCategoryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex"
+    xmlns:c="using:Flavordex.UI.Controls"
+    xmlns:vm="using:Flavordex.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <x:Double
+            x:Key="MaxWidth">800</x:Double>
+
+        <Style
+            TargetType="Button">
+            <Setter
+                Property="Margin"
+                Value="2" />
+        </Style>
+
+        <Style
+            TargetType="TextBox">
+            <Setter
+                Property="Margin"
+                Value="2" />
+        </Style>
+    </Page.Resources>
+
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <CommandBar
+            x:Uid="ms-resource:///Category/Title/Edit">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton
+                    x:Uid="ms-resource:///Category/Command/Save"
+                    Icon="Save"
+                    Click="OnSaveCategory" />
+            </CommandBar.PrimaryCommands>
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton
+                    x:Uid="ms-resource:///Category/Command/Delete"
+                    Icon="Delete"
+                    Visibility="{x:Bind DeleteButtonVisibility, Mode=OneWay}"
+                    Click="OnDeleteCategory" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+
+        <ScrollViewer
+            Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="2*" />
+                    <ColumnDefinition
+                        Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Grid.ColumnSpan="2"
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Category/Header/Title"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <TextBox
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    x:Uid="ms-resource:///Category/Input/Title"
+                    MaxWidth="{StaticResource MaxWidth}"
+                    IsReadOnly="{x:Bind Category.IsPreset, Mode=OneWay}"
+                    Text="{x:Bind Category.Name, Mode=TwoWay}" />
+
+                <Border
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Category/Header/Extras"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <ItemsControl
+                    Grid.Row="3"
+                    Grid.ColumnSpan="2"
+                    MaxWidth="{StaticResource MaxWidth}"
+                    ItemsSource="{x:Bind Fields, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Text="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl
+                    Grid.Row="4"
+                    Grid.ColumnSpan="2"
+                    MaxWidth="{StaticResource MaxWidth}"
+                    ItemsSource="{x:Bind Category.Extras, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="vm:ExtraItemViewModel">
+                            <c:FieldEditor
+                                x:Uid="ms-resource:///Category/Input/ExtraName"
+                                MaxLength="20"
+                                Value="{x:Bind Name, Mode=TwoWay}"
+                                Deleted="{x:Bind IsDeleted, Mode=TwoWay}"
+                                Loaded="OnFieldLoaded"
+                                Return="OnAddExtra" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Button
+                    Grid.Row="5"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Stretch"
+                    MaxWidth="{StaticResource MaxWidth}"
+                    Click="OnAddExtra">
+                    <SymbolIcon
+                        Symbol="Add" />
+                </Button>
+
+                <Border
+                    Grid.Row="6"
+                    Grid.ColumnSpan="2"
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Category/Header/Flavors"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <ItemsControl
+                    Grid.Row="7"
+                    ItemsSource="{x:Bind Category.Flavors, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="vm:FlavorItemViewModel">
+                            <c:FieldEditor
+                                x:Uid="ms-resource:///Category/Input/FlavorName"
+                                MaxLength="12"
+                                Value="{x:Bind Name, Mode=TwoWay}"
+                                Deleted="{x:Bind IsDeleted, Mode=TwoWay}"
+                                Loaded="OnFieldLoaded"
+                                Return="OnAddFlavor" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Button
+                    Grid.Row="8"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Click="OnAddFlavor">
+                    <SymbolIcon
+                        Symbol="Add" />
+                </Button>
+
+                <c:RadarGraph
+                    Grid.Row="7"
+                    Grid.Column="1"
+                    Grid.RowSpan="2"
+                    Margin="4"
+                    Items="{x:Bind RadarItems}" />
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

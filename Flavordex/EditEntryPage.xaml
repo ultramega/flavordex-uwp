@@ -1,0 +1,36 @@
+﻿<Page
+    x:Class="Flavordex.EditEntryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex"
+    xmlns:c="using:Flavordex.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <CommandBar
+            x:Uid="ms-resource:///Entry/Title/Edit">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton
+                    x:Uid="ms-resource:///Entry/Command/Save"
+                    Icon="Save"
+                    IsEnabled="{x:Bind Entry.IsValid, FallbackValue=False, Mode=OneWay}"
+                    Click="OnSaveEntry" />
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+
+        <ScrollViewer
+            Grid.Row="1"
+            MaxWidth="800">
+            <c:EditEntryForm
+                Entry="{x:Bind Entry, Mode=OneWay}" />
+        </ScrollViewer>
+    </Grid>
+</Page>

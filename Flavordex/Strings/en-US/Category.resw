@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Button.Add.Text" xml:space="preserve">
+    <value>Create Category</value>
+  </data>
+  <data name="Command.Delete.Label" xml:space="preserve">
+    <value>Delete Category</value>
+  </data>
+  <data name="Command.Save.Label" xml:space="preserve">
+    <value>Save Category</value>
+  </data>
+  <data name="Dialog.Select.Title" xml:space="preserve">
+    <value>Select Category</value>
+  </data>
+  <data name="Dialog.Select.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Header.Title.Text" xml:space="preserve">
+    <value>Category Title</value>
+  </data>
+  <data name="Header.Extras.Text" xml:space="preserve">
+    <value>Category Fields</value>
+  </data>
+  <data name="Header.Flavors.Text" xml:space="preserve">
+    <value>Category Flavors</value>
+  </data>
+  <data name="Input.Title.PlaceholderText" xml:space="preserve">
+    <value>enter a title for the category</value>
+  </data>
+  <data name="Input.ExtraName.PlaceholderText" xml:space="preserve">
+    <value>Field Name</value>
+  </data>
+  <data name="Input.FlavorName.PlaceholderText" xml:space="preserve">
+    <value>Flavor Name</value>
+  </data>
+  <data name="Title.Edit.Content" xml:space="preserve">
+    <value>Edit Category</value>
+  </data>
+</root>
