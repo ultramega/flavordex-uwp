@@ -41,6 +41,7 @@
                 <AppBarButton
                     x:Uid="ms-resource:///Category/Command/Save"
                     Icon="Save"
+                    IsEnabled="{x:Bind Category.IsValid, FallbackValue=False, Mode=OneWay}"
                     Click="OnSaveCategory" />
             </CommandBar.PrimaryCommands>
 

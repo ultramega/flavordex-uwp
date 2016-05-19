@@ -44,6 +44,17 @@ namespace Flavordex.ViewModels
         }
 
         /// <summary>
+        /// Gets whether the Category has valid data.
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(Model.Name);
+            }
+        }
+
+        /// <summary>
         /// Gets the custom extra fields for the Category.
         /// </summary>
         public ExtraItemViewModel[] CustomFields
