@@ -526,7 +526,8 @@
             Height="30"
             RoundValueSlice="0.5"
             Value="{x:Bind Entry.Rating, Mode=TwoWay}"
-            IsEditable="True">
+            IsEditable="True"
+            AllowHover="False">
             <rating:RatingControl.FullItemsDefinition>
                 <rating:RateItemDefinition
                     BackgroundColor="{ThemeResource SystemControlHighlightAccentBrush}"

@@ -139,6 +139,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Bratched.Tools\RatingControl\IRateItemDefinition.cs" />
+    <Compile Include="Bratched.Tools\RatingControl\RateItem.xaml.cs">
+      <DependentUpon>RateItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Bratched.Tools\RatingControl\RateItemDefinition.cs" />
+    <Compile Include="Bratched.Tools\RatingControl\RateItemDefinitionModel.cs" />
+    <Compile Include="Bratched.Tools\RatingControl\RatingControl.xaml.cs">
+      <DependentUpon>RatingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="EditCategoryPage.xaml.cs">
       <DependentUpon>EditCategoryPage.xaml</DependentUpon>
@@ -311,6 +320,14 @@
     <Page Include="AddEntryPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Bratched.Tools\RatingControl\RateItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Bratched.Tools\RatingControl\RatingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="EditCategoryPage.xaml">
       <SubType>Designer</SubType>
