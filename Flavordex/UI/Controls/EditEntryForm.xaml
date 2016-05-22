@@ -58,7 +58,8 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}" />
+                    ItemsSource="{x:Bind CustomFields}"
+                    IsTabStop="False" />
             </StackPanel>
         </DataTemplate>
 
@@ -110,7 +111,8 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}" />
+                    ItemsSource="{x:Bind CustomFields}"
+                    IsTabStop="False" />
 
                 <Border
                     Style="{StaticResource DividerStyle}">
@@ -211,7 +213,8 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}" />
+                    ItemsSource="{x:Bind CustomFields}"
+                    IsTabStop="False" />
 
                 <Border
                     Style="{StaticResource DividerStyle}">
@@ -386,7 +389,8 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}" />
+                    ItemsSource="{x:Bind CustomFields}"
+                    IsTabStop="False" />
 
                 <Border
                     Style="{StaticResource DividerStyle}">
@@ -459,7 +463,8 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}" />
+                    ItemsSource="{x:Bind CustomFields}"
+                    IsTabStop="False" />
 
                 <Border
                     Style="{StaticResource DividerStyle}">
