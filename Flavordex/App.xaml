@@ -16,6 +16,9 @@
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
+            <x:Double
+                x:Key="MaxFormWidth">800</x:Double>
+
             <ui:DateTimeToStringConverter
                 x:Key="DateTimeToStringConverter" />
 

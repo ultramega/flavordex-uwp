@@ -27,8 +27,7 @@
         </CommandBar>
 
         <ScrollViewer
-            Grid.Row="1"
-            MaxWidth="800">
+            Grid.Row="1">
             <c:EditEntryForm
                 Entry="{x:Bind Entry, Mode=OneWay}" />
         </ScrollViewer>

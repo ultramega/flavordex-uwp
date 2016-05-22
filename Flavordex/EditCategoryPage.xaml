@@ -9,9 +9,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
-        <x:Double
-            x:Key="MaxWidth">800</x:Double>
-
         <Style
             TargetType="Button">
             <Setter
@@ -97,7 +94,7 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
                     x:Uid="ms-resource:///Category/Input/Title"
-                    MaxWidth="{StaticResource MaxWidth}"
+                    MaxWidth="{StaticResource MaxFormWidth}"
                     IsReadOnly="{x:Bind Category.IsPreset, Mode=OneWay}"
                     Text="{x:Bind Category.Name, Mode=TwoWay}" />
 
@@ -114,7 +111,7 @@
                 <ItemsControl
                     Grid.Row="3"
                     Grid.ColumnSpan="2"
-                    MaxWidth="{StaticResource MaxWidth}"
+                    MaxWidth="{StaticResource MaxFormWidth}"
                     ItemsSource="{x:Bind Fields, Mode=OneWay}"
                     IsTabStop="False">
                     <ItemsControl.ItemTemplate>
@@ -128,7 +125,7 @@
                 <ItemsControl
                     Grid.Row="4"
                     Grid.ColumnSpan="2"
-                    MaxWidth="{StaticResource MaxWidth}"
+                    MaxWidth="{StaticResource MaxFormWidth}"
                     ItemsSource="{x:Bind Category.CustomFields, Mode=OneWay}"
                     IsTabStop="False">
                     <ItemsControl.ItemTemplate>
@@ -149,7 +146,7 @@
                     Grid.Row="5"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
-                    MaxWidth="{StaticResource MaxWidth}"
+                    MaxWidth="{StaticResource MaxFormWidth}"
                     Click="OnAddExtra">
                     <SymbolIcon
                         Symbol="Add" />

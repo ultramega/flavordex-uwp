@@ -90,7 +90,6 @@
             x:Name="Pivot"
             x:DeferLoadStrategy="Lazy"
             Grid.Row="1"
-            MaxWidth="800"
             HorizontalContentAlignment="Stretch"
             SelectionChanged="OnTabChanged">
             <PivotItem
