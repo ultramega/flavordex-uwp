@@ -193,7 +193,8 @@ namespace Flavordex.ViewModels
         /// Constructor.
         /// </summary>
         /// <param name="entry">The Entry to represent.</param>
-        public EntryViewModel(Entry entry) : base(entry) {
+        public EntryViewModel(Entry entry) : base(entry)
+        {
             _extras.CollectionChanged += OnExtrasCollectionChanged;
         }
 
@@ -230,12 +231,16 @@ namespace Flavordex.ViewModels
         protected void SetExtra(string name, object value)
         {
             var extra = Extras.Where(e => e.Name == name).FirstOrDefault();
-            if (extra == null)
+            if (extra == null && value != null)
             {
                 var newExtra = new EntryExtra();
                 newExtra.Name = name;
                 newExtra.Value = value.ToString();
                 Extras.Add(new EntryExtraItemViewModel(newExtra));
+            }
+            else if (value == null)
+            {
+                Extras.Remove(extra);
             }
             else
             {
