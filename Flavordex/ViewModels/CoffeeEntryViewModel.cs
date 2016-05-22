@@ -198,16 +198,20 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// Gets or sets the total extraction time in seconds.
         /// </summary>
-        public int ExtractionTime
+        public int? ExtractionTime
         {
             get
             {
                 var time = 0;
-                int.TryParse(GetExtra(Tables.Extras.Coffee.STATS_EXTIME), out time);
-                return time;
+                if (int.TryParse(GetExtra(Tables.Extras.Coffee.STATS_EXTIME), out time))
+                {
+                    return time;
+                }
+                return null;
             }
             set
             {
+                value = value == null || value > 0 ? value : null;
                 SetExtra(Tables.Extras.Coffee.STATS_EXTIME, value);
                 RaisePropertyChanged();
                 RaisePropertyChanged("ExtractionTimeMinutes");
@@ -223,7 +227,12 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return (ExtractionTime / 60).ToString();
+                var time = ExtractionTime;
+                if (time != null)
+                {
+                    return (ExtractionTime / 60).ToString();
+                }
+                return null;
             }
             set
             {
@@ -240,7 +249,12 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return (ExtractionTime % 60).ToString();
+                var time = ExtractionTime;
+                if (time != null)
+                {
+                    return (ExtractionTime % 60).ToString();
+                }
+                return null;
             }
             set
             {
