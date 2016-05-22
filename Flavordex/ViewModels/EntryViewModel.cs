@@ -193,7 +193,9 @@ namespace Flavordex.ViewModels
         /// Constructor.
         /// </summary>
         /// <param name="entry">The Entry to represent.</param>
-        public EntryViewModel(Entry entry) : base(entry) { }
+        public EntryViewModel(Entry entry) : base(entry) {
+            _extras.CollectionChanged += OnExtrasCollectionChanged;
+        }
 
         /// <summary>
         /// Raises a PropertyChanged event for the CustomFields when the Extras collection changes.
