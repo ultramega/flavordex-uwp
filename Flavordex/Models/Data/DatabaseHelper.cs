@@ -296,6 +296,7 @@ namespace Flavordex.Models.Data
             var position = 0;
             foreach (var flavor in flavors)
             {
+                flavor.Model.EntryID = entryId;
                 flavor.Model.Position = position++;
                 await Database.Insert(Tables.EntriesFlavors.TABLE_NAME, flavor.Model.GetData());
             }

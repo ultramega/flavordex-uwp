@@ -258,6 +258,7 @@ namespace Flavordex
             {
                 var flavor = new EntryFlavor();
                 flavor.Name = item.Name;
+                flavor.Value = 0;
                 flavors.Add(new EntryFlavorItemViewModel(flavor));
             }
             Flavors = flavors;
