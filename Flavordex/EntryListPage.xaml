@@ -271,7 +271,13 @@
                 </AppBarButton>
 
                 <AppBarButton
-                    x:Uid="Command/About" />
+                    x:Uid="Command/About">
+                    <AppBarButton.Flyout>
+                        <Flyout>
+                            <c:AboutPage />
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
             </CommandBar.SecondaryCommands>
         </CommandBar>
 

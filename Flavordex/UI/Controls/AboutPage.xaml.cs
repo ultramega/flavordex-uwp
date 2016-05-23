@@ -3,12 +3,12 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml.Controls;
 
-namespace Flavordex
+namespace Flavordex.UI.Controls
 {
     /// <summary>
-    /// A Page containing a welcome message.
+    /// The about page to show some support information about the application.
     /// </summary>
-    public sealed partial class WelcomePage : Page
+    public sealed partial class AboutPage : UserControl
     {
         /// <summary>
         /// Gets the version message.
@@ -17,9 +17,19 @@ namespace Flavordex
         {
             get
             {
-                var format = ResourceLoader.GetForCurrentView().GetString("Message/Version");
                 var version = Package.Current.Id.Version;
-                return string.Format(format, version.Major, version.Minor, version.Build, version.Revision);
+                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+            }
+        }
+
+        /// <summary>
+        /// Gets the link to send an email.
+        /// </summary>
+        private string EmailLink
+        {
+            get
+            {
+                return "mailto://flavordex@ultramegasoft.com?subject=Flavordex " + Version;
             }
         }
 
@@ -38,7 +48,7 @@ namespace Flavordex
         /// <summary>
         /// Constructor.
         /// </summary>
-        public WelcomePage()
+        public AboutPage()
         {
             InitializeComponent();
         }

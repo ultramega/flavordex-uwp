@@ -75,7 +75,7 @@
   <data name="Title.Permission" xml:space="preserve">
     <value>Permission Requested</value>
   </data>
-  <data name="Title.About" xml:space="preserve">
+  <data name="About.Header.Text" xml:space="preserve">
     <value>About Flavordex</value>
   </data>
   <data name="Button.Cancel.Text" xml:space="preserve">
@@ -179,12 +179,6 @@ via Flavordex</value>
   <data name="Welcome.Description.Text" xml:space="preserve">
     <value>Tasting Journal</value>
   </data>
-  <data name="About.WebsiteUrl.Text" xml:space="preserve">
-    <value>http://flavordex.com/</value>
-  </data>
-  <data name="About.Email.Text" xml:space="preserve">
-    <value>flavordex@ultramegasoft.com</value>
-  </data>
   <data name="About.Version.Text" xml:space="preserve">
     <value>Version: </value>
   </data>
@@ -193,12 +187,6 @@ via Flavordex</value>
   </data>
   <data name="About.Website.Text" xml:space="preserve">
     <value>Website: </value>
-  </data>
-  <data name="About.SendEmail.Text" xml:space="preserve">
-    <value>Contact Support</value>
-  </data>
-  <data name="About.EmailSubject" xml:space="preserve">
-    <value>Flavordex {0}</value>
   </data>
   <data name="Title.CreateCat" xml:space="preserve">
     <value>Create Category</value>
