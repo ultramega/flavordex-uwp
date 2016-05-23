@@ -5,13 +5,57 @@
     xmlns:local="using:Flavordex"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
-
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled">
     <Grid
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Image
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Source="Assets/SplashScreen.png" />
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <Border
+                Height="48"
+                Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+                <TextBlock
+                    x:Uid="Welcome/Header"
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+            </Border>
+
+            <Image
+                Source="Assets/Square310x310Logo.png"
+                Stretch="None"
+                HorizontalAlignment="Center"
+                Margin="0,-40,0,-50" />
+
+            <TextBlock
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                Text="Flavordex" />
+
+            <TextBlock
+                x:Uid="Welcome/Description"
+                HorizontalAlignment="Center" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="2"
+            Margin="20">
+            <TextBlock
+                Style="{ThemeResource CaptionTextBlockStyle}"
+                HorizontalAlignment="Center"
+                Text="{x:Bind Version}" />
+
+            <TextBlock
+                Style="{ThemeResource CaptionTextBlockStyle}"
+                HorizontalAlignment="Center"
+                Text="{x:Bind Copyright}" />
+        </StackPanel>
     </Grid>
 </Page>

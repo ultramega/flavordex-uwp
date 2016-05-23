@@ -139,7 +139,7 @@
     <value>Flavordex requires external storage access to enable photo features.</value>
   </data>
   <data name="Message.Version" xml:space="preserve">
-    <value>Flavordex v.{0}</value>
+    <value>Flavordex v.{0}.{1}.{2}.{3}</value>
   </data>
   <data name="Message.Copyright" xml:space="preserve">
     <value>Copyright © {0} UltraMega Software</value>
@@ -173,10 +173,10 @@
 
 via Flavordex</value>
   </data>
-  <data name="Welcome.Header" xml:space="preserve">
+  <data name="Welcome.Header.Text" xml:space="preserve">
     <value>Welcome to Flavordex</value>
   </data>
-  <data name="Welcome.Description" xml:space="preserve">
+  <data name="Welcome.Description.Text" xml:space="preserve">
     <value>Tasting Journal</value>
   </data>
   <data name="About.WebsiteUrl.Text" xml:space="preserve">
