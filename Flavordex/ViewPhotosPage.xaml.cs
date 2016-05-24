@@ -23,6 +23,17 @@ namespace Flavordex
         public ObservableCollection<PhotoItemViewModel> Photos { get; } = new ObservableCollection<PhotoItemViewModel>();
 
         /// <summary>
+        /// Gets or sets the Visibility of the empty list message.
+        /// </summary>
+        public Visibility NoPhotosVisibility
+        {
+            get { return (Visibility)GetValue(NoPhotosVisibilityProperty); }
+            set { SetValue(NoPhotosVisibilityProperty, value); }
+        }
+        public static readonly DependencyProperty NoPhotosVisibilityProperty =
+            DependencyProperty.Register("NoPhotosVisibility", typeof(Visibility), typeof(ViewPhotosPage), new PropertyMetadata(Visibility.Collapsed));
+
+        /// <summary>
         /// The journal entry.
         /// </summary>
         private Entry _entry;
@@ -108,6 +119,7 @@ namespace Flavordex
                     if (index == 0)
                     {
                         PhotoUtilities.DeleteThumbnail(_entry.ID);
+                        NoPhotosVisibility = Visibility.Visible;
                     }
                 }
             }
@@ -129,6 +141,7 @@ namespace Flavordex
                 if (position == 0)
                 {
                     PhotoUtilities.DeleteThumbnail(_entry.ID);
+                    NoPhotosVisibility = Visibility.Collapsed;
                 }
             }
         }
@@ -153,6 +166,7 @@ namespace Flavordex
                         if (position == 0)
                         {
                             PhotoUtilities.DeleteThumbnail(_entry.ID);
+                            NoPhotosVisibility = Visibility.Collapsed;
                         }
                     }
                 }
@@ -169,6 +183,8 @@ namespace Flavordex
             {
                 Photos.Add(item);
             }
+
+            NoPhotosVisibility = Photos.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

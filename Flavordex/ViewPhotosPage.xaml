@@ -20,17 +20,41 @@
         <FlipView
             x:Name="FlipView"
             Background="Transparent"
-            ItemsSource="{x:Bind Photos}"
-            Holding="OnHolding"
-            RightTapped="OnRightTapped">
+            ItemsSource="{x:Bind Photos}">
             <FlipView.ItemTemplate>
                 <DataTemplate
                     x:DataType="vm:PhotoItemViewModel">
                     <Image
-                        Source="{x:Bind Bitmap, Mode=OneWay}" />
+                        Source="{x:Bind Bitmap, Mode=OneWay}"
+                        Holding="OnHolding"
+                        RightTapped="OnRightTapped" />
                 </DataTemplate>
             </FlipView.ItemTemplate>
         </FlipView>
+
+        <StackPanel
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            MinWidth="400"
+            Padding="12"
+            Visibility="{x:Bind NoPhotosVisibility, Mode=OneWay}">
+            <TextBlock
+                x:Uid="ms-resource:///Photos/Message/NoPhotos"
+                Style="{ThemeResource SubtitleTextBlockStyle}"
+                HorizontalAlignment="Center"
+                Margin="0,0,0,20" />
+
+            <Button
+                x:Uid="ms-resource:///Photos/Button/SelectPhoto"
+                HorizontalAlignment="Stretch"
+                Click="OnSelectPhoto"
+                Margin="0,0,0,12" />
+
+            <Button
+                x:Uid="ms-resource:///Photos/Button/TakePhoto"
+                HorizontalAlignment="Stretch"
+                Click="OnTakePhoto" />
+        </StackPanel>
 
         <ContentDialog
             x:Name="RemoveDialog"

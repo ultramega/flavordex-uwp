@@ -150,9 +150,6 @@ via Flavordex</value>
     <value>Welcome to Flavordex</value>
   </data>
   <!-- unused -->
-  <data name="Message.NoPhotos" xml:space="preserve">
-    <value>No Photos</value>
-  </data>
   <data name="Message.PhotoNotFound" xml:space="preserve">
     <value>Photo not found</value>
   </data>
