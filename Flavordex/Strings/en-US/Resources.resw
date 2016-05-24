@@ -39,44 +39,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DateFormat" xml:space="preserve">
-    <value>MMM dd, yyyy</value>
-  </data>
-  <data name="DateTimeFormat" xml:space="preserve">
-    <value>MMM dd, yyyy h:mm tt</value>
-  </data>
-  <data name="Category.Beer" xml:space="preserve">
-    <value>Beer</value>
-  </data>
-  <data name="Category.Wine" xml:space="preserve">
-    <value>Wine</value>
-  </data>
-  <data name="Category.Whiskey" xml:space="preserve">
-    <value>Whiskey</value>
-  </data>
-  <data name="Category.Coffee" xml:space="preserve">
-    <value>Coffee</value>
-  </data>
-  <data name="Dialog.DeleteEntry.Title" xml:space="preserve">
-    <value>Delete Entry?</value>
-  </data>
-  <data name="Dialog.DeleteEntry.PrimaryButtonText" xml:space="preserve">
-    <value>Yes</value>
-  </data>
-  <data name="Dialog.DeleteEntry.SecondaryButtonText" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="Title.Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="Title.SelectCat" xml:space="preserve">
-    <value>Select Category</value>
-  </data>
-  <data name="Title.Permission" xml:space="preserve">
-    <value>Permission Requested</value>
-  </data>
   <data name="About.Header.Text" xml:space="preserve">
     <value>About Flavordex</value>
+  </data>
+  <data name="About.Support.Text" xml:space="preserve">
+    <value>Support: </value>
+  </data>
+  <data name="About.Version.Text" xml:space="preserve">
+    <value>Version: </value>
+  </data>
+  <data name="About.Website.Text" xml:space="preserve">
+    <value>Website: </value>
   </data>
   <data name="Button.Cancel.Text" xml:space="preserve">
     <value>Cancel</value>
@@ -84,50 +57,104 @@
   <data name="Button.Save.Text" xml:space="preserve">
     <value>Save</value>
   </data>
-  <data name="Button.Clear" xml:space="preserve">
-    <value>Clear</value>
+  <data name="Category.Beer" xml:space="preserve">
+    <value>Beer</value>
   </data>
-  <data name="Button.AddPhoto" xml:space="preserve">
-    <value>Add Photo</value>
+  <data name="Category.Coffee" xml:space="preserve">
+    <value>Coffee</value>
   </data>
-  <data name="Button.SelectPhoto" xml:space="preserve">
-    <value>Add From Gallery</value>
+  <data name="Category.Whiskey" xml:space="preserve">
+    <value>Whiskey</value>
   </data>
-  <data name="Button.TakePhoto" xml:space="preserve">
-    <value>Add From Camera</value>
+  <data name="Category.Wine" xml:space="preserve">
+    <value>Wine</value>
   </data>
-  <data name="Button.RemovePhoto" xml:space="preserve">
-    <value>Remove Photo</value>
+  <data name="Command.About.Label" xml:space="preserve">
+    <value>About</value>
   </data>
-  <data name="Button.LocatePhoto" xml:space="preserve">
-    <value>Locate Photo…</value>
+  <data name="Command.ImportExport.Label" xml:space="preserve">
+    <value>Import/Export</value>
   </data>
-  <data name="Button.ClearFilter" xml:space="preserve">
-    <value>Remove Filters</value>
+  <data name="Command.Settings.Label" xml:space="preserve">
+    <value>Application Settings</value>
   </data>
-  <data name="Button.GrantPermission" xml:space="preserve">
-    <value>Grant Permission</value>
+  <data name="DateFormat" xml:space="preserve">
+    <value>MMM dd, yyyy</value>
   </data>
-  <data name="Input.StartDate.Header" xml:space="preserve">
-    <value>Starting</value>
+  <data name="DateTimeFormat" xml:space="preserve">
+    <value>MMM dd, yyyy h:mm tt</value>
+  </data>
+  <data name="Dialog.DeleteCategory.PrimaryButtonText" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Dialog.DeleteCategory.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Dialog.DeleteCategory.Title" xml:space="preserve">
+    <value>Delete Category?</value>
+  </data>
+  <data name="Dialog.DeleteEntry.PrimaryButtonText" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Dialog.DeleteEntry.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Dialog.DeleteEntry.Title" xml:space="preserve">
+    <value>Delete Entry?</value>
+  </data>
+  <data name="Fields" xml:space="preserve">
+    <value>Entry Title;Maker;Origin;Price;Tasting Location;Date/Time</value>
   </data>
   <data name="Input.EndDate.Header" xml:space="preserve">
     <value>Ending</value>
   </data>
+  <data name="Input.StartDate.Header" xml:space="preserve">
+    <value>Starting</value>
+  </data>
+  <data name="Menu.Export.Text" xml:space="preserve">
+    <value>Export to CSV</value>
+  </data>
+  <data name="Menu.Import.Text" xml:space="preserve">
+    <value>Import from CSV</value>
+  </data>
+  <data name="Message.ConfirmDeleteCategory" xml:space="preserve">
+    <value>Are you sure you want to delete the {0} category?</value>
+  </data>
+  <data name="Message.Copyright" xml:space="preserve">
+    <value>Copyright © {0} UltraMega Software</value>
+  </data>
+  <data name="Message.DeleteCategoryEntries" xml:space="preserve">
+    <value>Delete {0} {1} from this category.</value>
+  </data>
+  <data name="Message.DeleteEntry" xml:space="preserve">
+    <value>Are you sure you want to delete {0}?</value>
+  </data>
+  <data name="Message.Version" xml:space="preserve">
+    <value>Flavordex v.{0}.{1}.{2}.{3}</value>
+  </data>
+  <data name="Share.Body" xml:space="preserve">
+    <value>I logged {0} in my Flavordex with a {1:f1} rating.
+
+via Flavordex</value>
+  </data>
+  <data name="Share.Subject" xml:space="preserve">
+    <value>I logged {0} on Flavordex</value>
+  </data>
+  <data name="Welcome.Description.Text" xml:space="preserve">
+    <value>Tasting Journal</value>
+  </data>
+  <data name="Welcome.Header.Text" xml:space="preserve">
+    <value>Welcome to Flavordex</value>
+  </data>
+  <!-- unused -->
   <data name="Message.NoData" xml:space="preserve">
     <value>No entries found.</value>
   </data>
   <data name="Message.NoDataFilter" xml:space="preserve">
     <value>No entries found matching &lt;b&gt;{0}&lt;/b&gt;.</value>
   </data>
-  <data name="Message.DeleteEntry" xml:space="preserve">
-    <value>Are you sure you want to delete {0}?</value>
-  </data>
   <data name="Message.NoPhotos" xml:space="preserve">
     <value>No Photos</value>
-  </data>
-  <data name="Message.NoMedia" xml:space="preserve">
-    <value>External storage not available</value>
   </data>
   <data name="Message.PhotoNotFound" xml:space="preserve">
     <value>Photo not found</value>
@@ -135,70 +162,14 @@
   <data name="Message.ImportNoData" xml:space="preserve">
     <value>No valid entries were found.</value>
   </data>
-  <data name="Message.RequestStorage" xml:space="preserve">
-    <value>Flavordex requires external storage access to enable photo features.</value>
-  </data>
-  <data name="Message.Version" xml:space="preserve">
-    <value>Flavordex v.{0}.{1}.{2}.{3}</value>
-  </data>
-  <data name="Message.Copyright" xml:space="preserve">
-    <value>Copyright © {0} UltraMega Software</value>
-  </data>
   <data name="Message.DuplicatePhoto" xml:space="preserve">
     <value>The selected photo has already been added.</value>
-  </data>
-  <data name="Error.Camera" xml:space="preserve">
-    <value>Error: Unable to launch camera</value>
-  </data>
-  <data name="Error.Required" xml:space="preserve">
-    <value>required</value>
-  </data>
-  <data name="Error.NoApp" xml:space="preserve">
-    <value>Error: No applications found to complete your request</value>
-  </data>
-  <data name="Error.NoEmail" xml:space="preserve">
-    <value>Error: No email client found</value>
   </data>
   <data name="Error.InsertPhoto" xml:space="preserve">
     <value>Error: Failed to save photo</value>
   </data>
   <data name="Error.InsertEntry" xml:space="preserve">
     <value>Error: Failed to create new entry</value>
-  </data>
-  <data name="Share.Subject" xml:space="preserve">
-    <value>I logged {0} on Flavordex</value>
-  </data>
-  <data name="Share.Body" xml:space="preserve">
-    <value>I logged {0} in my Flavordex with a {1:f1} rating.
-
-via Flavordex</value>
-  </data>
-  <data name="Welcome.Header.Text" xml:space="preserve">
-    <value>Welcome to Flavordex</value>
-  </data>
-  <data name="Welcome.Description.Text" xml:space="preserve">
-    <value>Tasting Journal</value>
-  </data>
-  <data name="About.Version.Text" xml:space="preserve">
-    <value>Version: </value>
-  </data>
-  <data name="About.Support.Text" xml:space="preserve">
-    <value>Support: </value>
-  </data>
-  <data name="About.Website.Text" xml:space="preserve">
-    <value>Website: </value>
-  </data>
-  <data name="Title.CreateCat" xml:space="preserve">
-    <value>Create Category</value>
-  </data>
-  <data name="Dialog.DeleteCategory.Title" xml:space="preserve">
-    <value>Delete Category?</value>
-  </data>
-  <data name="Dialog.DeleteCategory.PrimaryButtonText" xml:space="preserve">
-    <value>Yes</value>
-  </data>
-  <data name="Dialog.DeleteCategory.SecondaryButtonText" xml:space="preserve">
-    <value>Cancel</value>
   </data>
   <data name="Title.Export" xml:space="preserve">
     <value>Export Entries</value>
@@ -221,15 +192,6 @@ via Flavordex</value>
   <data name="Title.Settings" xml:space="preserve">
     <value>Application Settings</value>
   </data>
-  <data name="Menu.Import.Text" xml:space="preserve">
-    <value>Import from CSV</value>
-  </data>
-  <data name="Menu.Export.Text" xml:space="preserve">
-    <value>Export to CSV</value>
-  </data>
-  <data name="Command.Settings.Label" xml:space="preserve">
-    <value>Application Settings</value>
-  </data>
   <data name="Menu.Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -242,29 +204,14 @@ via Flavordex</value>
   <data name="Menu.ExportSelected" xml:space="preserve">
     <value>Export</value>
   </data>
-  <data name="Button.Undo" xml:space="preserve">
-    <value>Undo</value>
-  </data>
   <data name="Button.SelectDir" xml:space="preserve">
     <value>Select Directory</value>
-  </data>
-  <data name="Button.AddExtra" xml:space="preserve">
-    <value>Add Field</value>
-  </data>
-  <data name="Button.AddFlavor" xml:space="preserve">
-    <value>Add Flavor</value>
-  </data>
-  <data name="Button.RemoveExtra" xml:space="preserve">
-    <value>Remove Field</value>
-  </data>
-  <data name="Button.RemoveFlavor" xml:space="preserve">
-    <value>Remove Flavor</value>
   </data>
   <data name="Button.Ignore" xml:space="preserve">
     <value>Ignore</value>
   </data>
   <data name="Button.UncheckDuplicates" xml:space="preserve">
-    <value>Uncheck %s</value>
+    <value>Uncheck {0}</value>
   </data>
   <data name="Button.Import" xml:space="preserve">
     <value>Import Selected</value>
@@ -272,14 +219,8 @@ via Flavordex</value>
   <data name="Button.Export" xml:space="preserve">
     <value>Export</value>
   </data>
-  <data name="Button.CreateCat" xml:space="preserve">
-    <value>Create Category</value>
-  </data>
   <data name="Input.FileName.PlaceholderText" xml:space="preserve">
     <value>File Name</value>
-  </data>
-  <data name="Fields" xml:space="preserve">
-    <value>Entry Title;Maker;Origin;Price;Tasting Location;Date/Time</value>
   </data>
   <data name="Message.ImportComplete" xml:space="preserve">
     <value>Import complete.</value>
@@ -292,15 +233,6 @@ via Flavordex</value>
   </data>
   <data name="Message.DuplicatesDetected" xml:space="preserve">
     <value>{0} {1} {2} detected. What would you like to do?</value>
-  </data>
-  <data name="Message.ConfirmDeleteCategory" xml:space="preserve">
-    <value>Are you sure you want to delete the {0} category?</value>
-  </data>
-  <data name="Message.DeleteCategoryEntries" xml:space="preserve">
-    <value>Delete {0} {1} from this category.</value>
-  </data>
-  <data name="Message.RequestStorageXport" xml:space="preserve">
-    <value>Flavordex requires external storage access to enable CSV file importing and exporting.</value>
   </data>
   <data name="Message.RegisteringClient" xml:space="preserve">
     <value>Registering device with the sync service…</value>
@@ -361,14 +293,5 @@ via Flavordex</value>
   </data>
   <data name="Error.RegisterFailed" xml:space="preserve">
     <value>Error: Failed to connect to the sync service</value>
-  </data>
-  <data name="EntryCount" xml:space="preserve">
-    <value>{0} {1}</value>
-  </data>
-  <data name="Command.ImportExport.Label" xml:space="preserve">
-    <value>Import/Export</value>
-  </data>
-  <data name="Command.About.Label" xml:space="preserve">
-    <value>About</value>
   </data>
 </root>
