@@ -216,6 +216,28 @@ namespace Flavordex.ViewModels
         }
 
         /// <summary>
+        /// Gets the Visibility of the empty list message.
+        /// </summary>
+        public Visibility EmptyListVisibility
+        {
+            get
+            {
+                return IsCategorySelected && Entries.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        /// <summary>
+        /// Gets the empty list message.
+        /// </summary>
+        public string EmptyListMessage
+        {
+            get
+            {
+                return _resources.GetString(FilterMessage == null ? "Message/NoEntries" : "Message/NoEntriesFilter");
+            }
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public EntryListViewModel()
@@ -278,6 +300,7 @@ namespace Flavordex.ViewModels
             }
 
             RaisePropertyChanged("IsCategorySelected");
+            RaisePropertyChanged("EmptyListVisibility");
         }
 
         /// <summary>
@@ -608,6 +631,9 @@ namespace Flavordex.ViewModels
             }
 
             SortList();
+
+            RaisePropertyChanged("EmptyListMessage");
+            RaisePropertyChanged("EmptyListVisibility");
         }
 
         /// <summary>

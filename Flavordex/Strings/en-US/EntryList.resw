@@ -105,6 +105,12 @@
   <data name="Message.ActiveFilters" xml:space="preserve">
     <value>Filtered by {0}.</value>
   </data>
+  <data name="Message.NoEntries" xml:space="preserve">
+    <value>No entries found.</value>
+  </data>
+  <data name="Message.NoEntriesFilter" xml:space="preserve">
+    <value>No entries found matching your filters.</value>
+  </data>
   <data name="Title.Categories" xml:space="preserve">
     <value>Categories</value>
   </data>

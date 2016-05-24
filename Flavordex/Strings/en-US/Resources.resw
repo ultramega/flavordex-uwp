@@ -147,12 +147,6 @@ via Flavordex</value>
     <value>Welcome to Flavordex</value>
   </data>
   <!-- unused -->
-  <data name="Message.NoData" xml:space="preserve">
-    <value>No entries found.</value>
-  </data>
-  <data name="Message.NoDataFilter" xml:space="preserve">
-    <value>No entries found matching &lt;b&gt;{0}&lt;/b&gt;.</value>
-  </data>
   <data name="Message.NoPhotos" xml:space="preserve">
     <value>No Photos</value>
   </data>

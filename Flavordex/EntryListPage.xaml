@@ -281,6 +281,14 @@
             </CommandBar.SecondaryCommands>
         </CommandBar>
 
+        <TextBlock
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{x:Bind List.EmptyListVisibility, Mode=OneWay}"
+            Text="{x:Bind List.EmptyListMessage, Mode=OneWay}"
+            TextWrapping="Wrap" />
+
         <SemanticZoom
             Grid.Row="1"
             x:Name="Zoom"
