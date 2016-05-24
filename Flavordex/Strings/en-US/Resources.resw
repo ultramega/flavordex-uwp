@@ -102,6 +102,9 @@
   <data name="Dialog.DeleteEntry.Title" xml:space="preserve">
     <value>Delete Entry?</value>
   </data>
+  <data name="EntryCount" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
   <data name="Fields" xml:space="preserve">
     <value>Entry Title;Maker;Origin;Price;Tasting Location;Date/Time</value>
   </data>
