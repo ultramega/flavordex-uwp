@@ -1,6 +1,7 @@
 ﻿using Flavordex.Models;
 using Flavordex.Models.Data;
 using Flavordex.Utilities;
+using Flavordex.Utilities.Databases;
 using Flavordex.ViewModels;
 using System;
 using System.Collections.ObjectModel;
@@ -52,13 +53,20 @@ namespace Flavordex
         /// <param name="e">
         /// The event arguments containing the ID of the requested Entry as the Parameter.
         /// </param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
             _entry = e.Parameter as Entry;
-            LoadPhotos();
-            _entry.RecordChanged += OnRecordChanged;
+
+            Photos.Clear();
+            foreach (var item in await DatabaseHelper.GetEntryPhotosAsync(_entry.ID))
+            {
+                Photos.Add(item);
+            }
+            NoPhotosVisibility = Photos.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+
+            DatabaseHelper.RecordChanged += OnRecordChanged;
         }
 
         /// <summary>
@@ -69,17 +77,42 @@ namespace Flavordex
         {
             base.OnNavigatedFrom(e);
 
-            _entry.RecordChanged -= OnRecordChanged;
+            DatabaseHelper.RecordChanged -= OnRecordChanged;
         }
 
         /// <summary>
-        /// Reloads the photos when the Entry changes.
+        /// Updates the Photos list when a database record changes.
         /// </summary>
-        /// <param name="sender">The Entry.</param>
+        /// <param name="sender">The object that raised the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnRecordChanged(object sender, EventArgs e)
+        private void OnRecordChanged(object sender, RecordChangedEventArgs e)
         {
-            LoadPhotos();
+            if(e.Model is Photo && (e.Model as Photo).EntryID == _entry.ID)
+            {
+                if (e.Action == RecordChangedAction.Insert)
+                {
+                    var item = new PhotoItemViewModel(e.Model as Photo);
+                    if (!Photos.Any(k => k.Model.Hash == item.Model.Hash))
+                    {
+                        Photos.Add(item);
+                        FlipView.SelectedItem = item;
+                        if (FlipView.SelectedIndex == 0)
+                        {
+                            PhotoUtilities.DeleteThumbnail(_entry.ID);
+                        }
+                    }
+                }
+                else if (e.Action == RecordChangedAction.Delete)
+                {
+                    var item = Photos.Where(k => k.Model.ID == e.Model.ID).FirstOrDefault();
+                    if (Photos.IndexOf(item) == 0)
+                    {
+                        PhotoUtilities.DeleteThumbnail(_entry.ID);
+                    }
+                    Photos.Remove(item);
+                }
+                NoPhotosVisibility = Photos.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
 
         /// <summary>
@@ -113,15 +146,7 @@ namespace Flavordex
             if (result == ContentDialogResult.Primary)
             {
                 var index = FlipView.SelectedIndex;
-                if (await DatabaseHelper.DeletePhotoAsync(Photos[index].Model))
-                {
-                    Photos.RemoveAt(index);
-                    if (index == 0)
-                    {
-                        PhotoUtilities.DeleteThumbnail(_entry.ID);
-                        NoPhotosVisibility = Visibility.Visible;
-                    }
-                }
+                await DatabaseHelper.DeletePhotoAsync(Photos[index].Model);
             }
         }
 
@@ -137,12 +162,6 @@ namespace Flavordex
             {
                 var position = Photos.Count > 0 ? Photos.Last().Model.Position + 1 : 0;
                 var photo = await PhotoUtilities.AddPhoto(file, _entry.ID, position);
-                Photos.Add(new PhotoItemViewModel(photo));
-                if (position == 0)
-                {
-                    PhotoUtilities.DeleteThumbnail(_entry.ID);
-                    NoPhotosVisibility = Visibility.Collapsed;
-                }
             }
         }
 
@@ -159,32 +178,9 @@ namespace Flavordex
                 var position = Photos.Count > 0 ? Photos.Last().Model.Position + 1 : 0;
                 foreach (var file in files)
                 {
-                    var photo = await PhotoUtilities.AddPhoto(file, _entry.ID, Photos.Count);
-                    if (!Photos.Any(k => k.Model.Hash == photo.Hash))
-                    {
-                        Photos.Add(new PhotoItemViewModel(photo));
-                        if (position == 0)
-                        {
-                            PhotoUtilities.DeleteThumbnail(_entry.ID);
-                            NoPhotosVisibility = Visibility.Collapsed;
-                        }
-                    }
+                    var photo = await PhotoUtilities.AddPhoto(file, _entry.ID, position);
                 }
             }
-        }
-
-        /// <summary>
-        /// Loads the Photos for the Entry.
-        /// </summary>
-        private async void LoadPhotos()
-        {
-            Photos.Clear();
-            foreach (var item in await DatabaseHelper.GetEntryPhotosAsync(_entry.ID))
-            {
-                Photos.Add(item);
-            }
-
-            NoPhotosVisibility = Photos.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

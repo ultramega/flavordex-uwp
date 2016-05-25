@@ -313,6 +313,7 @@ namespace Flavordex.Models.Data
         public static async Task<bool> InsertPhotoAsync(Photo photo)
         {
             photo.ID = await Database.Insert(Tables.Photos.TABLE_NAME, photo.GetData());
+            RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Insert, photo));
             photo.Changed();
             _entryCache.Changed(photo.EntryID);
             return photo.ID > 0;
@@ -327,6 +328,7 @@ namespace Flavordex.Models.Data
         {
             if (await Database.Delete(Tables.Photos.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { photo.ID }) > 0)
             {
+                RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, photo));
                 photo.Deleted();
                 _entryCache.Changed(photo.EntryID);
                 return true;
