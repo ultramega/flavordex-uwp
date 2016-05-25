@@ -10,37 +10,45 @@ namespace Flavordex.UI
     public class BooleanToVisibilityConverter : IValueConverter
     {
         /// <summary>
-        /// Converts a boolean value to a Visibility value.
+        /// Converts between a boolean value to a Visibility value.
         /// </summary>
-        /// <param name="value">The boolean.</param>
+        /// <param name="value">The input value.</param>
         /// <param name="targetType">The data type of the target property.</param>
         /// <param name="parameter">The parameter as a string.</param>
         /// <param name="language">The language.</param>
         /// <returns>Visible if true, Collapsed if false.</returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is bool)
+            if (targetType.Name == "Visibility")
             {
-                if (parameter != null)
+                if (value is bool)
                 {
-                    value = !(bool)value;
+                    if (parameter != null)
+                    {
+                        value = !(bool)value;
+                    }
+                    return (bool)value ? Visibility.Visible : Visibility.Collapsed;
                 }
-                return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+                return Visibility.Collapsed;
             }
-            return Visibility.Collapsed;
+            else
+            {
+                var result = value is Visibility ? (Visibility)value == Visibility.Visible : false;
+                return parameter == null ? result : !result;
+            }
         }
 
         /// <summary>
-        /// Converts a Visibility value to a boolean value.
+        /// Not implemented.
         /// </summary>
-        /// <param name="value">The Visibility.</param>
+        /// <param name="value">The value.</param>
         /// <param name="targetType">The data type of the target property.</param>
-        /// <param name="parameter">The parameter as a string.</param>
+        /// <param name="parameter">The parameter.</param>
         /// <param name="language">The language.</param>
-        /// <returns>True if Visible, false if Collapsed.</returns>
+        /// <returns>The result of the conversion.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return value is Visibility ? (Visibility)value == Visibility.Visible : false;
+            throw new NotImplementedException();
         }
     }
 }
