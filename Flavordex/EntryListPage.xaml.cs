@@ -5,9 +5,11 @@ using Flavordex.Utilities;
 using Flavordex.Utilities.Databases;
 using Flavordex.ViewModels;
 using System;
+using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using static Flavordex.Settings;
@@ -26,12 +28,35 @@ namespace Flavordex
         private EntryListViewModel List { get; } = new EntryListViewModel();
 
         /// <summary>
+        /// Gets or sets whether export mode is enabled.
+        /// </summary>
+        public bool ExportMode
+        {
+            get { return (bool)GetValue(ExportModeProperty); }
+            set { SetValue(ExportModeProperty, value); }
+        }
+        public static readonly DependencyProperty ExportModeProperty =
+            DependencyProperty.Register("ExportMode", typeof(bool), typeof(EntryListPage), new PropertyMetadata(false));
+
+        /// <summary>
+        /// Gets or sets whether the Export Button is enabled.
+        /// </summary>
+        public bool EnableExport
+        {
+            get { return (bool)GetValue(EnableExportProperty); }
+            set { SetValue(EnableExportProperty, value); }
+        }
+        public static readonly DependencyProperty EnableExportProperty =
+            DependencyProperty.Register("EnableExport", typeof(bool), typeof(EntryListPage), new PropertyMetadata(false));
+
+        /// <summary>
         /// Constructor. Loads the list of Categories.
         /// </summary>
         public EntryListPage()
         {
             InitializeComponent();
             CheckDefaultSortButton();
+            RegisterPropertyChangedCallback(ExportModeProperty, OnExportModeChanged);
         }
 
         /// <summary>
@@ -56,19 +81,26 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnItemSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (MasterList.SelectedItem != null)
+            if (ExportMode)
             {
-                var entryId = (MasterList.SelectedItem as EntryItemViewModel).Model.ID;
-                if (entryId != List.SelectedEntryId)
+                EnableExport = MasterList.SelectedItems.Count > 0;
+            }
+            else
+            {
+                if (MasterList.SelectedItem != null)
                 {
-                    List.SelectedEntryId = entryId;
-                    if (DetailFrame.SourcePageType == typeof(ViewEntryPage))
+                    var entryId = (MasterList.SelectedItem as EntryItemViewModel).Model.ID;
+                    if (entryId != List.SelectedEntryId)
                     {
-                        DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new SuppressNavigationTransitionInfo());
-                    }
-                    else
-                    {
-                        DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new DrillInNavigationTransitionInfo());
+                        List.SelectedEntryId = entryId;
+                        if (DetailFrame.SourcePageType == typeof(ViewEntryPage))
+                        {
+                            DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new SuppressNavigationTransitionInfo());
+                        }
+                        else
+                        {
+                            DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new DrillInNavigationTransitionInfo());
+                        }
                     }
                 }
             }
@@ -361,6 +393,89 @@ namespace Flavordex
                     SortNameButton.IsChecked = true;
                     break;
             }
+        }
+
+        /// <summary>
+        /// Changes the list selection settings based on the export mode when the ExportMode
+        /// property changes.
+        /// </summary>
+        /// <param name="sender">This Page.</param>
+        /// <param name="dp">The ExportModeProperty.</param>
+        private void OnExportModeChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            if (ExportMode)
+            {
+                MasterList.SelectionMode = ListViewSelectionMode.Multiple;
+                MasterList.IsItemClickEnabled = false;
+            }
+            else
+            {
+                if (AdaptiveStates.CurrentState == DefaultState)
+                {
+                    MasterList.SelectionMode = ListViewSelectionMode.Single;
+                }
+                else
+                {
+                    MasterList.SelectionMode = ListViewSelectionMode.None;
+                    MasterList.IsItemClickEnabled = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enables export mode when the Export menu option is clicked.
+        /// </summary>
+        /// <param name="sender">The MenuFlyoutItem.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnStartExport(object sender, RoutedEventArgs e)
+        {
+            ListCommandBar.IsOpen = false;
+            ExportMode = true;
+        }
+
+        /// <summary>
+        /// Disables export mode when the Cancel button is clicked.
+        /// </summary>
+        /// <param name="sender">The Cancel Button.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnCancelExport(object sender, RoutedEventArgs e)
+        {
+            ExportMode = false;
+        }
+
+        /// <summary>
+        /// Selects all list items when the Check All button is clicked.
+        /// </summary>
+        /// <param name="sender">The Check All Button.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnCheckAll(object sender, RoutedEventArgs e)
+        {
+            MasterList.SelectAll();
+        }
+
+        /// <summary>
+        /// Deselects all list items when the Uncheck All button is clicked.
+        /// </summary>
+        /// <param name="sender">The Uncheck All Button.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnUncheckAll(object sender, RoutedEventArgs e)
+        {
+            MasterList.DeselectRange(new ItemIndexRange(0, (uint)MasterList.Items.Count));
+        }
+
+        /// <summary>
+        /// Exports the selected list items when the Export button is clicked.
+        /// </summary>
+        /// <param name="sender">The Export Button.</param>
+        /// <param name="e">The event arguments.</param>
+        private async void OnExport(object sender, RoutedEventArgs e)
+        {
+            var items = new Collection<long>();
+            foreach (var item in MasterList.SelectedItems)
+            {
+                items.Add((item as EntryItemViewModel).Model.ID);
+            }
+            ExportMode = !await EntryUtilities.ExportEntriesAsync(items);
         }
     }
 }

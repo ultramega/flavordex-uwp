@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>	
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+  <data name="Button.Cancel.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Button.CheckAll.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Check All</value>
+  </data>
+  <data name="Button.ExportSelected.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="Button.UncheckAll.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Uncheck All</value>
+  </data>
+  <!-- unused -->
+  <data name="Message.ImportNoData" xml:space="preserve">
+    <value>No valid entries were found.</value>
+  </data>
+  <data name="Title.Import" xml:space="preserve">
+    <value>Import Entries</value>
+  </data>
+  <data name="Title.Importing" xml:space="preserve">
+    <value>Importing…</value>
+  </data>
+  <data name="Title.Exporting" xml:space="preserve">
+    <value>Exporting…</value>
+  </data>
+  <data name="Title.Duplicates" xml:space="preserve">
+    <value>Duplicates Detected</value>
+  </data>
+  <data name="Button.Ignore" xml:space="preserve">
+    <value>Ignore</value>
+  </data>
+  <data name="Button.UncheckDuplicates" xml:space="preserve">
+    <value>Uncheck {0}</value>
+  </data>
+  <data name="Button.Import" xml:space="preserve">
+    <value>Import Selected</value>
+  </data>
+  <data name="Message.ImportComplete" xml:space="preserve">
+    <value>Import complete.</value>
+  </data>
+  <data name="Message.ExportComplete" xml:space="preserve">
+    <value>Export complete.</value>
+  </data>
+  <data name="Message.DuplicatesUnchecked" xml:space="preserve">
+    <value>{0} {1} {2} unchecked.</value>
+  </data>
+  <data name="Message.DuplicatesDetected" xml:space="preserve">
+    <value>{0} {1} {2} detected. What would you like to do?</value>
+  </data>
+  <data name="Error.CsvParse" xml:space="preserve">
+    <value>Unable to parse the .csv file</value>
+  </data>
+</root>

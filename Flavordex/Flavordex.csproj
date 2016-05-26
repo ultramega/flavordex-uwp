@@ -92,6 +92,9 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="Flavordex_StoreKey.pfx" />
     <None Include="project.json" />
+    <PRIResource Include="Strings\en-US\ImportExport.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
     <PRIResource Include="Strings\en-US\Entry.resw">
       <SubType>Designer</SubType>
     </PRIResource>
