@@ -1,0 +1,133 @@
+﻿<ContentDialog
+    x:Class="Flavordex.UI.Controls.ImportDialog"
+    x:Uid="ms-resource:///ImportExport/Dialog/Import"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex.UI.Controls"
+    xmlns:util="using:Flavordex.Utilities"
+    xmlns:rating="using:Bratched.Tools.RatingControl"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    IsPrimaryButtonEnabled="False"
+    PrimaryButtonClick="OnPrimaryButtonClicked">
+    <ContentDialog.TitleTemplate>
+        <DataTemplate>
+            <StackPanel
+                Orientation="Horizontal">
+                <SymbolIcon
+                    Symbol="Download" />
+
+                <TextBlock
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    Margin="10,0,0,0"
+                    Text="{Binding}" />
+            </StackPanel>
+        </DataTemplate>
+    </ContentDialog.TitleTemplate>
+
+    <Grid
+        Margin="0,10,0,0">
+        <TextBlock
+            x:Uid="ms-resource:///ImportExport/Message/NoData"
+            x:Name="EmptyList"
+            HorizontalAlignment="Center"
+            Margin="0,10,0,0"
+            TextWrapping="Wrap"
+            Visibility="Collapsed" />
+
+        <ListView
+            x:Name="ListView"
+            ItemContainerStyle="{StaticResource ListItemStyle}"
+            SelectionMode="Multiple"
+            SelectionChanged="OnSelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate
+                    x:DataType="util:ImportRecord">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition
+                                Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel
+                            Margin="4,0">
+                            <TextBlock
+                                Style="{ThemeResource BaseTextBlockStyle}"
+                                Text="{x:Bind Entry.Title}" />
+
+                            <TextBlock
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="{x:Bind Entry.Maker}" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1">
+                            <rating:RatingControl
+                                Height="12"
+                                RoundValueSlice="0.5"
+                                Value="{x:Bind Entry.Rating}">
+                                <rating:RatingControl.FullItemsDefinition>
+                                    <rating:RateItemDefinition
+                                        BackgroundColor="{ThemeResource ApplicationForegroundThemeBrush}"
+                                        OutlineColor="Transparent" />
+                                </rating:RatingControl.FullItemsDefinition>
+
+                                <rating:RatingControl.EmptyItemsDefinition>
+                                    <rating:RateItemDefinition
+                                        BackgroundColor="#AA000000"
+                                        OutlineColor="Transparent" />
+                                </rating:RatingControl.EmptyItemsDefinition>
+                            </rating:RatingControl>
+
+                            <TextBlock
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{x:Bind Entry.Date, Converter={StaticResource DateTimeToStringConverter}}" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid
+            x:Name="ProgressPanel"
+            Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                x:Uid="ms-resource:///ImportExport/Message/Importing" />
+
+            <TextBlock
+                Grid.Column="1"
+                Text="{Binding Value, ElementName=ProgressBar}" />
+
+            <TextBlock
+                Grid.Column="2"
+                Text="/" />
+
+            <TextBlock
+                Grid.Column="3"
+                Text="{Binding Maximum, ElementName=ProgressBar}" />
+
+            <ProgressBar
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                x:Name="ProgressBar"
+                Margin="0,8" />
+        </Grid>
+    </Grid>
+</ContentDialog>

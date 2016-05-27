@@ -10,26 +10,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
-        <Style
-            x:Key="ListItemStyle"
-            TargetType="ListViewItem">
-            <Setter
-                Property="HorizontalContentAlignment"
-                Value="Stretch" />
-
-            <Setter
-                Property="Padding"
-                Value="4" />
-
-            <Setter
-                Property="BorderBrush"
-                Value="{ThemeResource AppBarSeparatorForegroundThemeBrush}" />
-
-            <Setter
-                Property="BorderThickness"
-                Value="0,0,0,1" />
-        </Style>
-
         <DataTemplate
             x:Key="CategoryItemTemplate"
             x:DataType="vm:CategoryItemViewModel">
@@ -258,7 +238,8 @@
                                 Click="OnStartExport" />
 
                             <MenuFlyoutItem
-                                x:Uid="Menu/Import" />
+                                x:Uid="Menu/Import"
+                                Click="OnStartImport" />
                         </MenuFlyout>
                     </AppBarButton.Flyout>
                 </AppBarButton>

@@ -163,6 +163,9 @@
     <Compile Include="UI\Controls\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Controls\ImportDialog.xaml.cs">
+      <DependentUpon>ImportDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\Databases\ContentValues.cs" />
     <Compile Include="Utilities\Databases\Model.cs" />
     <Compile Include="Settings.cs" />
@@ -223,6 +226,7 @@
     <Compile Include="Utilities\Databases\RecordChangedAction.cs" />
     <Compile Include="Utilities\Databases\RecordChangedEventArgs.cs" />
     <Compile Include="Utilities\EntryUtilities.cs" />
+    <Compile Include="Utilities\ImportRecord.cs" />
     <Compile Include="Utilities\PhotoUtilities.cs" />
     <Compile Include="Utilities\ObjectCache.cs" />
     <Compile Include="Utilities\Plurals.cs" />
@@ -368,6 +372,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Controls\EntryListFilterForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Controls\ImportDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -51,16 +51,22 @@
   <data name="Button.UncheckAll.ToolTipService.ToolTip" xml:space="preserve">
     <value>Uncheck All</value>
   </data>
-  <!-- unused -->
-  <data name="Message.ImportNoData" xml:space="preserve">
-    <value>No valid entries were found.</value>
+  <data name="Dialog.Import.PrimaryButtonText" xml:space="preserve">
+    <value>Import Selected</value>
   </data>
-  <data name="Title.Import" xml:space="preserve">
+  <data name="Dialog.Import.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Dialog.Import.Title" xml:space="preserve">
     <value>Import Entries</value>
   </data>
-  <data name="Title.Importing" xml:space="preserve">
+  <data name="Message.Importing.Text" xml:space="preserve">
     <value>Importing…</value>
   </data>
+  <data name="Message.NoData.Text" xml:space="preserve">
+    <value>No valid entries were found.</value>
+  </data>
+  <!-- unused -->
   <data name="Title.Exporting" xml:space="preserve">
     <value>Exporting…</value>
   </data>
@@ -72,9 +78,6 @@
   </data>
   <data name="Button.UncheckDuplicates" xml:space="preserve">
     <value>Uncheck {0}</value>
-  </data>
-  <data name="Button.Import" xml:space="preserve">
-    <value>Import Selected</value>
   </data>
   <data name="Message.ImportComplete" xml:space="preserve">
     <value>Import complete.</value>

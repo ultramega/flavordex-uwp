@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using Flavordex.Models;
 using Flavordex.Models.Data;
+using Flavordex.UI.Controls;
 using Flavordex.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.ApplicationModel.Resources;
 using Windows.Data.Json;
 using Windows.Storage.Pickers;
+using Windows.UI.Xaml.Controls;
 
 namespace Flavordex.Utilities
 {
@@ -171,6 +173,126 @@ namespace Flavordex.Utilities
                 json.Add(JsonValue.CreateStringValue(photo.Model.Path));
             }
             return json.Stringify();
+        }
+
+        /// <summary>
+        /// Imports journal entries from a CSV file.
+        /// </summary>
+        /// <returns>Whether the import was completed successfully.</returns>
+        public static async Task<bool> ImportEntriesAsync()
+        {
+            var picker = new FileOpenPicker();
+            picker.FileTypeFilter.Add(".csv");
+            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            var file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                using (var stream = await file.OpenStreamForReadAsync())
+                {
+                    var reader = new StreamReader(stream);
+                    using (var csv = new CsvReader(reader))
+                    {
+                        var records = new Collection<ImportRecord>();
+                        while (csv.Read())
+                        {
+                            var row = csv.GetRecord<CsvRecord>();
+                            var entry = new Entry()
+                            {
+                                UUID = row.uuid,
+                                Title = row.title,
+                                Category = row.cat,
+                                Maker = row.maker,
+                                Origin = row.origin,
+                                Price = row.price,
+                                Location = row.location,
+                                Date = DateTime.Parse(row.date),
+                                Rating = row.rating,
+                                Notes = row.notes
+                            };
+
+                            records.Add(new ImportRecord()
+                            {
+                                Entry = entry,
+                                Extras = ParseExtras(row),
+                                Flavors = ParseFlavors(row),
+                                Photos = ParsePhotos(row)
+                            });
+                        }
+
+                        return await new ImportDialog(records).ShowAsync() == ContentDialogResult.Primary;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Parse the extra fields from a CSV record.
+        /// </summary>
+        /// <param name="record">The CsvRecord.</param>
+        /// <returns>A Collection of EntryExtras.</returns>
+        private static Collection<EntryExtra> ParseExtras(CsvRecord record)
+        {
+            var list = new Collection<EntryExtra>();
+            JsonObject json;
+            if (JsonObject.TryParse(record.extras, out json))
+            {
+                foreach (var item in json)
+                {
+                    list.Add(new EntryExtra()
+                    {
+                        Name = item.Key,
+                        Value = item.Value.GetString()
+                    });
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Parse the flavors from a CSV record.
+        /// </summary>
+        /// <param name="record">The CsvRecord.</param>
+        /// <returns>A Collection of EntryFlavors.</returns>
+        private static Collection<EntryFlavor> ParseFlavors(CsvRecord record)
+        {
+            var list = new Collection<EntryFlavor>();
+            JsonObject json;
+            if (JsonObject.TryParse(record.flavors, out json))
+            {
+                foreach (var item in json)
+                {
+                    list.Add(new EntryFlavor()
+                    {
+                        Name = item.Key,
+                        Value = (long)item.Value.GetNumber()
+                    });
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Parse the photos from a CSV record.
+        /// </summary>
+        /// <param name="record">The CsvRecord.</param>
+        /// <returns>A Collection of Photos.</returns>
+        private static Collection<Photo> ParsePhotos(CsvRecord record)
+        {
+            var list = new Collection<Photo>();
+            JsonArray json;
+            if (JsonArray.TryParse(record.photos, out json))
+            {
+                foreach (var item in json)
+                {
+                    list.Add(new Photo()
+                    {
+                        Path = item.GetString()
+                    });
+                }
+            }
+            return list;
         }
     }
 }

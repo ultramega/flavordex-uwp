@@ -477,5 +477,16 @@ namespace Flavordex
             }
             ExportMode = !await EntryUtilities.ExportEntriesAsync(items);
         }
+
+        /// <summary>
+        /// Starts the import process when the Import menu option is clicked.
+        /// </summary>
+        /// <param name="sender">The MenuFlyoutItem.</param>
+        /// <param name="e">The event arguments.</param>
+        private async void OnStartImport(object sender, RoutedEventArgs e)
+        {
+            ListCommandBar.IsOpen = false;
+            await EntryUtilities.ImportEntriesAsync();
+        }
     }
 }
