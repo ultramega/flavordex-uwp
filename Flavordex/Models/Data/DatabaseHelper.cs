@@ -210,16 +210,30 @@ namespace Flavordex.Models.Data
         /// </summary>
         /// <param name="entry">The Entry to update or insert.</param>
         /// <param name="extras">The extra fields for the journal entry.</param>
+        /// <param name="flavors">The flavors for the journal entry.</param>
         /// <returns>Whether the update was successful.</returns>
-        public static async Task<bool> UpdateEntryAsync(Entry entry, Collection<EntryExtra> extras)
+        public static async Task<bool> UpdateEntryAsync(Entry entry, Collection<EntryExtra> extras = null, Collection<EntryFlavor> flavors = null)
         {
+            entry.Title = FilterName(entry.Title);
+            if (string.IsNullOrEmpty(entry.Title))
+            {
+                return false;
+            }
+
             var action = entry.ID == 0 ? RecordChangedAction.Insert : RecordChangedAction.Update;
 
             entry.Updated = DateTime.Now;
             entry.IsSynced = false;
+
             if (string.IsNullOrEmpty(entry.UUID))
             {
                 entry.UUID = Guid.NewGuid().ToString();
+            }
+
+            await GetCategoryIdAsync(entry, flavors);
+            if (entry.CategoryID == 0)
+            {
+                return false;
             }
 
             var values = entry.GetData();
@@ -232,6 +246,8 @@ namespace Flavordex.Models.Data
 
             if (action == RecordChangedAction.Update)
             {
+                values.Remove(Tables.Entries.UUID);
+                values.Remove(Tables.Entries.CAT_ID);
                 await Database.Update(Tables.Entries.TABLE_NAME, values, BaseColumns._ID + " = ?", new object[] { entry.ID });
             }
             else
@@ -242,6 +258,7 @@ namespace Flavordex.Models.Data
             if (entry.ID > 0)
             {
                 await UpdateEntryExtrasAsync(entry.ID, entry.CategoryID, extras);
+                await UpdateEntryFlavorsAsync(entry.ID, flavors);
 
                 entry.Changed();
                 RecordChanged(null, new RecordChangedEventArgs(action, entry));
@@ -253,6 +270,52 @@ namespace Flavordex.Models.Data
         }
 
         /// <summary>
+        /// Gets the primary ID of the category for a journal entry, creating it if needed.
+        /// </summary>
+        /// <param name="entry">The journal entry.</param>
+        /// <param name="flavors">The flavors for the journal entry.</param>
+        private static async Task GetCategoryIdAsync(Entry entry, Collection<EntryFlavor> flavors)
+        {
+            if (entry.CategoryID > 0)
+            {
+                return;
+            }
+
+            var projection = new string[] { BaseColumns._ID };
+            var where = Tables.Cats.NAME + " = ?";
+            var whereArgs = new object[] { entry.Category };
+
+            var rows = await Database.Query(Tables.Cats.TABLE_NAME, projection, where, whereArgs, null, "1");
+            if (rows.Length > 0)
+            {
+                entry.CategoryID = rows[0].GetLong(BaseColumns._ID);
+            }
+            else
+            {
+                var category = new Category()
+                {
+                    Name = entry.Category
+                };
+                Collection<Flavor> categoryFlavors = null;
+                if (flavors != null)
+                {
+                    categoryFlavors = new Collection<Flavor>();
+                    var position = 0;
+                    foreach (var flavor in flavors)
+                    {
+                        categoryFlavors.Add(new Flavor()
+                        {
+                            Name = flavor.Name,
+                            Position = position++
+                        });
+                    }
+                }
+                await UpdateCategoryAsync(category, null, categoryFlavors);
+                entry.CategoryID = category.ID;
+            }
+        }
+
+        /// <summary>
         /// Updates the Extras for a journal entry.
         /// </summary>
         /// <param name="entryId">The primary ID of the journal entry.</param>
@@ -260,6 +323,11 @@ namespace Flavordex.Models.Data
         /// <param name="extras">The list of EntryExtras.</param>
         private static async Task UpdateEntryExtrasAsync(long entryId, long categoryId, Collection<EntryExtra> extras)
         {
+            if (extras == null)
+            {
+                return;
+            }
+
             await Database.Delete(Tables.EntriesExtras.TABLE_NAME, Tables.EntriesExtras.ENTRY + " = ?", new object[] { entryId });
 
             var values = new ContentValues();
@@ -300,7 +368,7 @@ namespace Flavordex.Models.Data
             else
             {
                 extra.Name = FilterName(extra.Name);
-                if (!string.IsNullOrWhiteSpace(extra.Name))
+                if (!string.IsNullOrEmpty(extra.Name))
                 {
                     var values = new ContentValues()
                     {
@@ -320,6 +388,11 @@ namespace Flavordex.Models.Data
         /// <param name="flavors">The list of EntryFlavors.</param>
         public static async Task UpdateEntryFlavorsAsync(long entryId, Collection<EntryFlavor> flavors)
         {
+            if (flavors == null)
+            {
+                return;
+            }
+
             await Database.Delete(Tables.EntriesFlavors.TABLE_NAME, Tables.EntriesFlavors.ENTRY + " = ?", new object[] { entryId });
 
             var position = 0;
@@ -503,21 +576,30 @@ namespace Flavordex.Models.Data
             category.Updated = DateTime.Now;
             category.IsSynced = false;
 
-            var values = category.GetData();
-            values.Remove(Tables.Cats.NUM_ENTRIES);
+            if (!category.IsPreset)
+            {
+                category.Name = FilterName(category.Name);
+                if (string.IsNullOrEmpty(category.Name))
+                {
+                    return false;
+                }
 
-            if (string.IsNullOrEmpty(category.UUID))
-            {
-                category.UUID = Guid.NewGuid().ToString();
-            }
+                if (string.IsNullOrEmpty(category.UUID))
+                {
+                    category.UUID = Guid.NewGuid().ToString();
+                }
 
-            if (action == RecordChangedAction.Update)
-            {
-                await Database.Update(Tables.Cats.TABLE_NAME, values, BaseColumns._ID + " = ?", new object[] { category.ID });
-            }
-            else
-            {
-                category.ID = await Database.Insert(Tables.Cats.TABLE_NAME, values);
+                var values = category.GetData();
+                values.Remove(Tables.Cats.NUM_ENTRIES);
+
+                if (action == RecordChangedAction.Update)
+                {
+                    await Database.Update(Tables.Cats.TABLE_NAME, values, BaseColumns._ID + " = ?", new object[] { category.ID });
+                }
+                else
+                {
+                    category.ID = await Database.Insert(Tables.Cats.TABLE_NAME, values);
+                }
             }
 
             if (category.ID > 0)
@@ -540,25 +622,37 @@ namespace Flavordex.Models.Data
         /// <param name="extras">The list of Extras.</param>
         private static async Task UpdateCategoryExtrasAsync(long categoryId, Collection<Extra> extras)
         {
+            if (extras == null)
+            {
+                return;
+            }
+
             foreach (var extra in extras)
             {
-                if (string.IsNullOrEmpty(extra.UUID))
+                if (extra.IsPreset)
                 {
-                    extra.UUID = Guid.NewGuid().ToString();
+                    continue;
                 }
+
+                extra.Name = FilterName(extra.Name);
+
                 if (extra.ID > 0)
                 {
                     if (extra.IsDeleted)
                     {
                         await Database.Delete(Tables.Extras.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { extra.ID });
                     }
-                    else
+                    else if (!string.IsNullOrEmpty(extra.Name))
                     {
                         await Database.Update(Tables.Extras.TABLE_NAME, extra.GetData(), BaseColumns._ID + " = ?", new object[] { extra.ID });
                     }
                 }
-                else
+                else if (!string.IsNullOrEmpty(extra.Name))
                 {
+                    if (string.IsNullOrEmpty(extra.UUID))
+                    {
+                        extra.UUID = Guid.NewGuid().ToString();
+                    }
                     extra.CategoryID = categoryId;
                     await Database.Insert(Tables.Extras.TABLE_NAME, extra.GetData());
                 }
@@ -572,6 +666,11 @@ namespace Flavordex.Models.Data
         /// <param name="flavors">The list of Flavors.</param>
         private static async Task UpdateCategoryFlavorsAsync(long categoryId, Collection<Flavor> flavors)
         {
+            if (flavors == null)
+            {
+                return;
+            }
+
             await Database.Delete(Tables.Flavors.TABLE_NAME, Tables.Flavors.CAT + " = ?", new object[] { categoryId });
 
             foreach (var flavor in flavors)
