@@ -4,7 +4,6 @@ using Flavordex.UI;
 using Flavordex.ViewModels;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -122,7 +121,18 @@ namespace Flavordex
             if (result == ContentDialogResult.Primary)
             {
                 Radar.IsInteractive = true;
-                Flavors = new ObservableCollection<RadarItem>(await DatabaseHelper.GetCategoryFlavorsAsync(_entry.CategoryID));
+
+                var flavors = new ObservableCollection<RadarItem>();
+                foreach (var flavor in await DatabaseHelper.GetCategoryFlavorsAsync(_entry.CategoryID))
+                {
+                    flavors.Add(new EntryFlavorItemViewModel(new EntryFlavor()
+                    {
+                        EntryID = _entry.ID,
+                        Name = flavor.Name,
+                        Position = flavor.Position
+                    }));
+                }
+                Flavors = flavors;
             }
         }
 
@@ -133,8 +143,12 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private async void OnSaveFlavors(object sender, RoutedEventArgs e)
         {
-            var flavors = new Collection<EntryFlavorItemViewModel>(Flavors.Cast<EntryFlavorItemViewModel>().ToList());
-            await DatabaseHelper.InsertFlavorsAsync(_entry.ID, flavors);
+            var flavors = new Collection<EntryFlavor>();
+            foreach (EntryFlavorItemViewModel flavor in Flavors)
+            {
+                flavors.Add(flavor.Model);
+            }
+            await DatabaseHelper.UpdateEntryFlavorsAsync(_entry.ID, flavors);
         }
 
         /// <summary>
@@ -142,8 +156,12 @@ namespace Flavordex
         /// </summary>
         private async void LoadFlavors()
         {
-            var flavors = await DatabaseHelper.GetEntryFlavorsAsync(_entry.ID);
-            Flavors = new Collection<RadarItem>(flavors.Cast<RadarItem>().ToList());
+            var flavors = new Collection<RadarItem>();
+            foreach (var flavor in await DatabaseHelper.GetEntryFlavorsAsync(_entry.ID))
+            {
+                flavors.Add(new EntryFlavorItemViewModel(flavor));
+            }
+            Flavors = flavors;
         }
     }
 }

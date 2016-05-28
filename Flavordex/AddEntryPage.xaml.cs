@@ -102,7 +102,12 @@ namespace Flavordex
             else
             {
                 PageTitle = ResourceLoader.GetForCurrentView("AddEntry").GetString("Title/SelectCategory");
-                (FindName("CategoryList") as ListView).ItemsSource = await DatabaseHelper.GetCategoryListAsync();
+                var categories = new Collection<CategoryItemViewModel>();
+                foreach (var category in await DatabaseHelper.GetCategoryListAsync())
+                {
+                    categories.Add(new CategoryItemViewModel(category));
+                }
+                (FindName("CategoryList") as ListView).ItemsSource = categories;
             }
         }
 
@@ -148,10 +153,19 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private async void OnSaveEntry(object sender, RoutedEventArgs e)
         {
-            if (await DatabaseHelper.UpdateEntryAsync(Entry))
+            var extras = new Collection<EntryExtra>();
+            foreach (var extra in Entry.Extras)
             {
-                var flavors = new Collection<EntryFlavorItemViewModel>(Flavors.Cast<EntryFlavorItemViewModel>().ToList());
-                await DatabaseHelper.InsertFlavorsAsync(Entry.Model.ID, flavors);
+                extras.Add(extra.Model);
+            }
+            if (await DatabaseHelper.UpdateEntryAsync(Entry.Model, extras))
+            {
+                var flavors = new Collection<EntryFlavor>();
+                foreach (EntryFlavorItemViewModel flavor in Flavors)
+                {
+                    flavors.Add(flavor.Model);
+                }
+                await DatabaseHelper.UpdateEntryFlavorsAsync(Entry.Model.ID, flavors);
 
                 var position = 0;
                 foreach (var item in Photos)
@@ -224,37 +238,20 @@ namespace Flavordex
 
             PageTitle = string.Format(ResourceLoader.GetForCurrentView("AddEntry").GetString("Title/AddEntry"), category.Name);
 
-            var entry = new Entry() { CategoryID = categoryId, Date = DateTime.Now };
-            switch (category.Model.Name)
-            {
-                case Constants.CAT_BEER:
-                    Entry = new BeerEntryViewModel(entry);
-                    break;
-                case Constants.CAT_COFFEE:
-                    Entry = new CoffeeEntryViewModel(entry);
-                    break;
-                case Constants.CAT_WHISKEY:
-                    Entry = new WhiskeyEntryViewModel(entry);
-                    break;
-                case Constants.CAT_WINE:
-                    Entry = new WineEntryViewModel(entry);
-                    break;
-                default:
-                    Entry = new EntryViewModel(entry);
-                    break;
-            }
+            var entry = new Entry() { Category = category.Name, CategoryID = categoryId, Date = DateTime.Now };
+            Entry = EntryViewModel.GetInstance(entry);
 
-            foreach (var item in category.Extras)
+            foreach (var item in await DatabaseHelper.GetCategoryExtrasAsync(categoryId))
             {
                 var extra = new EntryExtra();
-                extra.ExtraID = item.Model.ID;
-                extra.IsPreset = item.Model.IsPreset;
-                extra.Name = item.Model.Name;
+                extra.ExtraID = item.ID;
+                extra.IsPreset = item.IsPreset;
+                extra.Name = item.Name;
                 Entry.Extras.Add(new EntryExtraItemViewModel(extra));
             }
 
             var flavors = new Collection<RadarItem>();
-            foreach(var item in category.Flavors)
+            foreach (var item in await DatabaseHelper.GetCategoryFlavorsAsync(categoryId))
             {
                 var flavor = new EntryFlavor();
                 flavor.Name = item.Name;

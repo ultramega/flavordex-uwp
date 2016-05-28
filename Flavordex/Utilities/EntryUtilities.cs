@@ -2,7 +2,6 @@
 using Flavordex.Models;
 using Flavordex.Models.Data;
 using Flavordex.UI.Controls;
-using Flavordex.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -102,22 +101,21 @@ namespace Flavordex.Utilities
                         foreach (var entryId in entryIds)
                         {
                             var entry = await DatabaseHelper.GetEntryAsync(entryId);
-                            var model = entry.Model;
                             var record = new CsvRecord()
                             {
-                                uuid = model.UUID,
-                                title = model.Title,
-                                cat = model.Category,
-                                maker = model.Maker,
-                                origin = model.Origin,
-                                price = model.Price,
-                                location = model.Location,
-                                date = model.Date.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm'Z'"),
-                                rating = model.Rating,
-                                notes = model.Notes,
-                                extras = SerializeExtras(entry),
-                                flavors = await SerializeFlavorsAsync(model.ID),
-                                photos = await SerializePhotosAsync(model.ID)
+                                uuid = entry.UUID,
+                                title = entry.Title,
+                                cat = entry.Category,
+                                maker = entry.Maker,
+                                origin = entry.Origin,
+                                price = entry.Price,
+                                location = entry.Location,
+                                date = entry.Date.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm'Z'"),
+                                rating = entry.Rating,
+                                notes = entry.Notes,
+                                extras = await SerializeExtrasAsync(entry.ID),
+                                flavors = await SerializeFlavorsAsync(entry.ID),
+                                photos = await SerializePhotosAsync(entry.ID)
                             };
                             csv.WriteRecord(record);
                         }
@@ -133,14 +131,14 @@ namespace Flavordex.Utilities
         /// <summary>
         /// Serializes the extra fields for a journal entry into a JSON object string.
         /// </summary>
-        /// <param name="entry">The journal entry.</param>
+        /// <param name="entryId">The primary ID of the journal entry.</param>
         /// <returns>A JSON object string.</returns>
-        private static string SerializeExtras(EntryViewModel entry)
+        private static async Task<string> SerializeExtrasAsync(long entryId)
         {
             var json = new JsonObject();
-            foreach (var extra in entry.Extras)
+            foreach (var extra in await DatabaseHelper.GetEntryExtrasAsync(entryId))
             {
-                json[extra.Model.Name] = JsonValue.CreateStringValue(extra.Model.Value);
+                json[extra.Name] = JsonValue.CreateStringValue(extra.Value);
             }
             return json.Stringify();
         }
@@ -155,7 +153,7 @@ namespace Flavordex.Utilities
             var json = new JsonObject();
             foreach (var flavor in await DatabaseHelper.GetEntryFlavorsAsync(entryId))
             {
-                json[flavor.Model.Name] = JsonValue.CreateNumberValue(flavor.Model.Value);
+                json[flavor.Name] = JsonValue.CreateNumberValue(flavor.Value);
             }
             return json.Stringify();
         }
@@ -170,7 +168,7 @@ namespace Flavordex.Utilities
             var json = new JsonArray();
             foreach (var photo in await DatabaseHelper.GetEntryPhotosAsync(entryId))
             {
-                json.Add(JsonValue.CreateStringValue(photo.Model.Path));
+                json.Add(JsonValue.CreateStringValue(photo.Path));
             }
             return json.Stringify();
         }

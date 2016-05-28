@@ -269,7 +269,17 @@ namespace Flavordex
         /// <param name="categoryId">The primary ID of the Category.</param>
         private async void LoadCategory(long categoryId)
         {
-            Category = await DatabaseHelper.GetCategoryAsync(categoryId);
+            Category = new CategoryViewModel(await DatabaseHelper.GetCategoryAsync(categoryId));
+
+            foreach (var extra in await DatabaseHelper.GetCategoryExtrasAsync(categoryId))
+            {
+                Category.Extras.Add(new ExtraItemViewModel(extra));
+            }
+
+            foreach (var flavor in await DatabaseHelper.GetCategoryFlavorsAsync(categoryId))
+            {
+                Category.Flavors.Add(new FlavorItemViewModel(flavor));
+            }
         }
 
         /// <summary>
@@ -278,19 +288,23 @@ namespace Flavordex
         /// <returns>Whether the update was successful.</returns>
         private async Task<bool> UpdateCategory()
         {
+            var extras = new Collection<Extra>();
             var position = 0;
             foreach (var extra in Category.Extras)
             {
                 extra.Model.Position = position++;
+                extras.Add(extra.Model);
             }
 
+            var flavors = new Collection<Flavor>();
             position = 0;
             foreach (var flavor in Category.Flavors)
             {
                 flavor.Model.Position = position++;
+                flavors.Add(flavor.Model);
             }
 
-            return await DatabaseHelper.UpdateCategoryAsync(Category);
+            return await DatabaseHelper.UpdateCategoryAsync(Category.Model, extras, flavors);
         }
 
         /// <summary>

@@ -137,7 +137,12 @@ namespace Flavordex
                 return;
             }
 
-            Entry = await DatabaseHelper.GetEntryAsync(_entryId);
+            Entry = EntryViewModel.GetInstance(await DatabaseHelper.GetEntryAsync(_entryId));
+
+            foreach (var extra in await DatabaseHelper.GetEntryExtrasAsync(_entryId))
+            {
+                Entry.Extras.Add(new EntryExtraItemViewModel(extra));
+            }
 
             FindName("Pivot");
         }

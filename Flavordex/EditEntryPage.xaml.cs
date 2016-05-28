@@ -1,5 +1,7 @@
-﻿using Flavordex.Models.Data;
+﻿using Flavordex.Models;
+using Flavordex.Models.Data;
 using Flavordex.ViewModels;
+using System.Collections.ObjectModel;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -47,7 +49,12 @@ namespace Flavordex
 
             if (e.Parameter is long)
             {
-                Entry = await DatabaseHelper.GetEntryAsync((long)e.Parameter);
+                Entry = EntryViewModel.GetInstance(await DatabaseHelper.GetEntryAsync((long)e.Parameter));
+
+                foreach (var extra in await DatabaseHelper.GetEntryExtrasAsync((long)e.Parameter))
+                {
+                    Entry.Extras.Add(new EntryExtraItemViewModel(extra));
+                }
             }
             else if (e.Parameter is EntryViewModel)
             {
@@ -86,7 +93,13 @@ namespace Flavordex
         /// <param name="e"></param>
         private async void OnSaveEntry(object sender, RoutedEventArgs e)
         {
-            await DatabaseHelper.UpdateEntryAsync(Entry);
+            var extras = new Collection<EntryExtra>();
+            foreach (var extra in Entry.Extras)
+            {
+                extras.Add(extra.Model);
+            }
+
+            await DatabaseHelper.UpdateEntryAsync(Entry.Model, extras);
             Frame.GoBack();
         }
     }

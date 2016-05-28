@@ -199,6 +199,27 @@ namespace Flavordex.ViewModels
         }
 
         /// <summary>
+        /// Gets a new instance of a EntryViewModel of the type specific to the Entry's category.
+        /// </summary>
+        /// <param name="entry">The Entry to represent.</param>
+        /// <returns>The EntryViewModel.</returns>
+        public static EntryViewModel GetInstance(Entry entry)
+        {
+            switch (entry.Category)
+            {
+                case Constants.CAT_BEER:
+                    return new BeerEntryViewModel(entry);
+                case Constants.CAT_COFFEE:
+                    return new CoffeeEntryViewModel(entry);
+                case Constants.CAT_WHISKEY:
+                    return new WhiskeyEntryViewModel(entry);
+                case Constants.CAT_WINE:
+                    return new WineEntryViewModel(entry);
+            }
+            return new EntryViewModel(entry);
+        }
+
+        /// <summary>
         /// Raises a PropertyChanged event for the CustomFields when the Extras collection changes.
         /// </summary>
         /// <param name="sender">The Extras ObservableCollection.</param>

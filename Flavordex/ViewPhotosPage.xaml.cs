@@ -62,7 +62,7 @@ namespace Flavordex
             Photos.Clear();
             foreach (var item in await DatabaseHelper.GetEntryPhotosAsync(_entry.ID))
             {
-                Photos.Add(item);
+                Photos.Add(new PhotoItemViewModel(item));
             }
             NoPhotosVisibility = Photos.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
 
@@ -87,7 +87,7 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnRecordChanged(object sender, RecordChangedEventArgs e)
         {
-            if(e.Model is Photo && (e.Model as Photo).EntryID == _entry.ID)
+            if (e.Model is Photo && (e.Model as Photo).EntryID == _entry.ID)
             {
                 if (e.Action == RecordChangedAction.Insert)
                 {

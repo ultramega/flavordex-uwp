@@ -1,6 +1,5 @@
 ﻿using Flavordex.Models.Data;
 using Flavordex.Utilities;
-using Flavordex.ViewModels;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -54,8 +53,14 @@ namespace Flavordex.UI.Controls
             ProgressPanel.Visibility = Visibility.Visible;
             foreach (ImportRecord item in ListView.SelectedItems)
             {
-                var entry = new EntryViewModel(item.Entry);
-                await DatabaseHelper.UpdateEntryAsync(entry);
+                if (await DatabaseHelper.UpdateEntryAsync(item.Entry, item.Extras))
+                {
+                    await DatabaseHelper.UpdateEntryFlavorsAsync(item.Entry.ID, item.Flavors);
+                    foreach (var photo in item.Photos)
+                    {
+                        await DatabaseHelper.InsertPhotoAsync(photo);
+                    }
+                }
                 ProgressBar.Value++;
             }
 

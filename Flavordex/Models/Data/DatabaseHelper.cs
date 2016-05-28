@@ -1,9 +1,6 @@
-﻿using Flavordex.UI;
-using Flavordex.Utilities.Databases;
-using Flavordex.ViewModels;
+﻿using Flavordex.Utilities.Databases;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Flavordex.Models.Data
@@ -73,10 +70,10 @@ namespace Flavordex.Models.Data
         /// Gets a list of all journal entries from one or all categories.
         /// </summary>
         /// <param name="categoryId">The primary ID of the category; 0 for all categories.</param>
-        /// <returns>A Collection of EntryItemViewModels.</returns>
-        public static async Task<Collection<EntryItemViewModel>> GetEntryListAsync(long categoryId)
+        /// <returns>A Collection of Entries.</returns>
+        public static async Task<Collection<Entry>> GetEntryListAsync(long categoryId)
         {
-            var list = new Collection<EntryItemViewModel>();
+            var list = new Collection<Entry>();
 
             var projection = new string[]
             {
@@ -93,8 +90,7 @@ namespace Flavordex.Models.Data
             var rows = await Database.Query(Tables.Entries.VIEW_NAME, projection, where, whereArgs);
             foreach (var row in rows)
             {
-                var entry = _entryCache.Get(row);
-                list.Add(new EntryItemViewModel(entry));
+                list.Add(_entryCache.Get(row));
             }
 
             return list;
@@ -104,37 +100,15 @@ namespace Flavordex.Models.Data
         /// Gets a journal entry from the database.
         /// </summary>
         /// <param name="entryId">The primary ID of the journal entry.</param>
-        /// <returns>The EntryViewModel.</returns>
-        public static async Task<EntryViewModel> GetEntryAsync(long entryId)
+        /// <returns>The Entry.</returns>
+        public static async Task<Entry> GetEntryAsync(long entryId)
         {
             var where = BaseColumns._ID + " = ?";
             var whereArgs = new object[] { entryId };
             var rows = await Database.Query(Tables.Entries.VIEW_NAME, null, where, whereArgs);
             if (rows.Length > 0)
             {
-                var entry = _entryCache.Get(rows[0]);
-
-                EntryViewModel viewModel;
-                switch (entry.Category)
-                {
-                    case Constants.CAT_BEER:
-                        viewModel = new BeerEntryViewModel(entry);
-                        break;
-                    case Constants.CAT_COFFEE:
-                        viewModel = new CoffeeEntryViewModel(entry);
-                        break;
-                    case Constants.CAT_WHISKEY:
-                        viewModel = new WhiskeyEntryViewModel(entry);
-                        break;
-                    case Constants.CAT_WINE:
-                        viewModel = new WineEntryViewModel(entry);
-                        break;
-                    default:
-                        viewModel = new EntryViewModel(entry);
-                        break;
-                }
-                await GetEntryExtrasAsync(viewModel);
-                return viewModel;
+                return _entryCache.Get(rows[0]);
             }
 
             return null;
@@ -143,33 +117,34 @@ namespace Flavordex.Models.Data
         /// <summary>
         /// Gets the extra fields for a journal entry.
         /// </summary>
-        /// <param name="entry">The journal entry.</param>
-        private static async Task GetEntryExtrasAsync(EntryViewModel entry)
+        /// <param name="entryId">The primary ID of the journal entry.</param>
+        /// <returns>A Collection of EntryExtras representing the flavors.</returns>
+        public static async Task<Collection<EntryExtra>> GetEntryExtrasAsync(long entryId)
         {
-            var list = new Collection<EntryExtraItemViewModel>();
+            var list = new Collection<EntryExtra>();
 
             var where = Tables.EntriesExtras.ENTRY + " = ?";
-            var whereArgs = new object[] { entry.Model.ID };
+            var whereArgs = new object[] { entryId };
             var sort = Tables.Extras.POS;
             var rows = await Database.Query(Tables.EntriesExtras.VIEW_NAME, null, where, whereArgs, sort);
             foreach (var row in rows)
             {
                 var item = new EntryExtra();
                 item.SetData(row);
-                list.Add(new EntryExtraItemViewModel(item));
+                list.Add(item);
             }
 
-            entry.Extras = list;
+            return list;
         }
 
         /// <summary>
         /// Gets the flavors for a journal entry.
         /// </summary>
         /// <param name="entryId">The primary ID of the journal entry.</param>
-        /// <returns>A Collection of FlavorItemViewModels representing the flavors.</returns>
-        public static async Task<Collection<EntryFlavorItemViewModel>> GetEntryFlavorsAsync(long entryId)
+        /// <returns>A Collection of EntryFlavors representing the flavors.</returns>
+        public static async Task<Collection<EntryFlavor>> GetEntryFlavorsAsync(long entryId)
         {
-            var list = new Collection<EntryFlavorItemViewModel>();
+            var list = new Collection<EntryFlavor>();
 
             var where = Tables.EntriesFlavors.ENTRY + " = ?";
             var whereArgs = new object[] { entryId };
@@ -179,7 +154,7 @@ namespace Flavordex.Models.Data
             {
                 var item = new EntryFlavor();
                 item.SetData(row);
-                list.Add(new EntryFlavorItemViewModel(item));
+                list.Add(item);
             }
 
             return list;
@@ -189,10 +164,10 @@ namespace Flavordex.Models.Data
         /// Gets the photos for a journal entry.
         /// </summary>
         /// <param name="entryId">The primary ID of the journal entry.</param>
-        /// <returns>A Collection of PhotoItemViewModels representing the photos.</returns>
-        public static async Task<Collection<PhotoItemViewModel>> GetEntryPhotosAsync(long entryId)
+        /// <returns>A Collection of Photos representing the photos.</returns>
+        public static async Task<Collection<Photo>> GetEntryPhotosAsync(long entryId)
         {
-            var list = new Collection<PhotoItemViewModel>();
+            var list = new Collection<Photo>();
 
             var where = Tables.Photos.ENTRY + " = ?";
             var whereArgs = new object[] { entryId };
@@ -202,7 +177,7 @@ namespace Flavordex.Models.Data
             {
                 var item = new Photo();
                 item.SetData(row);
-                list.Add(new PhotoItemViewModel(item));
+                list.Add(item);
             }
 
             return list;
@@ -234,19 +209,20 @@ namespace Flavordex.Models.Data
         /// Updates or inserts a journal entry in the database.
         /// </summary>
         /// <param name="entry">The Entry to update or insert.</param>
+        /// <param name="extras">The extra fields for the journal entry.</param>
         /// <returns>Whether the update was successful.</returns>
-        public static async Task<bool> UpdateEntryAsync(EntryViewModel entry)
+        public static async Task<bool> UpdateEntryAsync(Entry entry, Collection<EntryExtra> extras)
         {
-            var action = entry.Model.ID == 0 ? RecordChangedAction.Insert : RecordChangedAction.Update;
+            var action = entry.ID == 0 ? RecordChangedAction.Insert : RecordChangedAction.Update;
 
-            entry.Model.Updated = DateTime.Now;
-            entry.Model.IsSynced = false;
-            if (string.IsNullOrEmpty(entry.Model.UUID))
+            entry.Updated = DateTime.Now;
+            entry.IsSynced = false;
+            if (string.IsNullOrEmpty(entry.UUID))
             {
-                entry.Model.UUID = Guid.NewGuid().ToString();
+                entry.UUID = Guid.NewGuid().ToString();
             }
 
-            var values = entry.Model.GetData();
+            var values = entry.GetData();
 
             await GetMakerIDAsync(values);
 
@@ -256,27 +232,20 @@ namespace Flavordex.Models.Data
 
             if (action == RecordChangedAction.Update)
             {
-                await Database.Update(Tables.Entries.TABLE_NAME, values, BaseColumns._ID + " = ?", new object[] { entry.Model.ID });
+                await Database.Update(Tables.Entries.TABLE_NAME, values, BaseColumns._ID + " = ?", new object[] { entry.ID });
             }
             else
             {
-                entry.Model.ID = await Database.Insert(Tables.Entries.TABLE_NAME, values);
+                entry.ID = await Database.Insert(Tables.Entries.TABLE_NAME, values);
             }
 
-            if (entry.Model.ID > 0)
+            if (entry.ID > 0)
             {
-                await Database.Delete(Tables.EntriesExtras.TABLE_NAME, Tables.EntriesExtras.ENTRY + " = ?", new object[] { entry.Model.ID });
-                values.Clear();
-                values.SetLong(Tables.EntriesExtras.ENTRY, entry.Model.ID);
-                foreach (var extra in entry.Extras)
-                {
-                    values.SetLong(Tables.EntriesExtras.EXTRA, extra.Model.ID);
-                    values.SetString(Tables.EntriesExtras.VALUE, extra.Model.Value);
-                    await Database.Insert(Tables.EntriesExtras.TABLE_NAME, values);
-                }
+                await UpdateEntryExtrasAsync(entry.ID, extras);
 
-                entry.Model.Changed();
-                RecordChanged(null, new RecordChangedEventArgs(action, entry.Model));
+                entry.Changed();
+                RecordChanged(null, new RecordChangedEventArgs(action, entry));
+
                 return true;
             }
 
@@ -284,25 +253,42 @@ namespace Flavordex.Models.Data
         }
 
         /// <summary>
-        /// Inserts the Flavors for a journal entry into the database.
+        /// Updates the Extras for a journal entry.
         /// </summary>
         /// <param name="entryId">The primary ID of the journal entry.</param>
-        /// <param name="flavors">The list of Flavors.</param>
-        /// <returns>Whether the Flavors were inserted successfully.</returns>
-        public static async Task<bool> InsertFlavorsAsync(long entryId, Collection<EntryFlavorItemViewModel> flavors)
+        /// <param name="extras">The list of EntryExtras.</param>
+        private static async Task UpdateEntryExtrasAsync(long entryId, Collection<EntryExtra> extras)
+        {
+            await Database.Delete(Tables.EntriesExtras.TABLE_NAME, Tables.EntriesExtras.ENTRY + " = ?", new object[] { entryId });
+
+            var values = new ContentValues();
+            values.SetLong(Tables.EntriesExtras.ENTRY, entryId);
+            foreach (var extra in extras)
+            {
+                values.SetLong(Tables.EntriesExtras.EXTRA, extra.ID);
+                values.SetString(Tables.EntriesExtras.VALUE, extra.Value);
+                await Database.Insert(Tables.EntriesExtras.TABLE_NAME, values);
+            }
+        }
+
+        /// <summary>
+        /// Updates the Flavors for a journal entry.
+        /// </summary>
+        /// <param name="entryId">The primary ID of the journal entry.</param>
+        /// <param name="flavors">The list of EntryFlavors.</param>
+        public static async Task UpdateEntryFlavorsAsync(long entryId, Collection<EntryFlavor> flavors)
         {
             await Database.Delete(Tables.EntriesFlavors.TABLE_NAME, Tables.EntriesFlavors.ENTRY + " = ?", new object[] { entryId });
 
             var position = 0;
             foreach (var flavor in flavors)
             {
-                flavor.Model.EntryID = entryId;
-                flavor.Model.Position = position++;
-                await Database.Insert(Tables.EntriesFlavors.TABLE_NAME, flavor.Model.GetData());
+                flavor.EntryID = entryId;
+                flavor.Position = position++;
+                await Database.Insert(Tables.EntriesFlavors.TABLE_NAME, flavor.GetData());
             }
 
             _entryCache.Changed(entryId);
-            return true;
         }
 
         /// <summary>
@@ -385,38 +371,33 @@ namespace Flavordex.Models.Data
         /// <summary>
         /// Gets the list of categories.
         /// </summary>
-        /// <returns>A Collection of CategoryItemViewModels.</returns>
-        public static async Task<Collection<CategoryItemViewModel>> GetCategoryListAsync()
+        /// <returns>A Collection of Categories.</returns>
+        public static async Task<Collection<Category>> GetCategoryListAsync()
         {
-            var list = new Collection<CategoryItemViewModel>();
+            var list = new Collection<Category>();
 
             var rows = await Database.Query(Tables.Cats.VIEW_NAME);
             foreach (var row in rows)
             {
-                var item = _categoryCache.Get(row);
-                list.Add(new CategoryItemViewModel(item));
+                list.Add(_categoryCache.Get(row));
             }
 
-            return new Collection<CategoryItemViewModel>(list.OrderBy(e => e.Name).ToArray());
+            return list;
         }
 
         /// <summary>
         /// Gets a category from the database.
         /// </summary>
         /// <param name="categoryId">The primary ID of the category.</param>
-        /// <returns>The CategoryViewModel.</returns>
-        public static async Task<CategoryViewModel> GetCategoryAsync(long categoryId)
+        /// <returns>The Category.</returns>
+        public static async Task<Category> GetCategoryAsync(long categoryId)
         {
             var where = BaseColumns._ID + " = ?";
             var whereArgs = new object[] { categoryId };
             var rows = await Database.Query(Tables.Cats.VIEW_NAME, null, where, whereArgs);
             foreach (var row in rows)
             {
-                var category = _categoryCache.Get(row);
-                var viewModel = new CategoryViewModel(category);
-                await GetCategoryExtrasAsync(viewModel);
-                viewModel.Flavors = await GetCategoryFlavorsAsync(category.ID);
-                return viewModel;
+                return _categoryCache.Get(row);
             }
 
             return null;
@@ -425,23 +406,23 @@ namespace Flavordex.Models.Data
         /// <summary>
         /// Gets the extra fields for a category.
         /// </summary>
-        /// <param name="category">The category.</param>
-        private static async Task GetCategoryExtrasAsync(CategoryViewModel category)
+        /// <param name="categoryId">The primary ID of the category.</param>
+        public static async Task<Collection<Extra>> GetCategoryExtrasAsync(long categoryId)
         {
-            var list = new ObservableCollection<ExtraItemViewModel>();
+            var list = new Collection<Extra>();
 
             var where = Tables.Extras.CAT + " = ?";
-            var whereArgs = new object[] { category.Model.ID };
+            var whereArgs = new object[] { categoryId };
             var sort = Tables.Extras.POS;
             var rows = await Database.Query(Tables.Extras.TABLE_NAME, null, where, whereArgs, sort);
             foreach (var row in rows)
             {
                 var item = new Extra();
                 item.SetData(row);
-                list.Add(new ExtraItemViewModel(item));
+                list.Add(item);
             }
 
-            category.Extras = list;
+            return list;
         }
 
         /// <summary>
@@ -449,9 +430,9 @@ namespace Flavordex.Models.Data
         /// </summary>
         /// <param name="categoryId">The primary ID of the category.</param>
         /// <returns>The list of Flavors for the Category.</returns>
-        public static async Task<ObservableCollection<FlavorItemViewModel>> GetCategoryFlavorsAsync(long categoryId)
+        public static async Task<Collection<Flavor>> GetCategoryFlavorsAsync(long categoryId)
         {
-            var list = new ObservableCollection<FlavorItemViewModel>();
+            var list = new Collection<Flavor>();
 
             var where = Tables.Flavors.CAT + " = ?";
             var whereArgs = new object[] { categoryId };
@@ -461,7 +442,7 @@ namespace Flavordex.Models.Data
             {
                 var item = new Flavor();
                 item.SetData(row);
-                list.Add(new FlavorItemViewModel(item));
+                list.Add(item);
             }
 
             return list;
@@ -471,69 +452,91 @@ namespace Flavordex.Models.Data
         /// Updates or inserts a Category in the database.
         /// </summary>
         /// <param name="category">The Category to update or insert.</param>
+        /// <param name="extras">The extra fields for the category.</param>
+        /// <param name="flavors">The flavors for the category.</param>
         /// <returns>Whether the update was successful.</returns>
-        public static async Task<bool> UpdateCategoryAsync(CategoryViewModel category)
+        public static async Task<bool> UpdateCategoryAsync(Category category, Collection<Extra> extras, Collection<Flavor> flavors)
         {
-            var action = category.Model.ID == 0 ? RecordChangedAction.Insert : RecordChangedAction.Update;
-            category.Model.Updated = DateTime.Now;
-            category.Model.IsSynced = false;
+            var action = category.ID == 0 ? RecordChangedAction.Insert : RecordChangedAction.Update;
+            category.Updated = DateTime.Now;
+            category.IsSynced = false;
 
-            var values = category.Model.GetData();
+            var values = category.GetData();
             values.Remove(Tables.Cats.NUM_ENTRIES);
 
-            if (string.IsNullOrEmpty(category.Model.UUID))
+            if (string.IsNullOrEmpty(category.UUID))
             {
-                category.Model.UUID = Guid.NewGuid().ToString();
+                category.UUID = Guid.NewGuid().ToString();
             }
 
             if (action == RecordChangedAction.Update)
             {
-                await Database.Update(Tables.Cats.TABLE_NAME, values, BaseColumns._ID + " = ?", new object[] { category.Model.ID });
+                await Database.Update(Tables.Cats.TABLE_NAME, values, BaseColumns._ID + " = ?", new object[] { category.ID });
             }
             else
             {
-                category.Model.ID = await Database.Insert(Tables.Cats.TABLE_NAME, values);
+                category.ID = await Database.Insert(Tables.Cats.TABLE_NAME, values);
             }
 
-            if (category.Model.ID > 0)
+            if (category.ID > 0)
             {
-                foreach (var extra in category.Extras)
-                {
-                    if (string.IsNullOrEmpty(extra.Model.UUID))
-                    {
-                        extra.Model.UUID = Guid.NewGuid().ToString();
-                    }
-                    if (extra.Model.ID > 0)
-                    {
-                        if (extra.Model.IsDeleted)
-                        {
-                            await Database.Delete(Tables.Extras.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { extra.Model.ID });
-                        }
-                        else
-                        {
-                            await Database.Update(Tables.Extras.TABLE_NAME, extra.Model.GetData(), BaseColumns._ID + " = ?", new object[] { extra.Model.ID });
-                        }
-                    }
-                    else
-                    {
-                        extra.Model.CategoryID = category.Model.ID;
-                        await Database.Insert(Tables.Extras.TABLE_NAME, extra.Model.GetData());
-                    }
-                }
+                await UpdateCategoryExtrasAsync(category.ID, extras);
+                await UpdateCategoryFlavorsAsync(category.ID, flavors);
 
-                await Database.Delete(Tables.Flavors.TABLE_NAME, Tables.Flavors.CAT + " = ?", new object[] { category.Model.ID });
-                foreach (var flavor in category.Flavors)
-                {
-                    flavor.Model.CategoryID = category.Model.ID;
-                    await Database.Insert(Tables.Flavors.TABLE_NAME, flavor.Model.GetData());
-                }
-
-                category.Model.Changed();
-                RecordChanged(null, new RecordChangedEventArgs(action, category.Model));
+                category.Changed();
+                RecordChanged(null, new RecordChangedEventArgs(action, category));
                 return true;
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Updates the extra fields for a category.
+        /// </summary>
+        /// <param name="categoryId">The primary ID of the category.</param>
+        /// <param name="extras">The list of Extras.</param>
+        private static async Task UpdateCategoryExtrasAsync(long categoryId, Collection<Extra> extras)
+        {
+            foreach (var extra in extras)
+            {
+                if (string.IsNullOrEmpty(extra.UUID))
+                {
+                    extra.UUID = Guid.NewGuid().ToString();
+                }
+                if (extra.ID > 0)
+                {
+                    if (extra.IsDeleted)
+                    {
+                        await Database.Delete(Tables.Extras.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { extra.ID });
+                    }
+                    else
+                    {
+                        await Database.Update(Tables.Extras.TABLE_NAME, extra.GetData(), BaseColumns._ID + " = ?", new object[] { extra.ID });
+                    }
+                }
+                else
+                {
+                    extra.CategoryID = categoryId;
+                    await Database.Insert(Tables.Extras.TABLE_NAME, extra.GetData());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the flavors for a category.
+        /// </summary>
+        /// <param name="categoryId">The primary ID of the category.</param>
+        /// <param name="flavors">The list of Flavors.</param>
+        private static async Task UpdateCategoryFlavorsAsync(long categoryId, Collection<Flavor> flavors)
+        {
+            await Database.Delete(Tables.Flavors.TABLE_NAME, Tables.Flavors.CAT + " = ?", new object[] { categoryId });
+
+            foreach (var flavor in flavors)
+            {
+                flavor.CategoryID = categoryId;
+                await Database.Insert(Tables.Flavors.TABLE_NAME, flavor.GetData());
+            }
         }
 
         /// <summary>

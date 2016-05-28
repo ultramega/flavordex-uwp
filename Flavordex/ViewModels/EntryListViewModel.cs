@@ -85,7 +85,7 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The unfiltered list of EntryItemViewModels.
         /// </summary>
-        private Collection<EntryItemViewModel> _entries;
+        private Collection<EntryItemViewModel> _entries = new Collection<EntryItemViewModel>();
 
         /// <summary>
         /// Gets the list of EntryItemViewModels to display.
@@ -265,8 +265,8 @@ namespace Flavordex.ViewModels
             Categories.Add(new CategoryItemViewModel(_allEntries));
             foreach (var item in await DatabaseHelper.GetCategoryListAsync())
             {
-                _allEntries.EntryCount += item.Model.EntryCount;
-                Categories.Add(item);
+                _allEntries.EntryCount += item.EntryCount;
+                Categories.Add(new CategoryItemViewModel(item));
             }
             _allEntries.Changed();
 
@@ -280,7 +280,12 @@ namespace Flavordex.ViewModels
         {
             if (Settings.ListCategory > -1)
             {
-                _entries = await DatabaseHelper.GetEntryListAsync(Settings.ListCategory);
+                _entries.Clear();
+                foreach (var entry in await DatabaseHelper.GetEntryListAsync(Settings.ListCategory))
+                {
+                    _entries.Add(new EntryItemViewModel(entry));
+                }
+
                 Entries.Clear();
                 foreach (var item in _entries)
                 {
