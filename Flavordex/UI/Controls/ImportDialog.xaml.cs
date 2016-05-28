@@ -53,9 +53,8 @@ namespace Flavordex.UI.Controls
             ProgressPanel.Visibility = Visibility.Visible;
             foreach (ImportRecord item in ListView.SelectedItems)
             {
-                if (await DatabaseHelper.UpdateEntryAsync(item.Entry, item.Extras))
+                if (await DatabaseHelper.UpdateEntryAsync(item.Entry, item.Extras, item.Flavors))
                 {
-                    await DatabaseHelper.UpdateEntryFlavorsAsync(item.Entry.ID, item.Flavors);
                     foreach (var photo in item.Photos)
                     {
                         await DatabaseHelper.InsertPhotoAsync(photo);
