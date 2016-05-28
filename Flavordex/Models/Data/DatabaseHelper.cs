@@ -374,11 +374,33 @@ namespace Flavordex.Models.Data
                     {
                         { Tables.Extras.UUID, Guid.NewGuid().ToString() },
                         { Tables.Extras.CAT, categoryId },
-                        { Tables.Extras.NAME, extra.Name }
+                        { Tables.Extras.NAME, extra.Name },
+                        { Tables.Extras.POS, await GetNextExtraPositionAsync(categoryId) }
                     };
                     extra.ExtraID = await Database.Insert(Tables.Extras.TABLE_NAME, values);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the next sorting position for an extra field.
+        /// </summary>
+        /// <param name="categoryId">The primary ID of the category.</param>
+        /// <returns>The next sorting position for an extra field.</returns>
+        private static async Task<long> GetNextExtraPositionAsync(long categoryId)
+        {
+            var projection = new string[] { Tables.Extras.POS };
+            var where = Tables.Extras.CAT + " = ?";
+            var whereArgs = new object[] { categoryId };
+            var sort = Tables.Extras.POS + " DESC";
+
+            var rows = await Database.Query(Tables.Extras.TABLE_NAME, projection, where, whereArgs, sort, "1");
+            if (rows.Length > 0)
+            {
+                return rows[0].GetLong(Tables.Extras.POS) + 1;
+            }
+
+            return 0;
         }
 
         /// <summary>
