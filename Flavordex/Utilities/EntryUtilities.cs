@@ -233,17 +233,13 @@ namespace Flavordex.Utilities
         private static Collection<EntryExtra> ParseExtras(CsvRecord record)
         {
             var list = new Collection<EntryExtra>();
-            JsonObject json;
-            if (JsonObject.TryParse(record.extras, out json))
+            foreach (var item in ParseJsonObject(record.extras))
             {
-                foreach (var item in json)
+                list.Add(new EntryExtra()
                 {
-                    list.Add(new EntryExtra()
-                    {
-                        Name = item.Key,
-                        Value = item.Value.GetString()
-                    });
-                }
+                    Name = item.Key,
+                    Value = item.Value.GetString()
+                });
             }
             return list;
         }
@@ -256,16 +252,35 @@ namespace Flavordex.Utilities
         private static Collection<EntryFlavor> ParseFlavors(CsvRecord record)
         {
             var list = new Collection<EntryFlavor>();
-            JsonObject json;
-            if (JsonObject.TryParse(record.flavors, out json))
+            foreach (var item in ParseJsonObject(record.flavors))
             {
-                foreach (var item in json)
+                list.Add(new EntryFlavor()
                 {
-                    list.Add(new EntryFlavor()
+                    Name = item.Key,
+                    Value = (long)item.Value.GetNumber()
+                });
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Parses a JSON object into an ordered list of KeyValuePairs.
+        /// </summary>
+        /// <param name="input">The JSON object string.</param>
+        /// <returns>An ordered list of KeyValuePairs</returns>
+        private static IEnumerable<KeyValuePair<string, JsonValue>> ParseJsonObject(string input)
+        {
+            var list = new List<KeyValuePair<string, JsonValue>>();
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                foreach (var item in input.Trim().Trim('{', '}').Split(','))
+                {
+                    var pair = item.Split(':');
+                    JsonValue name, value;
+                    if (pair.Length >= 2 && JsonValue.TryParse(pair[0], out name) && JsonValue.TryParse(pair[1], out value))
                     {
-                        Name = item.Key,
-                        Value = (long)item.Value.GetNumber()
-                    });
+                        list.Add(new KeyValuePair<string, JsonValue>(name.GetString(), value));
+                    }
                 }
             }
             return list;
