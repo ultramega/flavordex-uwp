@@ -241,7 +241,7 @@ namespace Flavordex.Models.Data
 
             if (entry.ID > 0)
             {
-                await UpdateEntryExtrasAsync(entry.ID, extras);
+                await UpdateEntryExtrasAsync(entry.ID, entry.CategoryID, extras);
 
                 entry.Changed();
                 RecordChanged(null, new RecordChangedEventArgs(action, entry));
@@ -256,8 +256,9 @@ namespace Flavordex.Models.Data
         /// Updates the Extras for a journal entry.
         /// </summary>
         /// <param name="entryId">The primary ID of the journal entry.</param>
+        /// <param name="categoryId">The primary ID of the category.</param>
         /// <param name="extras">The list of EntryExtras.</param>
-        private static async Task UpdateEntryExtrasAsync(long entryId, Collection<EntryExtra> extras)
+        private static async Task UpdateEntryExtrasAsync(long entryId, long categoryId, Collection<EntryExtra> extras)
         {
             await Database.Delete(Tables.EntriesExtras.TABLE_NAME, Tables.EntriesExtras.ENTRY + " = ?", new object[] { entryId });
 
@@ -265,9 +266,50 @@ namespace Flavordex.Models.Data
             values.SetLong(Tables.EntriesExtras.ENTRY, entryId);
             foreach (var extra in extras)
             {
-                values.SetLong(Tables.EntriesExtras.EXTRA, extra.ID);
-                values.SetString(Tables.EntriesExtras.VALUE, extra.Value);
-                await Database.Insert(Tables.EntriesExtras.TABLE_NAME, values);
+                await GetExtraIdAsync(categoryId, extra);
+                if (extra.ExtraID > 0)
+                {
+                    values.SetLong(Tables.EntriesExtras.EXTRA, extra.ExtraID);
+                    values.SetString(Tables.EntriesExtras.VALUE, extra.Value);
+                    await Database.Insert(Tables.EntriesExtras.TABLE_NAME, values);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the primary ID of an extra field, creating one if needed.
+        /// </summary>
+        /// <param name="categoryId">The primary ID of the category.</param>
+        /// <param name="extra">The EntryExtra.</param>
+        private static async Task GetExtraIdAsync(long categoryId, EntryExtra extra)
+        {
+            if (extra.ExtraID > 0)
+            {
+                return;
+            }
+
+            var projection = new string[] { BaseColumns._ID };
+            var where = Tables.Extras.CAT + " = ? AND " + Tables.Extras.NAME + " = ?";
+            var whereArgs = new object[] { categoryId, extra.Name };
+
+            var rows = await Database.Query(Tables.Extras.TABLE_NAME, projection, where, whereArgs, null, "1");
+            if (rows.Length > 0)
+            {
+                extra.ExtraID = rows[0].GetLong(BaseColumns._ID);
+            }
+            else
+            {
+                extra.Name = FilterName(extra.Name);
+                if (!string.IsNullOrWhiteSpace(extra.Name))
+                {
+                    var values = new ContentValues()
+                    {
+                        { Tables.Extras.UUID, Guid.NewGuid().ToString() },
+                        { Tables.Extras.CAT, categoryId },
+                        { Tables.Extras.NAME, extra.Name }
+                    };
+                    extra.ExtraID = await Database.Insert(Tables.Extras.TABLE_NAME, values);
+                }
             }
         }
 
@@ -553,6 +595,16 @@ namespace Flavordex.Models.Data
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Prepares a non-preset name for the database.
+        /// </summary>
+        /// <param name="input">The original name.</param>
+        /// <returns>The filtered name.</returns>
+        private static string FilterName(string input)
+        {
+            return input.TrimStart(' ', '_').TrimEnd(' ');
         }
     }
 }
