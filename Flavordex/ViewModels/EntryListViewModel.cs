@@ -341,17 +341,17 @@ namespace Flavordex.ViewModels
             }
 
             RaisePropertyChanged("IsCategorySelected");
-            RaisePropertyChanged("EmptyListVisibility");
         }
 
         /// <summary>
-        /// Raises the PropertyChanged event for the SelectedEntry property when the Entries
-        /// Collection changes.
+        /// Raises the PropertyChanged event for the SelectedEntry and EmptyListVisibility
+        /// properties when the Entries Collection changes.
         /// </summary>
         /// <param name="sender">The ObservableCollection.</param>
         /// <param name="e">The event arguments.</param>
         private void OnEntriesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            RaisePropertyChanged("EmptyListVisibility");
             RaisePropertyChanged("SelectedEntry");
         }
 
