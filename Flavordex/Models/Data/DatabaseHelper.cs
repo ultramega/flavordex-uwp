@@ -1,6 +1,7 @@
 ﻿using Flavordex.Utilities.Databases;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Flavordex.Models.Data
@@ -252,6 +253,8 @@ namespace Flavordex.Models.Data
             }
             else
             {
+                entry.Title = await GetUniqueEntryTitle(entry.Title);
+                values.SetString(Tables.Entries.TITLE, entry.Title);
                 entry.ID = await Database.Insert(Tables.Entries.TABLE_NAME, values);
                 if (entry.ID > 0)
                 {
@@ -323,6 +326,35 @@ namespace Flavordex.Models.Data
                 await UpdateCategoryAsync(category, null, categoryFlavors);
                 entry.CategoryID = category.ID;
             }
+        }
+
+        /// <summary>
+        /// Gets a title that does not exist by appending a number.
+        /// </summary>
+        /// <param name="title">The original title.</param>
+        /// <returns>The unique title.</returns>
+        private static async Task<string> GetUniqueEntryTitle(string title)
+        {
+            var projection = new string[] { Tables.Entries.TITLE };
+            var where = Tables.Entries.TITLE + " LIKE ?";
+            var whereArgs = new object[] { title + "%" };
+            var sort = Tables.Entries.TITLE;
+
+            var rows = await Database.Query(Tables.Entries.TABLE_NAME, projection, where, whereArgs, sort);
+            if (rows.Length > 0)
+            {
+                string newTitle;
+                var number = 2;
+                do
+                {
+                    newTitle = string.Format("{0} ({1})", title, number++);
+                }
+                while (rows.Where(e => e.GetString(Tables.Entries.TITLE) == newTitle).Any());
+
+                return newTitle;
+            }
+
+            return title;
         }
 
         /// <summary>
