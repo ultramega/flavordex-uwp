@@ -263,12 +263,19 @@ namespace Flavordex.ViewModels
         private async void LoadCategories()
         {
             Categories.Add(new CategoryItemViewModel(_allEntries));
+
+            var unsorted = new Collection<CategoryItemViewModel>();
             foreach (var item in await DatabaseHelper.GetCategoryListAsync())
             {
                 _allEntries.EntryCount += item.EntryCount;
-                Categories.Add(new CategoryItemViewModel(item));
+                unsorted.Add(new CategoryItemViewModel(item));
             }
             _allEntries.Changed();
+
+            foreach (var item in unsorted.OrderBy(e => e.Name))
+            {
+                Categories.Add(item);
+            }
 
             LoadEntries();
         }
