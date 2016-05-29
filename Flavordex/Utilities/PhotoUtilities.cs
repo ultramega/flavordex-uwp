@@ -156,11 +156,6 @@ namespace Flavordex.Utilities
             photo.Position = position;
             await DatabaseHelper.InsertPhotoAsync(photo);
 
-            if (position == 0)
-            {
-                ThumbnailChanged(null, new ThumbnailChangedEventArgs(entryId));
-            }
-
             return photo;
         }
 
