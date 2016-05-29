@@ -256,7 +256,12 @@ namespace Flavordex.Models.Data
                 if (entry.ID > 0)
                 {
                     _entryCache.Put(entry);
-                    _categoryCache.Changed(entry.CategoryID);
+                    var category = _categoryCache.Get(entry.CategoryID);
+                    if (category != null)
+                    {
+                        category.EntryCount++;
+                        category.Changed();
+                    }
                 }
             }
 
@@ -505,7 +510,12 @@ namespace Flavordex.Models.Data
             {
                 entry.Deleted();
                 RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, entry));
-                _categoryCache.Changed(entry.CategoryID);
+                var category = _categoryCache.Get(entry.CategoryID);
+                if (category != null)
+                {
+                    category.EntryCount--;
+                    category.Changed();
+                }
                 return true;
             }
             return false;
