@@ -170,7 +170,7 @@ namespace Flavordex
                 var position = 0;
                 foreach (var item in Photos)
                 {
-                    await PhotoUtilities.AddPhoto(item.Key, Entry.Model.ID, position++);
+                    await PhotoUtilities.AddPhotoAsync(item.Key, Entry.Model.ID, position++);
                 }
 
                 if (Frame.BackStack.Count > 0)
@@ -200,7 +200,7 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private async void OnTakePhoto(object sender, RoutedEventArgs e)
         {
-            var file = await PhotoUtilities.CapturePhoto();
+            var file = await PhotoUtilities.CapturePhotoAsync();
             if (file != null)
             {
                 AddPhoto(file);

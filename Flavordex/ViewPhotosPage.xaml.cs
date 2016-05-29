@@ -157,11 +157,11 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         public async void OnTakePhoto(object sender, RoutedEventArgs e)
         {
-            var file = await PhotoUtilities.CapturePhoto();
+            var file = await PhotoUtilities.CapturePhotoAsync();
             if (file != null)
             {
                 var position = Photos.Count > 0 ? Photos.Last().Model.Position + 1 : 0;
-                var photo = await PhotoUtilities.AddPhoto(file, _entry.ID, position);
+                var photo = await PhotoUtilities.AddPhotoAsync(file, _entry.ID, position);
             }
         }
 
@@ -178,7 +178,7 @@ namespace Flavordex
                 var position = Photos.Count > 0 ? Photos.Last().Model.Position + 1 : 0;
                 foreach (var file in files)
                 {
-                    var photo = await PhotoUtilities.AddPhoto(file, _entry.ID, position);
+                    var photo = await PhotoUtilities.AddPhotoAsync(file, _entry.ID, position);
                 }
             }
         }

@@ -110,7 +110,7 @@ namespace Flavordex.Utilities
         /// Captures a new photo with the camera.
         /// </summary>
         /// <returns>The captured StorageFile.</returns>
-        public static async Task<StorageFile> CapturePhoto()
+        public static async Task<StorageFile> CapturePhotoAsync()
         {
             var capture = new CameraCaptureUI();
             capture.PhotoSettings.Format = CameraCaptureUIPhotoFormat.Jpeg;
@@ -129,7 +129,7 @@ namespace Flavordex.Utilities
         /// <param name="entryId">The primary ID of the journal entry.</param>
         /// <param name="position">The sorting position of the Photo.</param>
         /// <returns>The Photo that was added.</returns>
-        public static async Task<Photo> AddPhoto(string name, long entryId, long position)
+        public static async Task<Photo> AddPhotoAsync(string name, long entryId, long position)
         {
             var file = await GetPhotoFileAsync(name);
             if (file == null)
@@ -137,7 +137,7 @@ namespace Flavordex.Utilities
                 return null;
             }
 
-            return await AddPhoto(file, entryId, position);
+            return await AddPhotoAsync(file, entryId, position);
         }
 
         /// <summary>
@@ -147,12 +147,12 @@ namespace Flavordex.Utilities
         /// <param name="entryId">The primary ID of the journal entry.</param>
         /// <param name="position">The sorting position of the Photo.</param>
         /// <returns>The Photo that was added.</returns>
-        public static async Task<Photo> AddPhoto(StorageFile file, long entryId, long position)
+        public static async Task<Photo> AddPhotoAsync(StorageFile file, long entryId, long position)
         {
             var photo = new Photo();
             photo.EntryID = entryId;
-            photo.Path = await SavePhoto(file);
-            photo.Hash = await GetMD5Hash(file);
+            photo.Path = await SavePhotoAsync(file);
+            photo.Hash = await GetMD5HashAsync(file);
             photo.Position = position;
             await DatabaseHelper.InsertPhotoAsync(photo);
 
@@ -169,7 +169,7 @@ namespace Flavordex.Utilities
         /// </summary>
         /// <param name="file">The file to hash.</param>
         /// <returns>The MD5 hash of the file.</returns>
-        public static async Task<string> GetMD5Hash(StorageFile file)
+        public static async Task<string> GetMD5HashAsync(StorageFile file)
         {
             var md5 = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Md5).CreateHash();
             var buffer = new Windows.Storage.Streams.Buffer(8192);
@@ -190,7 +190,7 @@ namespace Flavordex.Utilities
         /// </summary>
         /// <param name="source">The source file.</param>
         /// <returns>The name of the saved file.</returns>
-        public static async Task<string> SavePhoto(StorageFile source)
+        public static async Task<string> SavePhotoAsync(StorageFile source)
         {
             var folder = await KnownFolders.PicturesLibrary.CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
             var destination = await folder.TryGetItemAsync(source.Name) as StorageFile;
@@ -206,7 +206,7 @@ namespace Flavordex.Utilities
         /// </summary>
         /// <param name="name">The name of the image file.</param>
         /// <returns>The BitmapImage containing the photo.</returns>
-        public static async Task<BitmapImage> GetPhoto(string name)
+        public static async Task<BitmapImage> GetPhotoAsync(string name)
         {
             var file = await GetPhotoFileAsync(name);
             if (file != null)

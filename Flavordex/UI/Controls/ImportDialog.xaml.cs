@@ -100,7 +100,7 @@ namespace Flavordex.UI.Controls
                     var position = 0;
                     foreach (var photo in item.Photos)
                     {
-                        await PhotoUtilities.AddPhoto(photo.Path, item.Entry.ID, position++);
+                        await PhotoUtilities.AddPhotoAsync(photo.Path, item.Entry.ID, position++);
                     }
                 }
                 ProgressBar.Value++;

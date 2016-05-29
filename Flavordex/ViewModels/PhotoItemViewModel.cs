@@ -46,7 +46,7 @@ namespace Flavordex.ViewModels
         /// </summary>
         private async void LoadBitmap()
         {
-            Bitmap = await PhotoUtilities.GetPhoto(Model.Path);
+            Bitmap = await PhotoUtilities.GetPhotoAsync(Model.Path);
         }
     }
 }
