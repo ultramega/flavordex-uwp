@@ -229,8 +229,7 @@
 
             <CommandBar.SecondaryCommands>
                 <AppBarButton
-                    x:Uid="Command/ImportExport"
-                    Visibility="{Binding IsZoomedInViewActive, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Zoom}">
+                    x:Uid="Command/ImportExport">
                     <AppBarButton.Flyout>
                         <MenuFlyout>
                             <MenuFlyoutItem
@@ -276,7 +275,7 @@
             Grid.Row="1"
             x:Name="Zoom"
             ViewChangeStarted="OnListViewChange"
-            IsZoomedInViewActive="{x:Bind List.IsCategorySelected}"
+            IsZoomedInViewActive="{x:Bind List.IsCategorySelected, Mode=OneWay}"
             IsZoomOutButtonEnabled="{Binding Visibility, ElementName=ExportBar, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!, Mode=OneWay}">
             <SemanticZoom.ZoomedOutView>
                 <ListView

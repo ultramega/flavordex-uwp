@@ -430,6 +430,10 @@ namespace Flavordex
         private void OnStartExport(object sender, RoutedEventArgs e)
         {
             ListCommandBar.IsOpen = false;
+            if (!List.IsCategorySelected)
+            {
+                ListCategory = 0;
+            }
             ExportMode = true;
         }
 
