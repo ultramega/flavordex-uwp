@@ -55,6 +55,15 @@ namespace Flavordex.Utilities.Databases
         }
 
         /// <summary>
+        /// Adds an item to the cache.
+        /// </summary>
+        /// <param name="model">The item to add.</param>
+        public void Put(T model)
+        {
+            _cache[model.ID] = new WeakReference<T>(model);
+        }
+
+        /// <summary>
         /// Notifies a Model that its data has changed if it exists in the cache.
         /// </summary>
         /// <param name="id">The primary ID of the Model.</param>

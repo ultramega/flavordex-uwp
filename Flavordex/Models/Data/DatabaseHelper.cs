@@ -253,6 +253,11 @@ namespace Flavordex.Models.Data
             else
             {
                 entry.ID = await Database.Insert(Tables.Entries.TABLE_NAME, values);
+                if (entry.ID > 0)
+                {
+                    _entryCache.Put(entry);
+                    _categoryCache.Changed(entry.CategoryID);
+                }
             }
 
             if (entry.ID > 0)
@@ -500,6 +505,7 @@ namespace Flavordex.Models.Data
             {
                 entry.Deleted();
                 RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, entry));
+                _categoryCache.Changed(entry.CategoryID);
                 return true;
             }
             return false;
@@ -621,6 +627,10 @@ namespace Flavordex.Models.Data
                 else
                 {
                     category.ID = await Database.Insert(Tables.Cats.TABLE_NAME, values);
+                    if (category.ID > 0)
+                    {
+                        _categoryCache.Put(category);
+                    }
                 }
             }
 
