@@ -1,6 +1,7 @@
 ﻿using Flavordex.Models;
 using Flavordex.Utilities;
 using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 namespace Flavordex.ViewModels
@@ -75,6 +76,27 @@ namespace Flavordex.ViewModels
             private set
             {
                 _thumbnail = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// The Visibility of the thumbnail.
+        /// </summary>
+        private Visibility _thumbnailVisibility = Visibility.Visible;
+
+        /// <summary>
+        /// Gets or sets the Visibility of the thumbnail.
+        /// </summary>
+        public Visibility ThumbnailVisibility
+        {
+            get
+            {
+                return _thumbnailVisibility;
+            }
+            set
+            {
+                _thumbnailVisibility = value;
                 RaisePropertyChanged();
             }
         }

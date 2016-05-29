@@ -238,6 +238,34 @@ namespace Flavordex.ViewModels
         }
 
         /// <summary>
+        /// Whether export mode is enabled.
+        /// </summary>
+        private bool _exportMode;
+
+        /// <summary>
+        /// Gets or sets whether export mode is enabled.
+        /// </summary>
+        public bool ExportMode
+        {
+            get
+            {
+                return _exportMode;
+            }
+            set
+            {
+                if (_exportMode != value)
+                {
+                    _exportMode = value;
+                    foreach (var item in _entries)
+                    {
+                        item.ThumbnailVisibility = value ? Visibility.Collapsed : Visibility.Visible;
+                    }
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public EntryListViewModel()
@@ -296,6 +324,7 @@ namespace Flavordex.ViewModels
                 Entries.Clear();
                 foreach (var item in _entries)
                 {
+                    item.ThumbnailVisibility = ExportMode ? Visibility.Collapsed : Visibility.Visible;
                     Entries.Add(item);
                 }
                 SortList();

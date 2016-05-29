@@ -28,17 +28,6 @@ namespace Flavordex
         private EntryListViewModel List { get; } = new EntryListViewModel();
 
         /// <summary>
-        /// Gets or sets whether export mode is enabled.
-        /// </summary>
-        public bool ExportMode
-        {
-            get { return (bool)GetValue(ExportModeProperty); }
-            set { SetValue(ExportModeProperty, value); }
-        }
-        public static readonly DependencyProperty ExportModeProperty =
-            DependencyProperty.Register("ExportMode", typeof(bool), typeof(EntryListPage), new PropertyMetadata(false));
-
-        /// <summary>
         /// Gets or sets whether the Export Button is enabled.
         /// </summary>
         public bool EnableExport
@@ -56,7 +45,6 @@ namespace Flavordex
         {
             InitializeComponent();
             CheckDefaultSortButton();
-            RegisterPropertyChangedCallback(ExportModeProperty, OnExportModeChanged);
         }
 
         /// <summary>
@@ -81,7 +69,7 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnItemSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (ExportMode)
+            if (List.ExportMode)
             {
                 EnableExport = MasterList.SelectedItems.Count > 0;
             }
@@ -396,14 +384,13 @@ namespace Flavordex
         }
 
         /// <summary>
-        /// Changes the list selection settings based on the export mode when the ExportMode
-        /// property changes.
+        /// Sets export mode and changes the list selection settings accordingly.
         /// </summary>
-        /// <param name="sender">This Page.</param>
-        /// <param name="dp">The ExportModeProperty.</param>
-        private void OnExportModeChanged(DependencyObject sender, DependencyProperty dp)
+        private void SetExportMode(bool exportMode)
         {
-            if (ExportMode)
+            List.ExportMode = exportMode;
+
+            if (exportMode)
             {
                 MasterList.SelectionMode = ListViewSelectionMode.Multiple;
                 MasterList.IsItemClickEnabled = false;
@@ -434,7 +421,7 @@ namespace Flavordex
             {
                 ListCategory = 0;
             }
-            ExportMode = true;
+            SetExportMode(true);
         }
 
         /// <summary>
@@ -444,7 +431,7 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnCancelExport(object sender, RoutedEventArgs e)
         {
-            ExportMode = false;
+            SetExportMode(false);
         }
 
         /// <summary>
@@ -479,7 +466,7 @@ namespace Flavordex
             {
                 items.Add((item as EntryItemViewModel).Model.ID);
             }
-            ExportMode = !await EntryUtilities.ExportEntriesAsync(items);
+            SetExportMode(!await EntryUtilities.ExportEntriesAsync(items));
         }
 
         /// <summary>

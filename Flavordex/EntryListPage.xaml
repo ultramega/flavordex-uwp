@@ -77,7 +77,8 @@
                     Width="40"
                     Height="40"
                     VerticalAlignment="Top"
-                    Source="{x:Bind Thumbnail, Mode=OneWay}" />
+                    Source="{x:Bind Thumbnail, Mode=OneWay}"
+                    Visibility="{x:Bind ThumbnailVisibility, Mode=OneWay}" />
 
                 <StackPanel
                     Grid.Column="1"
@@ -276,7 +277,7 @@
             x:Name="Zoom"
             ViewChangeStarted="OnListViewChange"
             IsZoomedInViewActive="{x:Bind List.IsCategorySelected, Mode=OneWay}"
-            IsZoomOutButtonEnabled="{Binding Visibility, ElementName=ExportBar, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!, Mode=OneWay}">
+            IsZoomOutButtonEnabled="{Binding Visibility, ElementName=ExportBar, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!}">
             <SemanticZoom.ZoomedOutView>
                 <ListView
                     ItemContainerStyle="{StaticResource ListItemStyle}"
@@ -318,7 +319,7 @@
                         <Grid
                             x:Name="ExportBar"
                             Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
-                            Visibility="{x:Bind ExportMode, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                            Visibility="{x:Bind List.ExportMode, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                             <Grid.Resources>
                                 <Style
                                     TargetType="Button">
