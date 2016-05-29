@@ -326,6 +326,19 @@ namespace Flavordex.Models.Data
         }
 
         /// <summary>
+        /// Checks whether a journal entry exists with the specified UUID.
+        /// </summary>
+        /// <param name="uuid">The UUID to check.</param>
+        /// <returns>Whether a journal entry exists with the UUID.</returns>
+        public static async Task<bool> EntryUuidExists(string uuid)
+        {
+            var projection = new string[] { BaseColumns._ID };
+            var where = Tables.Entries.UUID + " = ?";
+            var whereArgs = new object[] { uuid };
+            return (await Database.Query(Tables.Entries.TABLE_NAME, projection, where, whereArgs, null, "1")).Length > 0;
+        }
+
+        /// <summary>
         /// Updates the Extras for a journal entry.
         /// </summary>
         /// <param name="entryId">The primary ID of the journal entry.</param>

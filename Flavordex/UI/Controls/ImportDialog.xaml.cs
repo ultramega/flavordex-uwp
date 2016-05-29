@@ -1,6 +1,7 @@
 ﻿using Flavordex.Models.Data;
 using Flavordex.Utilities;
 using System.Collections.ObjectModel;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -29,6 +30,31 @@ namespace Flavordex.UI.Controls
         }
 
         /// <summary>
+        /// Checks all items and checks for duplicates when the ListView is loaded.
+        /// </summary>
+        /// <param name="sender">The ListView.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnListLoaded(object sender, RoutedEventArgs e)
+        {
+            ListView.SelectAll();
+
+            var duplicates = 0;
+            foreach (ImportRecord item in ListView.Items)
+            {
+                if (item.IsDuplicate)
+                {
+                    duplicates++;
+                }
+            }
+            if (duplicates > 0)
+            {
+                var format = ResourceLoader.GetForCurrentView("ImportExport").GetString("Button/UncheckDuplicates");
+                DuplicateButton.Content = string.Format(format, duplicates, Plurals.GetWord("Duplicates", duplicates));
+                DuplicateButton.Visibility = Visibility.Visible;
+            }
+        }
+
+        /// <summary>
         /// Enables or disables the Import button when the list selection changes.
         /// </summary>
         /// <param name="sender">The ListView.</param>
@@ -36,6 +62,22 @@ namespace Flavordex.UI.Controls
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             IsPrimaryButtonEnabled = ListView.SelectedItems.Count > 0;
+        }
+
+        /// <summary>
+        /// Unchecks duplicate entries when the Uncheck Duplicates button is clicked.
+        /// </summary>
+        /// <param name="sender">The Button.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnUncheckDuplicates(object sender, RoutedEventArgs e)
+        {
+            foreach (ImportRecord item in ListView.Items)
+            {
+                if (item.IsDuplicate)
+                {
+                    ListView.SelectedItems.Remove(item);
+                }
+            }
         }
 
         /// <summary>

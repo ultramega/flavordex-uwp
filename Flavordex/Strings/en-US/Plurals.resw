@@ -51,10 +51,4 @@
   <data name="Entries.Other" xml:space="preserve">
     <value>Entries</value>
   </data>
-  <data name="Were.One" xml:space="preserve">
-    <value>was</value>
-  </data>
-  <data name="Were.Other" xml:space="preserve">
-    <value>were</value>
-  </data>
 </root>

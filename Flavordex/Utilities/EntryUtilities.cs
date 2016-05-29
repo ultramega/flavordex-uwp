@@ -194,9 +194,9 @@ namespace Flavordex.Utilities
                         while (csv.Read())
                         {
                             var row = csv.GetRecord<CsvRecord>();
+
                             var entry = new Entry()
                             {
-                                UUID = row.uuid,
                                 Title = row.title,
                                 Category = row.cat,
                                 Maker = row.maker,
@@ -208,12 +208,19 @@ namespace Flavordex.Utilities
                                 Notes = row.notes
                             };
 
+                            var isDuplicate = await DatabaseHelper.EntryUuidExists(row.uuid);
+                            if (!isDuplicate)
+                            {
+                                entry.UUID = row.uuid;
+                            }
+
                             records.Add(new ImportRecord()
                             {
                                 Entry = entry,
                                 Extras = ParseExtras(row),
                                 Flavors = ParseFlavors(row),
-                                Photos = ParsePhotos(row)
+                                Photos = ParsePhotos(row),
+                                IsDuplicate = isDuplicate
                             });
                         }
 

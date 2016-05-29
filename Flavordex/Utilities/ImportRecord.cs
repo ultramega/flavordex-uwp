@@ -27,5 +27,10 @@ namespace Flavordex.Utilities
         /// Gets or sets the photos for the journal entry.
         /// </summary>
         public Collection<Photo> Photos { get; internal set; }
+
+        /// <summary>
+        /// Whether this record has been detected as a duplicate.
+        /// </summary>
+        public bool IsDuplicate { get; internal set; }
     }
 }

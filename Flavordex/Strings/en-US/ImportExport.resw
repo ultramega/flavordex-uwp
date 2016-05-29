@@ -51,6 +51,9 @@
   <data name="Button.UncheckAll.ToolTipService.ToolTip" xml:space="preserve">
     <value>Uncheck All</value>
   </data>
+  <data name="Button.UncheckDuplicates" xml:space="preserve">
+    <value>Uncheck {0} {1}</value>
+  </data>
   <data name="Dialog.Import.PrimaryButtonText" xml:space="preserve">
     <value>Import Selected</value>
   </data>
@@ -70,26 +73,11 @@
   <data name="Title.Exporting" xml:space="preserve">
     <value>Exporting…</value>
   </data>
-  <data name="Title.Duplicates" xml:space="preserve">
-    <value>Duplicates Detected</value>
-  </data>
-  <data name="Button.Ignore" xml:space="preserve">
-    <value>Ignore</value>
-  </data>
-  <data name="Button.UncheckDuplicates" xml:space="preserve">
-    <value>Uncheck {0}</value>
-  </data>
   <data name="Message.ImportComplete" xml:space="preserve">
     <value>Import complete.</value>
   </data>
   <data name="Message.ExportComplete" xml:space="preserve">
     <value>Export complete.</value>
-  </data>
-  <data name="Message.DuplicatesUnchecked" xml:space="preserve">
-    <value>{0} {1} {2} unchecked.</value>
-  </data>
-  <data name="Message.DuplicatesDetected" xml:space="preserve">
-    <value>{0} {1} {2} detected. What would you like to do?</value>
   </data>
   <data name="Error.CsvParse" xml:space="preserve">
     <value>Unable to parse the .csv file</value>

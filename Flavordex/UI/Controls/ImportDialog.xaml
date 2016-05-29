@@ -40,7 +40,8 @@
             x:Name="ListView"
             ItemContainerStyle="{StaticResource ListItemStyle}"
             SelectionMode="Multiple"
-            SelectionChanged="OnSelectionChanged">
+            SelectionChanged="OnSelectionChanged"
+            Loaded="OnListLoaded">
             <ListView.ItemTemplate>
                 <DataTemplate
                     x:DataType="util:ImportRecord">
@@ -88,6 +89,15 @@
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
+
+            <ListView.Footer>
+                <Button
+                    x:Name="DuplicateButton"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,6"
+                    Visibility="Collapsed"
+                    Click="OnUncheckDuplicates" />
+            </ListView.Footer>
         </ListView>
 
         <Grid
