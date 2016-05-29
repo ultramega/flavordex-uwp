@@ -1,4 +1,5 @@
-﻿using Flavordex.Utilities.Databases;
+﻿using Flavordex.Utilities;
+using Flavordex.Utilities.Databases;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -774,10 +775,29 @@ namespace Flavordex.Models.Data
         /// <returns>Whether the category was successfully deleted.</returns>
         public static async Task<bool> DeleteCategoryAsync(Category category)
         {
+            var projection = new string[] { BaseColumns._ID };
+            var where = Tables.Entries.CAT + " = ?";
+            var whereArgs = new object[] { category.ID };
+            var rows = await Database.Query(Tables.Entries.TABLE_NAME, projection, where, whereArgs);
+
             if (await Database.Delete(Tables.Cats.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { category.ID }) > 0)
             {
                 category.Deleted();
                 RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, category));
+
+                foreach (var item in rows)
+                {
+                    var id = item.GetLong(BaseColumns._ID);
+                    var entry = _entryCache.Get(id);
+                    if (entry != null)
+                    {
+                        entry.Deleted();
+                        RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, entry));
+                    }
+
+                    PhotoUtilities.DeleteThumbnail(id);
+                }
+
                 return true;
             }
             return false;
