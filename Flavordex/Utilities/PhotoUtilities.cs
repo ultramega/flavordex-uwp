@@ -125,6 +125,24 @@ namespace Flavordex.Utilities
         /// <summary>
         /// Adds a Photo to a journal entry.
         /// </summary>
+        /// <param name="name">The name of the photo file to add.</param>
+        /// <param name="entryId">The primary ID of the journal entry.</param>
+        /// <param name="position">The sorting position of the Photo.</param>
+        /// <returns>The Photo that was added.</returns>
+        public static async Task<Photo> AddPhoto(string name, long entryId, long position)
+        {
+            var file = await GetPhotoFileAsync(name);
+            if (file == null)
+            {
+                return null;
+            }
+
+            return await AddPhoto(file, entryId, position);
+        }
+
+        /// <summary>
+        /// Adds a Photo to a journal entry.
+        /// </summary>
         /// <param name="file">The photo file to add.</param>
         /// <param name="entryId">The primary ID of the journal entry.</param>
         /// <param name="position">The sorting position of the Photo.</param>
@@ -137,6 +155,12 @@ namespace Flavordex.Utilities
             photo.Hash = await GetMD5Hash(file);
             photo.Position = position;
             await DatabaseHelper.InsertPhotoAsync(photo);
+
+            if (position == 0)
+            {
+                ThumbnailChanged(null, new ThumbnailChangedEventArgs(entryId));
+            }
+
             return photo;
         }
 
@@ -184,16 +208,27 @@ namespace Flavordex.Utilities
         /// <returns>The BitmapImage containing the photo.</returns>
         public static async Task<BitmapImage> GetPhoto(string name)
         {
+            var file = await GetPhotoFileAsync(name);
+            if (file != null)
+            {
+                var bitmap = new BitmapImage();
+                await bitmap.SetSourceAsync(await file.OpenReadAsync());
+                return bitmap;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a photo file from the album directory.
+        /// </summary>
+        /// <param name="name">The name of the file.</param>
+        /// <returns>The StorageFile representing the photo, or null if it is not found.</returns>
+        private static async Task<StorageFile> GetPhotoFileAsync(string name)
+        {
             var folder = await KnownFolders.PicturesLibrary.TryGetItemAsync(_albumDirectory) as StorageFolder;
             if (folder != null)
             {
-                var file = await folder.TryGetItemAsync(name) as StorageFile;
-                if (file != null)
-                {
-                    var bitmap = new BitmapImage();
-                    await bitmap.SetSourceAsync(await file.OpenReadAsync());
-                    return bitmap;
-                }
+                return await folder.TryGetItemAsync(name) as StorageFile;
             }
             return null;
         }

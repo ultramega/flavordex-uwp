@@ -97,9 +97,10 @@ namespace Flavordex.UI.Controls
             {
                 if (await DatabaseHelper.UpdateEntryAsync(item.Entry, item.Extras, item.Flavors))
                 {
+                    var position = 0;
                     foreach (var photo in item.Photos)
                     {
-                        await DatabaseHelper.InsertPhotoAsync(photo);
+                        await PhotoUtilities.AddPhoto(photo.Path, item.Entry.ID, position++);
                     }
                 }
                 ProgressBar.Value++;
