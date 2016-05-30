@@ -595,6 +595,11 @@ namespace Flavordex.ViewModels
                 _allEntries.EntryCount--;
                 _allEntries.Changed();
             }
+
+            if (entry.ID == SelectedEntryId)
+            {
+                SelectedEntryId = 0;
+            }
         }
 
         /// <summary>
@@ -610,6 +615,11 @@ namespace Flavordex.ViewModels
 
                 _allEntries.EntryCount -= category.EntryCount;
                 _allEntries.Changed();
+            }
+
+            if (category.ID == Settings.ListCategory)
+            {
+                Settings.ListCategory = -1;
             }
         }
 
