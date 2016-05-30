@@ -107,7 +107,7 @@ namespace Flavordex
                 {
                     categories.Add(new CategoryItemViewModel(category));
                 }
-                (FindName("CategoryList") as ListView).ItemsSource = categories;
+                (FindName("CategoryList") as ListView).ItemsSource = categories.OrderBy(k => k.Name);
             }
         }
 
