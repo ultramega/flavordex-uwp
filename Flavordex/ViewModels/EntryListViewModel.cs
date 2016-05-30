@@ -504,42 +504,57 @@ namespace Flavordex.ViewModels
                     continue;
                 }
 
-                switch (Settings.ListSortField)
+                if (Settings.ListSortDescending)
                 {
-                    case Settings.SortField.Name:
-                        if (Settings.ListSortDescending && Entries[i].Model.Title.CompareTo(entry.Title) <= 0)
-                        {
-                            return i;
-                        }
-                        else if (Entries[i].Model.Title.CompareTo(entry.Title) >= 0)
-                        {
-                            return i;
-                        }
-                        break;
-                    case Settings.SortField.Date:
-                        if (Settings.ListSortDescending && Entries[i].Model.Date <= entry.Date)
-                        {
-                            return i;
-                        }
-                        else if (Entries[i].Model.Date <= entry.Date)
-                        {
-                            return i;
-                        }
-                        break;
-                    case Settings.SortField.Rating:
-                        if (Settings.ListSortDescending && Entries[i].Model.Rating <= entry.Rating)
-                        {
-                            return i;
-                        }
-                        else if (Entries[i].Model.Rating <= entry.Rating)
-                        {
-                            return i;
-                        }
-                        break;
+                    switch (Settings.ListSortField)
+                    {
+                        case Settings.SortField.Name:
+                            if (Entries[i].Title.CompareTo(entry.Title) <= 0)
+                            {
+                                return i;
+                            }
+                            break;
+                        case Settings.SortField.Date:
+                            if (Entries[i].Date <= entry.Date)
+                            {
+                                return i;
+                            }
+                            break;
+                        case Settings.SortField.Rating:
+                            if (Entries[i].Rating <= entry.Rating)
+                            {
+                                return i;
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (Settings.ListSortField)
+                    {
+                        case Settings.SortField.Name:
+                            if (Entries[i].Title.CompareTo(entry.Title) >= 0)
+                            {
+                                return i;
+                            }
+                            break;
+                        case Settings.SortField.Date:
+                            if (Entries[i].Date >= entry.Date)
+                            {
+                                return i;
+                            }
+                            break;
+                        case Settings.SortField.Rating:
+                            if (Entries[i].Rating >= entry.Rating)
+                            {
+                                return i;
+                            }
+                            break;
+                    }
                 }
             }
 
-            return Math.Max(0, Entries.Count - 1);
+            return Entries.Count;
         }
 
         /// <summary>
@@ -556,12 +571,12 @@ namespace Flavordex.ViewModels
                     continue;
                 }
 
-                if (Categories[i].Model.Name.CompareTo(category.Name) >= 0)
+                if (Categories[i].Name.CompareTo(category.Name) >= 0)
                 {
                     return i;
                 }
             }
-            return Math.Max(0, Categories.Count - 1);
+            return Categories.Count;
         }
 
         /// <summary>
