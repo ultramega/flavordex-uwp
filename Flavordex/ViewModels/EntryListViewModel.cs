@@ -340,6 +340,7 @@ namespace Flavordex.ViewModels
                 ListTitle = _categoriesTitle;
             }
 
+            RaisePropertyChanged("EmptyListVisibility");
             RaisePropertyChanged("IsCategorySelected");
         }
 
