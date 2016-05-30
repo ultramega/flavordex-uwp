@@ -236,7 +236,7 @@ namespace Flavordex
         {
             var category = await DatabaseHelper.GetCategoryAsync(categoryId);
 
-            PageTitle = string.Format(ResourceLoader.GetForCurrentView("AddEntry").GetString("Title/AddEntry"), category.Name);
+            PageTitle = string.Format(ResourceLoader.GetForCurrentView("AddEntry").GetString("Title/AddEntry"), Presets.GetRealCategoryName(category.Name));
 
             var entry = new Entry() { Category = category.Name, CategoryID = categoryId, Date = DateTime.Now };
             Entry = EntryViewModel.GetInstance(entry);
