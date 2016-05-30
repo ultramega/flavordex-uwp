@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Flavordex.UI.Controls"
     xmlns:ui="using:Flavordex.UI"
+    xmlns:model="using:Flavordex.Models"
     xmlns:vm="using:Flavordex.ViewModels"
     xmlns:rating="using:Bratched.Tools.RatingControl"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -18,6 +19,19 @@
             <TextBox
                 Header="{x:Bind Name}"
                 Text="{x:Bind Value, Mode=TwoWay}" />
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="MakerSuggestItemTemplate"
+            x:DataType="model:Maker">
+            <StackPanel>
+                <TextBlock
+                    Text="{x:Bind Name}" />
+
+                <TextBlock
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Text="{x:Bind Location}" />
+            </StackPanel>
         </DataTemplate>
 
         <DataTemplate
@@ -36,9 +50,13 @@
                         HorizontalAlignment="Center" />
                 </Border>
 
-                <TextBox
+                <AutoSuggestBox
                     x:Uid="ms-resource:///Entry/Input/Maker"
-                    Text="{x:Bind Maker, Mode=TwoWay}" />
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
 
                 <TextBox
                     x:Uid="ms-resource:///Entry/Input/Origin"
@@ -84,9 +102,13 @@
                     ItemsSource="{x:Bind BeerStyleSuggestions, Mode=OneWay}"
                     Text="{x:Bind Style, Mode=TwoWay}" />
 
-                <TextBox
-                    x:Uid="ms-resource:///Beer/Input/Maker"
-                    Text="{x:Bind Maker, Mode=TwoWay}" />
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Entry/Input/Maker"
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
 
                 <TextBox
                     x:Uid="ms-resource:///Entry/Input/Origin"
@@ -174,9 +196,13 @@
                         HorizontalAlignment="Center" />
                 </Border>
 
-                <TextBox
-                    x:Uid="ms-resource:///Coffee/Input/Maker"
-                    Text="{x:Bind Maker, Mode=TwoWay}" />
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Entry/Input/Maker"
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
 
                 <TextBox
                     x:Uid="ms-resource:///Entry/Input/Origin"
@@ -367,9 +393,13 @@
                     ItemsSource="{x:Bind WhiskeyTypeSuggestions, Mode=OneWay}"
                     Text="{x:Bind Type, Mode=TwoWay}" />
 
-                <TextBox
-                    x:Uid="ms-resource:///Whiskey/Input/Maker"
-                    Text="{x:Bind Title, Mode=TwoWay}" />
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Entry/Input/Maker"
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
 
                 <TextBox
                     x:Uid="ms-resource:///Entry/Input/Origin"
@@ -441,9 +471,13 @@
                     ItemsSource="{x:Bind WineVarietalSuggestions, Mode=OneWay}"
                     Text="{x:Bind Varietal, Mode=TwoWay}" />
 
-                <TextBox
-                    x:Uid="ms-resource:///Wine/Input/Maker"
-                    Text="{x:Bind Title, Mode=TwoWay}" />
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Entry/Input/Maker"
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
 
                 <TextBox
                     x:Uid="ms-resource:///Entry/Input/Origin"

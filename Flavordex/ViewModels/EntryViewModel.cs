@@ -12,6 +12,26 @@ namespace Flavordex.ViewModels
     public class EntryViewModel : ModelViewModel<Entry>
     {
         /// <summary>
+        /// The list of Makers backing the maker suggestions.
+        /// </summary>
+        private Collection<Maker> _makers;
+
+        /// <summary>
+        /// Gets the list of maker suggestions.
+        /// </summary>
+        public Maker[] MakerSuggestions
+        {
+            get
+            {
+                if (_makers == null || string.IsNullOrWhiteSpace(Maker))
+                {
+                    return null;
+                }
+                return _makers.Where(e => e.Name.ToLower().Contains(Maker.ToLower())).ToArray();
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the title of the Entry.
         /// </summary>
         public string Title
@@ -41,6 +61,7 @@ namespace Flavordex.ViewModels
             {
                 Model.Maker = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged("MakerSuggestions");
             }
         }
 
@@ -217,6 +238,16 @@ namespace Flavordex.ViewModels
                     return new WineEntryViewModel(entry);
             }
             return new EntryViewModel(entry);
+        }
+
+        /// <summary>
+        /// Sets the list of Makers backing the maker suggestions.
+        /// </summary>
+        /// <param name="makers">The Collection of Makers.</param>
+        public void SetMakers(Collection<Maker> makers)
+        {
+            _makers = makers;
+            RaisePropertyChanged("MakerSuggestions");
         }
 
         /// <summary>

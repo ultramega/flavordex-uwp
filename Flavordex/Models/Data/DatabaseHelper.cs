@@ -804,6 +804,25 @@ namespace Flavordex.Models.Data
         }
 
         /// <summary>
+        /// Gets the list of makers.
+        /// </summary>
+        /// <returns>The Collection of Makers.</returns>
+        public static async Task<Collection<Maker>> GetMakersAsync()
+        {
+            var list = new Collection<Maker>();
+            var rows = await Database.Query(Tables.Makers.TABLE_NAME, null, null, null, Tables.Makers.NAME);
+            foreach (var row in rows)
+            {
+                list.Add(new Maker()
+                {
+                    Name = row.GetString(Tables.Makers.NAME),
+                    Location = row.GetString(Tables.Makers.LOCATION)
+                });
+            }
+            return list;
+        }
+
+        /// <summary>
         /// Prepares a non-preset name for the database.
         /// </summary>
         /// <param name="input">The original name.</param>

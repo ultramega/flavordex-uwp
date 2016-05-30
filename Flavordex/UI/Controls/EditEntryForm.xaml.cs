@@ -1,4 +1,6 @@
-﻿using Flavordex.ViewModels;
+﻿using Flavordex.Models;
+using Flavordex.Models.Data;
+using Flavordex.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -26,6 +28,32 @@ namespace Flavordex.UI.Controls
         public EditEntryForm()
         {
             InitializeComponent();
+            RegisterPropertyChangedCallback(EntryProperty, OnEntryPropertyChanged);
+        }
+
+        /// <summary>
+        /// Loads the maker suggestions when the Entries property changes.
+        /// </summary>
+        /// <param name="sender">This UserControl.</param>
+        /// <param name="dp">The EntryProperty.</param>
+        private async void OnEntryPropertyChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            Entry.SetMakers(await DatabaseHelper.GetMakersAsync());
+        }
+
+        /// <summary>
+        /// Sets the origin field when a maker suggestion is selected.
+        /// </summary>
+        /// <param name="sender">The maker AutoSuggestBox.</param>
+        /// <param name="args">The event arguments.</param>
+        private void OnMakerSelected(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            var maker = args.ChosenSuggestion as Maker;
+            Entry.Origin = maker.Location;
+
+            var children = (sender.Parent as Panel).Children;
+            var index = children.IndexOf(sender);
+            (children[index + 2] as Control).Focus(FocusState.Programmatic);
         }
     }
 }
