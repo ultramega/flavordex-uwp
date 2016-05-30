@@ -1,5 +1,6 @@
 ﻿using Flavordex.Models;
 using Flavordex.Models.Data;
+using System;
 using System.Linq;
 using Windows.ApplicationModel.Resources;
 
@@ -76,6 +77,7 @@ namespace Flavordex.ViewModels
             }
             set
             {
+                value = Math.Min(0, Math.Max(value, _servingTypes.Length - 1));
                 SetExtra(Tables.Extras.Beer.SERVING, value);
                 RaisePropertyChanged();
                 RaisePropertyChanged("ServingTypeName");

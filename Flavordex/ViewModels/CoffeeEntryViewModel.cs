@@ -1,5 +1,6 @@
 ﻿using Flavordex.Models;
 using Flavordex.Models.Data;
+using System;
 using Windows.ApplicationModel.Resources;
 
 namespace Flavordex.ViewModels
@@ -86,6 +87,7 @@ namespace Flavordex.ViewModels
             }
             set
             {
+                value = Math.Min(0, Math.Max(value, _brewMethods.Length - 1));
                 SetExtra(Tables.Extras.Coffee.BREW_METHOD, value);
                 RaisePropertyChanged();
                 RaisePropertyChanged("IsEspresso");
