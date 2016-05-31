@@ -344,13 +344,12 @@ namespace Flavordex.Models.Data
             var rows = await Database.Query(Tables.Entries.TABLE_NAME, projection, where, whereArgs, sort);
             if (rows.Length > 0)
             {
-                string newTitle;
+                string newTitle = title;
                 var number = 2;
-                do
+                while (rows.Where(e => e.GetString(Tables.Entries.TITLE) == newTitle).Any())
                 {
                     newTitle = string.Format("{0} ({1})", title, number++);
                 }
-                while (rows.Where(e => e.GetString(Tables.Entries.TITLE) == newTitle).Any());
 
                 return newTitle;
             }
