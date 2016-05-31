@@ -58,6 +58,10 @@ namespace Flavordex
             if (e.Parameter is long)
             {
                 List.SelectedEntryId = (long)e.Parameter;
+                if (MasterList.SelectionMode == ListViewSelectionMode.None)
+                {
+                    Frame.Navigate(typeof(ViewEntryPage), List.SelectedEntryId);
+                }
             }
         }
 
@@ -81,14 +85,15 @@ namespace Flavordex
                     if (entryId != List.SelectedEntryId)
                     {
                         List.SelectedEntryId = entryId;
-                        if (DetailFrame.SourcePageType == typeof(ViewEntryPage))
-                        {
-                            DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new SuppressNavigationTransitionInfo());
-                        }
-                        else
-                        {
-                            DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new DrillInNavigationTransitionInfo());
-                        }
+                    }
+
+                    if (DetailFrame.SourcePageType == typeof(ViewEntryPage))
+                    {
+                        DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new SuppressNavigationTransitionInfo());
+                    }
+                    else
+                    {
+                        DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new DrillInNavigationTransitionInfo());
                     }
                 }
             }
@@ -102,8 +107,8 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnItemClicked(object sender, ItemClickEventArgs e)
         {
-            List.SelectedEntryId = (e.ClickedItem as EntryItemViewModel).Model.ID;
-            Frame.Navigate(typeof(ViewEntryPage), List.SelectedEntryId);
+            var entryId = (e.ClickedItem as EntryItemViewModel).Model.ID;
+            Frame.Navigate(typeof(ViewEntryPage), entryId);
         }
 
         /// <summary>
