@@ -6,8 +6,7 @@
     xmlns:c="using:Flavordex.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Loaded="OnPageLoaded">
+    mc:Ignorable="d">
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition />
@@ -548,28 +547,6 @@
 
     <Grid
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup
-                x:Name="AdaptiveStates"
-                CurrentStateChanged="OnCurrentStateChanged">
-                <VisualState
-                    x:Name="WideState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="720" />
-                    </VisualState.StateTriggers>
-                </VisualState>
-
-                <VisualState
-                    x:Name="NarrowState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
         <Grid.RowDefinitions>
             <RowDefinition
                 Height="Auto" />

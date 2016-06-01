@@ -175,9 +175,9 @@ namespace Flavordex
 
                 if (Frame.BackStack.Count > 0)
                 {
-                    var entry = new PageStackEntry(typeof(ViewEntryPage), Entry.Model.ID, new DrillInNavigationTransitionInfo());
-                    Frame.BackStack.Add(entry);
-                    Frame.GoBack();
+                    var entry = new PageStackEntry(typeof(EntryListPage), Entry.Model.ID, new DrillInNavigationTransitionInfo());
+                    Frame.BackStack[Frame.BackStackDepth - 1] = entry;
+                    Frame.GoBack(new DrillInNavigationTransitionInfo());
                 }
             }
         }

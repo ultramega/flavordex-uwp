@@ -1,14 +1,10 @@
-﻿using Flavordex.Models;
-using Flavordex.Models.Data;
+﻿using Flavordex.Models.Data;
 using Flavordex.UI.Controls;
 using Flavordex.Utilities;
-using Flavordex.Utilities.Databases;
 using Flavordex.ViewModels;
 using System;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 namespace Flavordex
@@ -82,61 +78,11 @@ namespace Flavordex
         /// <param name="e">
         /// The event arguments containing the ID of the requested Entry as the Parameter.
         /// </param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
 
             _entryId = (long)e.Parameter;
-            DatabaseHelper.RecordChanged += OnRecordChanged;
-
-            if (Window.Current.Bounds.Width < 720)
-            {
-                var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
-                systemNavigationManager.BackRequested += OnBackRequested;
-                systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-            }
-        }
-
-        /// <summary>
-        /// Disables the back button when the Page is navigated
-        /// away from.
-        /// </summary>
-        /// <param name="e">The event arguments.</param>
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
-
-            DatabaseHelper.RecordChanged -= OnRecordChanged;
-
-            var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
-            systemNavigationManager.BackRequested -= OnBackRequested;
-            systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-        }
-
-        /// <summary>
-        /// Navigates to the previous Page when the back button is clicked.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnBackRequested(object sender, BackRequestedEventArgs e)
-        {
-            e.Handled = true;
-            Frame.GoBack(new DrillInNavigationTransitionInfo());
-        }
-
-        /// <summary>
-        /// Loads the Entry when the Page has loaded.
-        /// </summary>
-        /// <param name="sender">The Page.</param>
-        /// <param name="e">The event arguments.</param>
-        private async void OnPageLoaded(object sender, RoutedEventArgs e)
-        {
-            if (Window.Current.Bounds.Width >= 720 && Frame == Window.Current.Content)
-            {
-                NavigateToWide();
-                return;
-            }
-
             Entry = EntryViewModel.GetInstance(await DatabaseHelper.GetEntryAsync(_entryId));
 
             foreach (var extra in await DatabaseHelper.GetEntryExtrasAsync(_entryId))
@@ -181,19 +127,6 @@ namespace Flavordex
             IsDetailsVisible = index == 0;
             IsFlavorsVisible = index == 1;
             IsPhotosVisible = index == 2;
-        }
-
-        /// <summary>
-        /// Navigates to the wide layout Page when the Page changes to the wide state.
-        /// </summary>
-        /// <param name="sender">The root Pivot.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnCurrentStateChanged(object sender, VisualStateChangedEventArgs e)
-        {
-            if (e.OldState == NarrowState && e.NewState == WideState)
-            {
-                NavigateToWide();
-            }
         }
 
         /// <summary>
@@ -279,33 +212,6 @@ namespace Flavordex
             if (PhotosFrame.CurrentSourcePageType == typeof(ViewPhotosPage))
             {
                 (PhotosFrame.Content as ViewPhotosPage).OnSelectPhoto(sender, e);
-            }
-        }
-
-        /// <summary>
-        /// Navigates to the wide state.
-        /// </summary>
-        private void NavigateToWide()
-        {
-            NavigationCacheMode = NavigationCacheMode.Disabled;
-            if (Frame.BackStack.Count > 0)
-            {
-                var entry = new PageStackEntry(typeof(EntryListPage), _entryId, new SuppressNavigationTransitionInfo());
-                Frame.BackStack[Frame.BackStack.Count - 1] = entry;
-                Frame.GoBack();
-            }
-        }
-
-        /// <summary>
-        /// Called when a record in the database changes.
-        /// </summary>
-        /// <param name="sender">The object that raised the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnRecordChanged(object sender, RecordChangedEventArgs e)
-        {
-            if (e.Action == RecordChangedAction.Delete && e.Model is Entry && e.Model.ID == _entryId)
-            {
-                Frame.GoBack();
             }
         }
     }

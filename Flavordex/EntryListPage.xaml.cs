@@ -6,6 +6,7 @@ using Flavordex.Utilities.Databases;
 using Flavordex.ViewModels;
 using System;
 using System.Collections.ObjectModel;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -45,6 +46,7 @@ namespace Flavordex
         {
             InitializeComponent();
             CheckDefaultSortButton();
+            Window.Current.SizeChanged += OnWindowSizeChanged;
         }
 
         /// <summary>
@@ -55,19 +57,61 @@ namespace Flavordex
         {
             base.OnNavigatedTo(e);
 
+            var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
+            systemNavigationManager.BackRequested += OnBackRequested;
+            if (List.SelectedEntry != null)
+            {
+                systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            }
+
             if (e.Parameter is long)
             {
                 List.SelectedEntryId = (long)e.Parameter;
-                if (MasterList.SelectionMode == ListViewSelectionMode.None)
-                {
-                    Frame.Navigate(typeof(ViewEntryPage), List.SelectedEntryId);
-                }
             }
         }
 
         /// <summary>
+        /// Removes event handlers when the Page is navigated away from.
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            SystemNavigationManager.GetForCurrentView().BackRequested -= OnBackRequested;
+        }
+
+        /// <summary>
+        /// Sets the VisualState when the Window size changes.
+        /// </summary>
+        /// <param name="sender">The Window.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnWindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
+        {
+            if (e.Size.Width >= 720)
+            {
+                VisualStateManager.GoToState(this, "WideState", false);
+            }
+            else
+            {
+                VisualStateManager.GoToState(this, List.SelectedEntry != null ? "NarrowSelectedState" : "NarrowState", false);
+            }
+        }
+
+        /// <summary>
+        /// Deselects the selected item when the back button is pressed.
+        /// </summary>
+        /// <param name="sender">The SystemNavigationManager.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            e.Handled = true;
+            List.SelectedEntryId = -1;
+        }
+
+        /// <summary>
         /// Loads the details for the selected Entry in the DetailFrame when the selected list item
-        /// changes. This only occurs while the Page is in the wide state.
+        /// changes.
         /// </summary>
         /// <param name="sender">The MasterList.</param>
         /// <param name="e">The event arguments.</param>
@@ -95,33 +139,14 @@ namespace Flavordex
                     {
                         DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new DrillInNavigationTransitionInfo());
                     }
+
+                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Navigates to the ViewEntryPage for the clicked Entry when a list item is clicked. This
-        /// only occurs while the Page is in the narrow state.
-        /// </summary>
-        /// <param name="sender">The MasterList.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnItemClicked(object sender, ItemClickEventArgs e)
-        {
-            var entryId = (e.ClickedItem as EntryItemViewModel).Model.ID;
-            Frame.Navigate(typeof(ViewEntryPage), entryId);
-        }
-
-        /// <summary>
-        /// Navigates to the ViewEntryPage for the selected Entry, if any, when the Page changes to
-        /// the narrow state.
-        /// </summary>
-        /// <param name="sender">The root Grid.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnStateChanged(object sender, VisualStateChangedEventArgs e)
-        {
-            if (e.NewState == NarrowState && List.SelectedEntryId != 0)
-            {
-                Frame.Navigate(typeof(ViewEntryPage), List.SelectedEntryId, new SuppressNavigationTransitionInfo());
+                else
+                {
+                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+                    DetailFrame.Navigate(typeof(WelcomePage), null, new DrillInNavigationTransitionInfo());
+                }
             }
         }
 
@@ -155,10 +180,10 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnDetailFrameNavigated(object sender, NavigationEventArgs e)
         {
-            if (DetailFrame.BackStackDepth > 0)
+            DetailFrame.BackStack.Clear();
+            if (Window.Current.Bounds.Width < 720)
             {
-                DetailFrame.BackStack.Clear();
-                DetailFrame.BackStack.Add(new PageStackEntry(typeof(WelcomePage), null, null));
+                VisualStateManager.GoToState(this, e.SourcePageType == typeof(ViewEntryPage) ? "NarrowSelectedState" : "NarrowState", true);
             }
         }
 
@@ -402,15 +427,7 @@ namespace Flavordex
             }
             else
             {
-                if (AdaptiveStates.CurrentState == DefaultState)
-                {
-                    MasterList.SelectionMode = ListViewSelectionMode.Single;
-                }
-                else
-                {
-                    MasterList.SelectionMode = ListViewSelectionMode.None;
-                    MasterList.IsItemClickEnabled = true;
-                }
+                MasterList.SelectionMode = ListViewSelectionMode.Single;
             }
         }
 

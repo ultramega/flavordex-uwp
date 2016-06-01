@@ -123,24 +123,12 @@
     <Grid
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup
-                x:Name="AdaptiveStates"
-                CurrentStateChanged="OnStateChanged">
+            <VisualStateGroup>
                 <VisualState
-                    x:Name="DefaultState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="720" />
-                    </VisualState.StateTriggers>
-                </VisualState>
+                    x:Name="WideState" />
 
                 <VisualState
                     x:Name="NarrowState">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger
-                            MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-
                     <VisualState.Setters>
                         <Setter
                             Target="MasterColumn.Width"
@@ -149,14 +137,19 @@
                         <Setter
                             Target="DetailColumn.Width"
                             Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+
+                <VisualState
+                    x:Name="NarrowSelectedState">
+                    <VisualState.Setters>
+                        <Setter
+                            Target="MasterColumn.Width"
+                            Value="0" />
 
                         <Setter
-                            Target="MasterList.SelectionMode"
-                            Value="None" />
-
-                        <Setter
-                            Target="MasterList.IsItemClickEnabled"
-                            Value="True" />
+                            Target="DetailColumn.Width"
+                            Value="*" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -293,8 +286,7 @@
                     ItemTemplate="{StaticResource EntryItemTemplate}"
                     ItemsSource="{x:Bind List.Entries}"
                     SelectedItem="{x:Bind List.SelectedEntry, Mode=OneWay}"
-                    SelectionChanged="OnItemSelected"
-                    ItemClick="OnItemClicked">
+                    SelectionChanged="OnItemSelected">
                     <ListView.Header>
                         <RelativePanel
                             Visibility="{x:Bind List.FilterMessageVisibility, Mode=OneWay}"
