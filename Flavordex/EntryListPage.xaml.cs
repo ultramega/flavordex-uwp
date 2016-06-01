@@ -501,5 +501,15 @@ namespace Flavordex
             ListCommandBar.IsOpen = false;
             await EntryUtilities.ImportEntriesAsync();
         }
+
+        /// <summary>
+        /// Opens the settings pane when the Settings menu option is clicked.
+        /// </summary>
+        /// <param name="sender">The Settings AppBarButton.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnSettingsClicked(object sender, RoutedEventArgs e)
+        {
+            SplitView.IsPaneOpen = true;
+        }
     }
 }
