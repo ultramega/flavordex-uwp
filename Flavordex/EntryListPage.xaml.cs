@@ -178,8 +178,8 @@ namespace Flavordex
         }
 
         /// <summary>
-        /// Resets the BackStack of the DetailFrame when it navigates to a new Page so it is never
-        /// more than one level above the WelcomePage.
+        /// Updates the VisualState of the Page according to the SourcePageType when the
+        /// DetailFrame is navigated.
         /// </summary>
         /// <param name="sender">The DetailFrame.</param>
         /// <param name="e">The event arguments.</param>
@@ -301,8 +301,8 @@ namespace Flavordex
         /// <summary>
         /// Opens the sharing UI when the Share Entry menu item is clicked.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The MenuFlyoutItem.</param>
+        /// <param name="e">The event arguments.</param>
         private void OnShareEntry(object sender, RoutedEventArgs e)
         {
             EntryUtilities.ShareEntry(GetItem(sender) as Entry);
@@ -334,10 +334,10 @@ namespace Flavordex
         }
 
         /// <summary>
-        /// Opens the list filtering dialog when the filter Button is clicked, then updates the
+        /// Opens the list filtering dialog when the Filter button is pressed, then updates the
         /// list filtering parameters according to the result.
         /// </summary>
-        /// <param name="sender">The filter Button.</param>
+        /// <param name="sender">The AppBarButton.</param>
         /// <param name="e">The event arguments.</param>
         private async void OnFilterClick(object sender, RoutedEventArgs e)
         {
@@ -508,9 +508,9 @@ namespace Flavordex
         }
 
         /// <summary>
-        /// Opens the settings pane when the Settings menu option is clicked.
+        /// Opens the settings pane when the Settings button is pressed.
         /// </summary>
-        /// <param name="sender">The Settings AppBarButton.</param>
+        /// <param name="sender">The AppBarButton.</param>
         /// <param name="e">The event arguments.</param>
         private void OnSettingsClicked(object sender, RoutedEventArgs e)
         {
