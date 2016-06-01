@@ -46,6 +46,11 @@ namespace Flavordex
         {
             InitializeComponent();
             CheckDefaultSortButton();
+
+            if (Window.Current.Bounds.Width < 720)
+            {
+                VisualStateManager.GoToState(this, "NarrowState", false);
+            }
             Window.Current.SizeChanged += OnWindowSizeChanged;
         }
 
