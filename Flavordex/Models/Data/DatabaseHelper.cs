@@ -828,6 +828,10 @@ namespace Flavordex.Models.Data
         /// <returns>The filtered name.</returns>
         private static string FilterName(string input)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
             return input.TrimStart(' ', '_').TrimEnd(' ');
         }
     }
