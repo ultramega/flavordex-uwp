@@ -13,7 +13,6 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using static Flavordex.Settings;
 
 namespace Flavordex
 {
@@ -169,14 +168,14 @@ namespace Flavordex
                     return;
                 }
                 var category = e.SourceItem.Item as CategoryItemViewModel;
-                if (ListCategory != category.Model.ID)
+                if (Settings.ListCategory != category.Model.ID)
                 {
-                    ListCategory = category.Model.ID;
+                    Settings.ListCategory = category.Model.ID;
                 }
             }
             else
             {
-                ListCategory = -1;
+                Settings.ListCategory = -1;
             }
         }
 
@@ -202,10 +201,10 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnSortButtonClick(object sender, RoutedEventArgs e)
         {
-            SortField field;
+            Settings.SortField field;
             if (sender == SortDateButton)
             {
-                field = SortField.Date;
+                field = Settings.SortField.Date;
 
                 SortNameButton.IsChecked = false;
                 SortDateButton.IsChecked = true;
@@ -213,7 +212,7 @@ namespace Flavordex
             }
             else if (sender == SortRatingButton)
             {
-                field = SortField.Rating;
+                field = Settings.SortField.Rating;
 
                 SortNameButton.IsChecked = false;
                 SortDateButton.IsChecked = false;
@@ -221,15 +220,15 @@ namespace Flavordex
             }
             else
             {
-                field = SortField.Name;
+                field = Settings.SortField.Name;
 
                 SortNameButton.IsChecked = true;
                 SortDateButton.IsChecked = false;
                 SortRatingButton.IsChecked = false;
             }
 
-            ListSortDescending = field == ListSortField ? !ListSortDescending : false;
-            ListSortField = field;
+            Settings.ListSortDescending = field == Settings.ListSortField ? !Settings.ListSortDescending : false;
+            Settings.ListSortField = field;
         }
 
         /// <summary>
@@ -250,7 +249,7 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnAddEntry(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(AddEntryPage), ListCategory);
+            Frame.Navigate(typeof(AddEntryPage), Settings.ListCategory);
         }
 
         /// <summary>
@@ -407,12 +406,12 @@ namespace Flavordex
         /// </summary>
         private void CheckDefaultSortButton()
         {
-            switch (ListSortField)
+            switch (Settings.ListSortField)
             {
-                case SortField.Date:
+                case Settings.SortField.Date:
                     SortDateButton.IsChecked = true;
                     break;
-                case SortField.Rating:
+                case Settings.SortField.Rating:
                     SortRatingButton.IsChecked = true;
                     break;
                 default:
@@ -449,7 +448,7 @@ namespace Flavordex
             ListCommandBar.IsOpen = false;
             if (!List.IsCategorySelected)
             {
-                ListCategory = 0;
+                Settings.ListCategory = 0;
             }
             SetExportMode(true);
         }
