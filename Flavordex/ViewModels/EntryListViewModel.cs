@@ -184,6 +184,17 @@ namespace Flavordex.ViewModels
         }
 
         /// <summary>
+        /// Gets the selected Category.
+        /// </summary>
+        public CategoryItemViewModel SelectedCategory
+        {
+            get
+            {
+                return Categories.Where(e => e.Model.ID == Settings.ListCategory).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
         /// The primary ID of the currently selected Entry.
         /// </summary>
         private long _selectedEntryId;
@@ -341,6 +352,7 @@ namespace Flavordex.ViewModels
             }
 
             RaisePropertyChanged("EmptyListVisibility");
+            RaisePropertyChanged("SelectedCategory");
             RaisePropertyChanged("IsCategorySelected");
         }
 

@@ -169,7 +169,10 @@ namespace Flavordex
                     return;
                 }
                 var category = e.SourceItem.Item as CategoryItemViewModel;
-                ListCategory = category.Model.ID;
+                if (ListCategory != category.Model.ID)
+                {
+                    ListCategory = category.Model.ID;
+                }
             }
             else
             {

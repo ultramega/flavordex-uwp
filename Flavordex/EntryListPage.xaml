@@ -279,7 +279,8 @@
                         <ListView
                             ItemContainerStyle="{StaticResource ListItemStyle}"
                             ItemTemplate="{StaticResource CategoryItemTemplate}"
-                            ItemsSource="{x:Bind List.Categories}" />
+                            ItemsSource="{x:Bind List.Categories}"
+                            SelectedItem="{x:Bind List.SelectedCategory, Mode=OneWay}" />
                     </SemanticZoom.ZoomedOutView>
 
                     <SemanticZoom.ZoomedInView>
