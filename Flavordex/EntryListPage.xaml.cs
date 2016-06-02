@@ -141,7 +141,7 @@ namespace Flavordex
                     }
                     else
                     {
-                        DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new DrillInNavigationTransitionInfo());
+                        DetailFrame.Navigate(typeof(ViewEntryPage), entryId);
                     }
 
                     SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
@@ -149,7 +149,7 @@ namespace Flavordex
                 else
                 {
                     SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-                    DetailFrame.Navigate(typeof(WelcomePage), null, new DrillInNavigationTransitionInfo());
+                    DetailFrame.Navigate(typeof(WelcomePage), null);
                 }
             }
         }
