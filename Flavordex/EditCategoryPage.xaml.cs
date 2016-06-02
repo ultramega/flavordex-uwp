@@ -12,6 +12,7 @@ using Windows.ApplicationModel.Resources;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
 namespace Flavordex
@@ -161,6 +162,16 @@ namespace Flavordex
         {
             e.Handled = true;
             Frame.GoBack();
+        }
+
+        /// <summary>
+        /// Updates the title when the field text is changed.
+        /// </summary>
+        /// <param name="sender">The TextBox.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnTitleKeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            Category.Name = (sender as TextBox).Text;
         }
 
         /// <summary>

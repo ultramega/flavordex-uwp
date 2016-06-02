@@ -96,7 +96,8 @@
                     x:Uid="ms-resource:///Category/Input/Title"
                     MaxWidth="{StaticResource MaxFormWidth}"
                     IsReadOnly="{x:Bind Category.IsPreset, Mode=OneWay}"
-                    Text="{x:Bind Category.Name, Mode=TwoWay}" />
+                    Text="{x:Bind Category.Name, Mode=OneWay}"
+                    KeyUp="OnTitleKeyUp" />
 
                 <Border
                     Grid.Row="2"
