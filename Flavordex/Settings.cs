@@ -18,6 +18,7 @@ namespace Flavordex
             public const string ListSortField = "ListSortField";
             public const string ListSortDescending = "ListSortDescending";
             public const string ListCategory = "ListCategory";
+            public const string DetectLocation = "DetectLocation";
         }
 
         /// <summary>
@@ -111,6 +112,22 @@ namespace Flavordex
             set
             {
                 _settings[Key.ListCategory] = value;
+                RaiseSettingChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether to detect and remember the user's location.
+        /// </summary>
+        public static bool DetectLocation
+        {
+            get
+            {
+                return GetValue(Key.DetectLocation, false);
+            }
+            set
+            {
+                _settings[Key.DetectLocation] = value;
                 RaiseSettingChanged();
             }
         }

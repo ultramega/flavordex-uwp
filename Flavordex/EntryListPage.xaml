@@ -163,7 +163,7 @@
         </VisualStateManager.VisualStateGroups>
 
         <SplitView.Pane>
-            <StackPanel></StackPanel>
+            <c:SettingsPane />
         </SplitView.Pane>
 
         <SplitView.Content>

@@ -162,29 +162,11 @@ via Flavordex</value>
   <data name="Error.InsertEntry" xml:space="preserve">
     <value>Error: Failed to create new entry</value>
   </data>
-  <data name="Title.Settings" xml:space="preserve">
-    <value>Application Settings</value>
-  </data>
   <data name="Message.RegisteringClient" xml:space="preserve">
     <value>Registering device with the sync service…</value>
   </data>
   <data name="Message.ConnectingDrive" xml:space="preserve">
     <value>Connecting to Google Drive…</value>
-  </data>
-  <data name="Pref.CatGeneral" xml:space="preserve">
-    <value>General</value>
-  </data>
-  <data name="Pref.EditCats" xml:space="preserve">
-    <value>Edit Categories</value>
-  </data>
-  <data name="Pref.SummaryEditCats" xml:space="preserve">
-    <value>Add, remove, or customize entry categories.</value>
-  </data>
-  <data name="Pref.DetectLocation" xml:space="preserve">
-    <value>Remember Locations</value>
-  </data>
-  <data name="Pref.SummaryDetectLocation" xml:space="preserve">
-    <value>Auto-fill location name based on previous entries.</value>
   </data>
   <data name="Pref.CatSync" xml:space="preserve">
     <value>Synchronization</value>
