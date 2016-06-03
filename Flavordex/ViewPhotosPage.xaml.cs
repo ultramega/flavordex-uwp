@@ -104,7 +104,7 @@ namespace Flavordex
                 }
                 else if (e.Action == RecordChangedAction.Delete)
                 {
-                    var item = Photos.Where(k => k.Model.ID == e.Model.ID).FirstOrDefault();
+                    var item = Photos.FirstOrDefault(k => k.Model.ID == e.Model.ID);
                     if (Photos.IndexOf(item) == 0)
                     {
                         PhotoUtilities.DeleteThumbnail(_entry.ID);

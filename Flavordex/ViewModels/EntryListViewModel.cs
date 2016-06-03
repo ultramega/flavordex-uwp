@@ -190,7 +190,7 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return Categories.Where(e => e.Model.ID == Settings.ListCategory).FirstOrDefault();
+                return Categories.FirstOrDefault(e => e.Model.ID == Settings.ListCategory);
             }
         }
 
@@ -222,7 +222,7 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return Entries.Where(e => e.Model.ID == _selectedEntryId).FirstOrDefault();
+                return Entries.FirstOrDefault(e => e.Model.ID == _selectedEntryId);
             }
         }
 
@@ -340,7 +340,7 @@ namespace Flavordex.ViewModels
                 }
                 SortList();
 
-                var category = Categories.Where(e => e.Model.ID == Settings.ListCategory).FirstOrDefault();
+                var category = Categories.FirstOrDefault(e => e.Model.ID == Settings.ListCategory);
                 if (category != null)
                 {
                     ListTitle = string.Format(_entriesTitleFormat, category.Model.ID == 0 ? _all : category.Name);
@@ -462,7 +462,7 @@ namespace Flavordex.ViewModels
         /// <param name="entry">The Entry to sort.</param>
         private void SortEntry(Entry entry)
         {
-            var item = _entries.Where(e => e.Model == entry).FirstOrDefault();
+            var item = _entries.FirstOrDefault(e => e.Model == entry);
 
             if (item != null && !Matches(item))
             {
@@ -489,7 +489,7 @@ namespace Flavordex.ViewModels
         /// <param name="category">The Category to sort.</param>
         private void SortCategory(Category category)
         {
-            var item = Categories.Where(e => e.Model == category).FirstOrDefault();
+            var item = Categories.FirstOrDefault(e => e.Model == category);
             var index = Categories.IndexOf(item);
             var newIndex = FindSortedIndex(category);
             if (index > -1 && newIndex > index)
@@ -598,7 +598,7 @@ namespace Flavordex.ViewModels
         /// <param name="entry">The Entry to remove.</param>
         private void DeleteEntry(Entry entry)
         {
-            var item = _entries.Where(e => e.Model == entry).FirstOrDefault();
+            var item = _entries.FirstOrDefault(e => e.Model == entry);
             if (item != null)
             {
                 Entries.Remove(item);
@@ -620,7 +620,7 @@ namespace Flavordex.ViewModels
         /// <param name="category">The Category to remove.</param>
         private void DeleteCategory(Category category)
         {
-            var item = Categories.Where(e => e.Model == category).FirstOrDefault();
+            var item = Categories.FirstOrDefault(e => e.Model == category);
             if (item != null)
             {
                 Categories.Remove(item);

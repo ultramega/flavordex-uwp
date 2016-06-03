@@ -267,7 +267,7 @@ namespace Flavordex.ViewModels
         /// <returns>The value of the extra field.</returns>
         protected string GetExtra(string name)
         {
-            var extra = Extras.Where(e => e.Name == name).FirstOrDefault();
+            var extra = Extras.FirstOrDefault(e => e.Name == name);
             if (extra != null)
             {
                 return extra.Value;
@@ -282,7 +282,7 @@ namespace Flavordex.ViewModels
         /// <param name="value">The value of the extra field.</param>
         protected void SetExtra(string name, object value)
         {
-            var extra = Extras.Where(e => e.Name == name).FirstOrDefault();
+            var extra = Extras.FirstOrDefault(e => e.Name == name);
             if (extra == null && value != null)
             {
                 var newExtra = new EntryExtra();

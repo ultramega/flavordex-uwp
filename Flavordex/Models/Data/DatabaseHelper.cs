@@ -346,7 +346,7 @@ namespace Flavordex.Models.Data
             {
                 string newTitle = title;
                 var number = 2;
-                while (rows.Where(e => e.GetString(Tables.Entries.TITLE) == newTitle).Any())
+                while (rows.Any(e => e.GetString(Tables.Entries.TITLE) == newTitle))
                 {
                     newTitle = string.Format("{0} ({1})", title, number++);
                 }
