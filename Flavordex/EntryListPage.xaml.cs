@@ -68,6 +68,9 @@ namespace Flavordex
                 systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             }
 
+            Zoom.IsZoomedInViewActive = List.IsCategorySelected;
+            Zoom.ViewChangeStarted += OnListViewChange;
+
             if (e.Parameter is long)
             {
                 List.SelectedEntryId = (long)e.Parameter;
@@ -83,6 +86,9 @@ namespace Flavordex
             base.OnNavigatedFrom(e);
 
             SystemNavigationManager.GetForCurrentView().BackRequested -= OnBackRequested;
+
+            Zoom.ViewChangeStarted -= OnListViewChange;
+            Zoom.IsZoomedInViewActive = true;
         }
 
         /// <summary>
@@ -109,8 +115,8 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            e.Handled = true;
             List.SelectedEntryId = -1;
+            e.Handled = true;
         }
 
         /// <summary>
@@ -167,6 +173,7 @@ namespace Flavordex
                 {
                     return;
                 }
+
                 var category = e.SourceItem.Item as CategoryItemViewModel;
                 if (Settings.ListCategory != category.Model.ID)
                 {

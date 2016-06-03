@@ -278,7 +278,6 @@
                 <SemanticZoom
                     Grid.Row="1"
                     x:Name="Zoom"
-                    ViewChangeStarted="OnListViewChange"
                     IsZoomedInViewActive="{x:Bind List.IsCategorySelected, Mode=OneWay}"
                     IsZoomOutButtonEnabled="{Binding Visibility, ElementName=ExportBar, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!}">
                     <SemanticZoom.ZoomedOutView>

@@ -131,8 +131,8 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            e.Handled = true;
             Frame.GoBack();
+            e.Handled = true;
         }
 
         /// <summary>
