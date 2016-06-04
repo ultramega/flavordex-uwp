@@ -34,6 +34,11 @@ namespace Flavordex.UI.Controls
             DependencyProperty.Register("DetectLocationVisibility", typeof(Visibility), typeof(SettingsPane), new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
+        /// A reference to the CategoryListDialog.
+        /// </summary>
+        private CategoryListDialog _categoryListDialog;
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public SettingsPane()
@@ -61,13 +66,39 @@ namespace Flavordex.UI.Controls
         }
 
         /// <summary>
+        /// Restores state when the Control is loaded.
+        /// </summary>
+        /// <param name="sender">This Control.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (_categoryListDialog != null)
+            {
+                OpenCategoryListDialog();
+            }
+        }
+
+        /// <summary>
         /// Opens the Edit Categories Dialog when the Edit Categories Button is clicked.
         /// </summary>
         /// <param name="sender">The Button.</param>
         /// <param name="e">The event arguments.</param>
-        private async void OnEditCategories(object sender, RoutedEventArgs e)
+        private void OnEditCategories(object sender, RoutedEventArgs e)
         {
-            await new CategoryListDialog().ShowAsync();
+            _categoryListDialog = new CategoryListDialog();
+            OpenCategoryListDialog();
+        }
+
+        /// <summary>
+        /// Opens the Category list dialog.
+        /// </summary>
+        private async void OpenCategoryListDialog()
+        {
+            var result = await _categoryListDialog.ShowAsync();
+            if (result == ContentDialogResult.Secondary)
+            {
+                _categoryListDialog = null;
+            }
         }
 
         /// <summary>

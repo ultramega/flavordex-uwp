@@ -39,6 +39,11 @@ namespace Flavordex
             DependencyProperty.Register("EnableExport", typeof(bool), typeof(EntryListPage), new PropertyMetadata(false));
 
         /// <summary>
+        /// Whether the Settings pane is open.
+        /// </summary>
+        private bool _isSettingsOpen;
+
+        /// <summary>
         /// Constructor. Loads the list of Categories.
         /// </summary>
         public EntryListPage()
@@ -75,6 +80,8 @@ namespace Flavordex
             {
                 List.SelectedEntryId = (long)e.Parameter;
             }
+
+            SplitView.IsPaneOpen = _isSettingsOpen;
         }
 
         /// <summary>
@@ -89,6 +96,7 @@ namespace Flavordex
 
             Zoom.ViewChangeStarted -= OnListViewChange;
             Zoom.IsZoomedInViewActive = true;
+            SplitView.IsPaneOpen = false;
         }
 
         /// <summary>
@@ -528,7 +536,8 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnSettingsClicked(object sender, RoutedEventArgs e)
         {
-            SplitView.IsPaneOpen = true;
+            FindName("SettingsPane");
+            SplitView.IsPaneOpen = _isSettingsOpen = true;
         }
     }
 }

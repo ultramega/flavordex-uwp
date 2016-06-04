@@ -163,7 +163,9 @@
         </VisualStateManager.VisualStateGroups>
 
         <SplitView.Pane>
-            <c:SettingsPane />
+            <c:SettingsPane
+                x:Name="SettingsPane"
+                x:DeferLoadStrategy="Lazy" />
         </SplitView.Pane>
 
         <SplitView.Content>
