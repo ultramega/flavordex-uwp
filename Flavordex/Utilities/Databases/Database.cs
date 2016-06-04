@@ -268,10 +268,13 @@ namespace Flavordex.Utilities.Databases
 
                 using (var stmt = Connection.Prepare(sql))
                 {
-                    var i = 1;
-                    foreach (var v in whereArgs)
+                    if (whereArgs != null)
                     {
-                        stmt.Bind(i++, v);
+                        var i = 1;
+                        foreach (var v in whereArgs)
+                        {
+                            stmt.Bind(i++, v);
+                        }
                     }
                     stmt.Step();
                     return Connection.ChangesCount();
