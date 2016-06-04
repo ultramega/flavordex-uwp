@@ -300,6 +300,11 @@ namespace Flavordex
         private async void OnDeleteCategory(object sender, RoutedEventArgs e)
         {
             var category = GetItem(sender) as Category;
+            if (category.IsPreset)
+            {
+                return;
+            }
+
             var result = await new DeleteCategoryDialog(category).ShowAsync();
             if (result == ContentDialogResult.Primary)
             {

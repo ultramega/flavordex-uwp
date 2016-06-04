@@ -325,6 +325,11 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private async void OnDeleteCategory(object sender, RoutedEventArgs e)
         {
+            if (Category.Model.IsPreset)
+            {
+                return;
+            }
+
             var result = await new DeleteCategoryDialog(Category.Model).ShowAsync();
             if (result == ContentDialogResult.Primary)
             {

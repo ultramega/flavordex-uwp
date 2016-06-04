@@ -1,0 +1,75 @@
+﻿<ContentDialog
+    x:Class="Flavordex.UI.Controls.CategoryListDialog"
+    x:Uid="ms-resource:///Category/Dialog/EditCategories"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex.UI.Controls"
+    xmlns:vm="using:Flavordex.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Style="{StaticResource ContentDialogStyle}">
+    <ListView
+        ItemsSource="{x:Bind Categories}"
+        SelectionMode="None"
+        IsItemClickEnabled="True"
+        ItemClick="OnItemClicked">
+        <ListView.ItemContainerStyle>
+            <Style
+                TargetType="ListViewItem">
+                <Setter
+                    Property="HorizontalContentAlignment"
+                    Value="Stretch" />
+            </Style>
+        </ListView.ItemContainerStyle>
+
+        <ListView.ItemTemplate>
+            <DataTemplate
+                x:DataType="vm:CategoryItemViewModel">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <SymbolIcon
+                        Symbol="Edit" />
+
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Margin="12,0,0,0"
+                        Text="{x:Bind Name, Mode=OneWay}" />
+
+                    <Button
+                        Grid.Column="2"
+                        Visibility="{x:Bind IsPreset, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!}"
+                        Click="OnDeleteCategory">
+                        <SymbolIcon
+                            Symbol="Delete" />
+                    </Button>
+                </Grid>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+
+        <ListView.Footer>
+            <Button
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Click="OnAddCategory">
+                <StackPanel
+                    Orientation="Horizontal">
+                    <SymbolIcon
+                        Symbol="Add" />
+
+                    <TextBlock
+                        x:Uid="ms-resource:///Category/Button/Add"
+                        Margin="6,0,0,0" />
+                </StackPanel>
+            </Button>
+        </ListView.Footer>
+    </ListView>
+</ContentDialog>

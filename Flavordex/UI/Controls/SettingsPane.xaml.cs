@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Flavordex.UI.Controls
@@ -62,8 +63,9 @@ namespace Flavordex.UI.Controls
         /// </summary>
         /// <param name="sender">The Button.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnEditCategories(object sender, RoutedEventArgs e)
+        private async void OnEditCategories(object sender, RoutedEventArgs e)
         {
+            await new CategoryListDialog().ShowAsync();
         }
 
         /// <summary>

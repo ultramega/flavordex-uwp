@@ -48,11 +48,11 @@
   <data name="Command.Save.Label" xml:space="preserve">
     <value>Save Category</value>
   </data>
-  <data name="Dialog.Select.Title" xml:space="preserve">
-    <value>Select Category</value>
+  <data name="Dialog.EditCategories.Title" xml:space="preserve">
+    <value>Edit Categories</value>
   </data>
-  <data name="Dialog.Select.SecondaryButtonText" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="Dialog.EditCategories.SecondaryButtonText" xml:space="preserve">
+    <value>Close</value>
   </data>
   <data name="Header.Title.Text" xml:space="preserve">
     <value>Category Title</value>

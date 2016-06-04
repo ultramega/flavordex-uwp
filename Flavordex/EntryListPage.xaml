@@ -390,7 +390,8 @@
                     Grid.RowSpan="2"
                     Grid.ColumnSpan="2"
                     x:Name="FilterDialog"
-                    x:Uid="ms-resource:///EntryList/Dialog/Filter">
+                    x:Uid="ms-resource:///EntryList/Dialog/Filter"
+                    Style="{StaticResource ContentDialogStyle}">
                     <ContentDialog.TitleTemplate>
                         <DataTemplate>
                             <StackPanel
