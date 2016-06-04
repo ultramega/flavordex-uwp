@@ -1,6 +1,8 @@
 ﻿using System;
+using Windows.Devices.Geolocation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace Flavordex.UI.Controls
 {
@@ -73,8 +75,13 @@ namespace Flavordex.UI.Controls
         /// </summary>
         /// <param name="sender">This Control.</param>
         /// <param name="dp">The DetectLocation property.</param>
-        private void OnDetectLocationChanged(DependencyObject sender, DependencyProperty dp)
+        private async void OnDetectLocationChanged(DependencyObject sender, DependencyProperty dp)
         {
+            if (DetectLocation && await Geolocator.RequestAccessAsync() != GeolocationAccessStatus.Allowed)
+            {
+                DetectLocation = false;
+                FlyoutBase.ShowAttachedFlyout(DetectLocationToggle);
+            }
             Settings.DetectLocation = DetectLocation;
         }
     }

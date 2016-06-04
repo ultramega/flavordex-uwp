@@ -51,8 +51,14 @@
   <data name="Button.EditCategories.Summary.Text" xml:space="preserve">
     <value>Add, remove, or customize entry categories</value>
   </data>
+  <data name="Button.LocationSettings.Content" xml:space="preserve">
+    <value>Go to Settings</value>
+  </data>
   <data name="Header.General.Text" xml:space="preserve">
     <value>General</value>
+  </data>
+  <data name="Message.LocationDenied.Text" xml:space="preserve">
+    <value>Location detection is blocked by your privacy settings.</value>
   </data>
   <data name="Title.Text" xml:space="preserve">
     <value>Application Settings</value>

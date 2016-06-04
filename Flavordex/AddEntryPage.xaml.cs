@@ -173,12 +173,28 @@ namespace Flavordex
                     await PhotoUtilities.AddPhotoAsync(item.Key, Entry.Model.ID, position++);
                 }
 
+                if (Settings.DetectLocation)
+                {
+                    CheckLocation();
+                }
+
                 if (Frame.BackStack.Count > 0)
                 {
                     var entry = new PageStackEntry(typeof(EntryListPage), Entry.Model.ID, new DrillInNavigationTransitionInfo());
                     Frame.BackStack[Frame.BackStackDepth - 1] = entry;
                     Frame.GoBack(new DrillInNavigationTransitionInfo());
                 }
+            }
+        }
+
+        /// <summary>
+        /// Checks for a new location and add it to the database.
+        /// </summary>
+        private void CheckLocation()
+        {
+            if (LocationUtilities.Location != null && !string.IsNullOrWhiteSpace(Entry.Location) && Entry.Location != LocationUtilities.LocationName)
+            {
+                LocationUtilities.AddLocation(Entry.Location);
             }
         }
 

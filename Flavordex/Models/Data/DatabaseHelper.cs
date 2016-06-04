@@ -822,6 +822,32 @@ namespace Flavordex.Models.Data
         }
 
         /// <summary>
+        /// Gets the list of saved locations.
+        /// </summary>
+        /// <returns>The list of saved locations.</returns>
+        public static async Task<Collection<Location>> GetLocationListAsync()
+        {
+            var list = new Collection<Location>();
+            var rows = await Database.Query(Tables.Locations.TABLE_NAME);
+            foreach (var row in rows)
+            {
+                var location = new Location();
+                location.SetData(row);
+                list.Add(location);
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Inserts a new location into the database.
+        /// </summary>
+        /// <param name="location">The Location to insert.</param>
+        public static async void InsertLocation(Location location)
+        {
+            await Database.Insert(Tables.Locations.TABLE_NAME, location.GetData());
+        }
+
+        /// <summary>
         /// Prepares a non-preset name for the database.
         /// </summary>
         /// <param name="input">The original name.</param>

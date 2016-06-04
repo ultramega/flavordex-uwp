@@ -67,9 +67,8 @@
                     x:Uid="ms-resource:///Entry/Input/Price"
                     Text="{x:Bind Price, Mode=TwoWay}" />
 
-                <TextBox
-                    x:Uid="ms-resource:///Entry/Input/Location"
-                    Text="{x:Bind Location, Mode=TwoWay}" />
+                <local:LocationField
+                    Entry="{x:Bind}" />
 
                 <local:EntryTimePicker
                     x:Uid="ms-resource:///Entry/Input/Date"
@@ -125,9 +124,8 @@
                     ItemsSource="{x:Bind ServingTypes}"
                     SelectedIndex="{x:Bind ServingType, Mode=TwoWay}" />
 
-                <TextBox
-                    x:Uid="ms-resource:///Entry/Input/Location"
-                    Text="{x:Bind Location, Mode=TwoWay}" />
+                <local:LocationField
+                    Entry="{x:Bind}" />
 
                 <local:EntryTimePicker
                     x:Uid="ms-resource:///Entry/Input/Date"
@@ -232,9 +230,8 @@
                     ItemsSource="{x:Bind BrewMethods}"
                     SelectedIndex="{x:Bind BrewMethod, Mode=TwoWay}" />
 
-                <TextBox
-                    x:Uid="ms-resource:///Entry/Input/Location"
-                    Text="{x:Bind Location, Mode=TwoWay}" />
+                <local:LocationField
+                    Entry="{x:Bind}" />
 
                 <local:EntryTimePicker
                     x:Uid="ms-resource:///Entry/Input/Date"
@@ -413,9 +410,8 @@
                     x:Uid="ms-resource:///Entry/Input/Price"
                     Text="{x:Bind Price, Mode=TwoWay}" />
 
-                <TextBox
-                    x:Uid="ms-resource:///Entry/Input/Location"
-                    Text="{x:Bind Location, Mode=TwoWay}" />
+                <local:LocationField
+                    Entry="{x:Bind}" />
 
                 <local:EntryTimePicker
                     x:Uid="ms-resource:///Entry/Input/Date"
@@ -492,9 +488,8 @@
                     x:Uid="ms-resource:///Entry/Input/Price"
                     Text="{x:Bind Price, Mode=TwoWay}" />
 
-                <TextBox
-                    x:Uid="ms-resource:///Entry/Input/Location"
-                    Text="{x:Bind Location, Mode=TwoWay}" />
+                <local:LocationField
+                    Entry="{x:Bind}" />
 
                 <local:EntryTimePicker
                     x:Uid="ms-resource:///Entry/Input/Date"

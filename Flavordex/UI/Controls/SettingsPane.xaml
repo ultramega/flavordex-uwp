@@ -39,10 +39,25 @@
 
         <ToggleSwitch
             x:Uid="ms-resource:///Settings/Button/DetectLocation"
+            x:Name="DetectLocationToggle"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Left"
             Margin="8,3"
             Visibility="{x:Bind DetectLocationVisibility, Mode=OneWay}"
-            IsOn="{x:Bind DetectLocation, Mode=TwoWay}" />
+            IsOn="{x:Bind DetectLocation, Mode=TwoWay}">
+            <FlyoutBase.AttachedFlyout>
+                <Flyout>
+                    <StackPanel>
+                        <TextBlock
+                            x:Uid="ms-resource:///Settings/Message/LocationDenied"
+                            TextWrapping="Wrap" />
+
+                        <HyperlinkButton
+                            x:Uid="ms-resource:///Settings/Button/LocationSettings"
+                            NavigateUri="ms-settings:privacy-location" />
+                    </StackPanel>
+                </Flyout>
+            </FlyoutBase.AttachedFlyout>
+        </ToggleSwitch>
     </StackPanel>
 </UserControl>

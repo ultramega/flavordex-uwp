@@ -29,5 +29,6 @@
   </Applications>
   <Capabilities>
     <uap:Capability Name="picturesLibrary" />
+    <DeviceCapability Name="location" />
   </Capabilities>
 </Package>
