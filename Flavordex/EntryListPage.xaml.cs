@@ -363,6 +363,7 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private async void OnFilterClick(object sender, RoutedEventArgs e)
         {
+            FindName("FilterDialog");
             var result = await FilterDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
@@ -449,6 +450,7 @@ namespace Flavordex
 
             if (exportMode)
             {
+                FindName("ExportBar");
                 MasterList.SelectionMode = ListViewSelectionMode.Multiple;
                 MasterList.IsItemClickEnabled = false;
             }
