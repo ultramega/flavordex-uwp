@@ -115,6 +115,13 @@ namespace Flavordex
                 }
 
                 DeleteButtonVisibility = Category.Model.ID > 0 && !Category.IsPreset ? Visibility.Visible : Visibility.Collapsed;
+
+                if (!Category.IsPreset)
+                {
+                    TitleField.Focus(FocusState.Programmatic);
+                    TitleField.Text = Category.Name;
+                    TitleField.SelectionStart = TitleField.Text.Length;
+                }
             }
         }
 
@@ -162,6 +169,18 @@ namespace Flavordex
         {
             Frame.GoBack();
             e.Handled = true;
+        }
+
+        /// <summary>
+        /// Sets focus on the title field when it is loaded.
+        /// </summary>
+        /// <param name="sender">The title TextBox.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnTitleLoaded(object sender, RoutedEventArgs e)
+        {
+            var field = sender as TextBox;
+            field.Focus(FocusState.Programmatic);
+            field.SelectionStart = field.Text.Length;
         }
 
         /// <summary>

@@ -43,6 +43,18 @@ namespace Flavordex.UI.Controls
         }
 
         /// <summary>
+        /// Sets focus on the title field when it is loaded.
+        /// </summary>
+        /// <param name="sender">The title TextBox.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnTitleLoaded(object sender, RoutedEventArgs e)
+        {
+            var field = sender as TextBox;
+            field.Focus(FocusState.Programmatic);
+            field.SelectionStart = field.Text.Length;
+        }
+
+        /// <summary>
         /// Updates the title when the field text is changed.
         /// </summary>
         /// <param name="sender">The TextBox.</param>

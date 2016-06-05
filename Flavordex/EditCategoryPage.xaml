@@ -100,9 +100,11 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
                     x:Uid="ms-resource:///Category/Input/Title"
+                    x:Name="TitleField"
                     MaxWidth="{StaticResource MaxFormWidth}"
                     IsReadOnly="{x:Bind Category.IsPreset, Mode=OneWay}"
                     Text="{x:Bind Category.Name, Mode=OneWay}"
+                    Loaded="OnTitleLoaded"
                     KeyUp="OnTitleKeyUp" />
 
                 <Border
