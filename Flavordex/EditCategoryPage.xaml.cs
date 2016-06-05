@@ -280,17 +280,19 @@ namespace Flavordex
         /// <param name="categoryId">The primary ID of the Category.</param>
         private async void LoadCategory(long categoryId)
         {
-            Category = new CategoryViewModel(await DatabaseHelper.GetCategoryAsync(categoryId));
+            var category = new CategoryViewModel(await DatabaseHelper.GetCategoryAsync(categoryId));
 
             foreach (var extra in await DatabaseHelper.GetCategoryExtrasAsync(categoryId))
             {
-                Category.Extras.Add(new ExtraItemViewModel(extra));
+                category.Extras.Add(new ExtraItemViewModel(extra));
             }
 
             foreach (var flavor in await DatabaseHelper.GetCategoryFlavorsAsync(categoryId))
             {
-                Category.Flavors.Add(new FlavorItemViewModel(flavor));
+                category.Flavors.Add(new FlavorItemViewModel(flavor));
             }
+
+            Category = category;
         }
 
         /// <summary>
