@@ -26,6 +26,13 @@
                 x:Key="BooleanToVisibilityConverter" />
 
             <Style
+                TargetType="TextBox">
+                <Setter
+                    Property="IsTextPredictionEnabled"
+                    Value="True" />
+            </Style>
+
+            <Style
                 TargetType="CommandBar">
                 <Setter
                     Property="ContentTemplate">
