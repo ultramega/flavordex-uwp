@@ -213,7 +213,7 @@ namespace Flavordex.ViewModels
             }
             set
             {
-                value = value == null || value > 0 ? value : null;
+                value = value != null && value > 0 ? value : null;
                 SetExtra(Tables.Extras.Coffee.STATS_EXTIME, value);
                 RaisePropertyChanged();
                 RaisePropertyChanged("ExtractionTimeMinutes");
@@ -229,10 +229,9 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                var time = ExtractionTime;
-                if (time != null)
+                if (ExtractionTime.HasValue)
                 {
-                    return (ExtractionTime / 60).ToString();
+                    return (ExtractionTime.Value / 60).ToString();
                 }
                 return null;
             }
@@ -240,7 +239,8 @@ namespace Flavordex.ViewModels
             {
                 var minutes = 0;
                 int.TryParse(value, out minutes);
-                ExtractionTime = minutes * 60 + ExtractionTime % 60;
+                var currentTime = ExtractionTime.HasValue ? ExtractionTime.Value : 0;
+                ExtractionTime = minutes * 60 + currentTime % 60;
             }
         }
 
@@ -251,10 +251,9 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                var time = ExtractionTime;
-                if (time != null)
+                if (ExtractionTime.HasValue)
                 {
-                    return (ExtractionTime % 60).ToString();
+                    return (ExtractionTime.Value % 60).ToString("D2");
                 }
                 return null;
             }
@@ -262,7 +261,8 @@ namespace Flavordex.ViewModels
             {
                 var seconds = 0;
                 int.TryParse(value, out seconds);
-                ExtractionTime = ExtractionTime - ExtractionTime % 60 + seconds;
+                var currentTime = ExtractionTime.HasValue ? ExtractionTime.Value : 0;
+                ExtractionTime = ExtractionTime - currentTime % 60 + seconds;
             }
         }
 
