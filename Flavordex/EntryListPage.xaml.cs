@@ -185,6 +185,7 @@ namespace Flavordex
             {
                 if (e.SourceItem.Item == null)
                 {
+                    Settings.ListCategory = 0;
                     return;
                 }
 
