@@ -78,11 +78,6 @@ namespace Flavordex
         {
             if (Category != null)
             {
-                if (Category.Flavors.Count == 0)
-                {
-                    AddFlavor(new Flavor());
-                }
-
                 switch (Category.Model.Name)
                 {
                     case Constants.CAT_BEER:
@@ -118,9 +113,12 @@ namespace Flavordex
 
                 if (!Category.IsPreset)
                 {
-                    TitleField.Focus(FocusState.Programmatic);
-                    TitleField.Text = Category.Name;
+                    if (Category.Name != null)
+                    {
+                        TitleField.Text = Category.Name;
+                    }
                     TitleField.SelectionStart = TitleField.Text.Length;
+                    TitleField.Focus(FocusState.Programmatic);
                 }
             }
         }
@@ -139,7 +137,9 @@ namespace Flavordex
             }
             else
             {
-                Category = new CategoryViewModel(new Category());
+                var category = new CategoryViewModel(new Category());
+                category.Flavors.Add(new FlavorItemViewModel(new Flavor()));
+                Category = category;
             }
 
             var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
@@ -287,7 +287,7 @@ namespace Flavordex
         private void OnFieldLoaded(object sender, RoutedEventArgs e)
         {
             var field = sender as FieldEditor;
-            if (string.IsNullOrWhiteSpace(field.Value))
+            if (string.IsNullOrWhiteSpace(field.Value) && TitleField.FocusState == FocusState.Unfocused)
             {
                 (field.FindName("Field") as TextBox).Focus(FocusState.Programmatic);
             }
