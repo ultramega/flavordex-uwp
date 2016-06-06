@@ -18,7 +18,7 @@ namespace Flavordex.UI
         /// <returns>The value with the parameter appended.</returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (parameter is string)
+            if (parameter is string && value != null)
             {
                 return string.Format("{0}{1}", value, parameter);
             }
