@@ -273,7 +273,11 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return ExtractionTimeMinutes + ":" + ExtractionTimeSeconds;
+                if (ExtractionTime.HasValue)
+                {
+                    return ExtractionTimeMinutes + ":" + ExtractionTimeSeconds;
+                }
+                return null;
             }
         }
 
