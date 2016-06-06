@@ -126,8 +126,11 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnBackRequested(object sender, BackRequestedEventArgs e)
         {
-            List.SelectedEntryId = -1;
-            e.Handled = true;
+            if (List.SelectedEntryId > -1)
+            {
+                List.SelectedEntryId = -1;
+                e.Handled = true;
+            }
         }
 
         /// <summary>
