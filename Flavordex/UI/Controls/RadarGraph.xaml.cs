@@ -1,5 +1,4 @@
-﻿using Flavordex.ViewModels;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -522,8 +521,8 @@ namespace Flavordex.UI.Controls
         private void OnSingleItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var item = sender as RadarItem;
-            var index = ActiveItems.IndexOf(sender as FlavorItemViewModel);
-            if (e.PropertyName.Equals("Name"))
+            var index = ActiveItems.IndexOf(sender as RadarItem);
+            if (e.PropertyName == "Name")
             {
                 if (index == -1 && !string.IsNullOrWhiteSpace(item.Name))
                 {
@@ -548,7 +547,7 @@ namespace Flavordex.UI.Controls
                     PositionLabels();
                 }
             }
-            else if (e.PropertyName.Equals("Value") && index > -1)
+            else if (e.PropertyName == "Value" && index > -1)
             {
                 var value = _items[index].Value;
                 PolygonPoints[index] = _cachedPoints[index, value];
