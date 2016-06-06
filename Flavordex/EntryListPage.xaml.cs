@@ -82,6 +82,7 @@ namespace Flavordex
             }
 
             SplitView.IsPaneOpen = _isSettingsOpen;
+            _isSettingsOpen = false;
         }
 
         /// <summary>
@@ -96,6 +97,8 @@ namespace Flavordex
 
             Zoom.ViewChangeStarted -= OnListViewChange;
             Zoom.IsZoomedInViewActive = true;
+
+            _isSettingsOpen = SplitView.IsPaneOpen;
             SplitView.IsPaneOpen = false;
         }
 
@@ -539,7 +542,7 @@ namespace Flavordex
         private void OnSettingsClicked(object sender, RoutedEventArgs e)
         {
             FindName("SettingsPane");
-            SplitView.IsPaneOpen = _isSettingsOpen = true;
+            SplitView.IsPaneOpen = true;
         }
     }
 }
