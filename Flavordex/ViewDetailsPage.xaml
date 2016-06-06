@@ -60,7 +60,7 @@
                     <TextBlock
                         Grid.Column="1"
                         Style="{StaticResource ValueStyle}"
-                        Text="{x:Bind Value}" />
+                        Text="{x:Bind Value, TargetNullValue=?}" />
                 </Grid>
             </Border>
         </DataTemplate>
@@ -93,7 +93,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Price, Mode=OneWay}" />
+                            Text="{x:Bind Price, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 
@@ -131,7 +131,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Style, Mode=OneWay}" />
+                            Text="{x:Bind Style, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 
@@ -159,7 +159,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Price, Mode=OneWay}" />
+                            Text="{x:Bind Price, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 
@@ -315,7 +315,7 @@
                         <TextBlock
                             Grid.Column="1"
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Roaster, Mode=OneWay}" />
+                            Text="{x:Bind Roaster, Mode=OneWay, TargetNullValue=?}" />
                     </Grid>
                 </Border>
 
@@ -329,7 +329,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind RoastDate, Mode=OneWay}" />
+                            Text="{x:Bind RoastDate, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 
@@ -343,7 +343,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Grind, Mode=OneWay}" />
+                            Text="{x:Bind Grind, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 
@@ -357,7 +357,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Price, Mode=OneWay}" />
+                            Text="{x:Bind Price, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 
@@ -538,7 +538,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Type, Mode=OneWay}" />
+                            Text="{x:Bind Type, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 
@@ -566,7 +566,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Price, Mode=OneWay}" />
+                            Text="{x:Bind Price, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 
@@ -652,7 +652,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Varietal, Mode=OneWay}" />
+                            Text="{x:Bind Varietal, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 
@@ -680,7 +680,7 @@
 
                         <TextBlock
                             Style="{StaticResource ValueStyle}"
-                            Text="{x:Bind Price, Mode=OneWay}" />
+                            Text="{x:Bind Price, Mode=OneWay, TargetNullValue=?}" />
                     </StackPanel>
                 </Border>
 

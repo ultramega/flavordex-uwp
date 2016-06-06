@@ -55,7 +55,7 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return Model.Maker;
+                return !string.IsNullOrWhiteSpace(Model.Maker) ? Model.Maker : null;
             }
             set
             {
@@ -72,7 +72,7 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return Model.Origin;
+                return !string.IsNullOrWhiteSpace(Model.Origin) ? Model.Origin : null;
             }
             set
             {
@@ -88,7 +88,7 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return Model.Price;
+                return !string.IsNullOrWhiteSpace(Model.Price) ? Model.Price : null;
             }
             set
             {
@@ -104,7 +104,7 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return Model.Location;
+                return !string.IsNullOrWhiteSpace(Model.Location) ? Model.Location : null;
             }
             set
             {

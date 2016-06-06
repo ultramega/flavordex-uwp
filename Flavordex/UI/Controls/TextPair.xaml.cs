@@ -77,7 +77,7 @@ namespace Flavordex.UI.Controls
                 }
                 else
                 {
-                    Text1.Text = PrimaryText;
+                    Text1.Text = "?";
                 }
                 Text2.Text = "";
                 Text2.Visibility = Visibility.Collapsed;
