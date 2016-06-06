@@ -39,7 +39,7 @@
         </Grid.RowDefinitions>
 
         <CommandBar
-            x:Uid="ms-resource:///Category/Title/Edit">
+            Content="{x:Bind PageTitle, Mode=OneWay}">
             <CommandBar.PrimaryCommands>
                 <AppBarButton
                     x:Uid="ms-resource:///Category/Command/Save"

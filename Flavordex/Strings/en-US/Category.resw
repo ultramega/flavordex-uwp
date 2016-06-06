@@ -72,7 +72,10 @@
   <data name="Input.FlavorName.PlaceholderText" xml:space="preserve">
     <value>Flavor Name</value>
   </data>
-  <data name="Title.Edit.Content" xml:space="preserve">
+  <data name="Title.Add" xml:space="preserve">
+    <value>Create Category</value>
+  </data>
+  <data name="Title.Edit" xml:space="preserve">
     <value>Edit Category</value>
   </data>
 </root>

@@ -23,6 +23,17 @@ namespace Flavordex
     public sealed partial class EditCategoryPage : Page
     {
         /// <summary>
+        /// Gets or sets the Page title.
+        /// </summary>
+        public string PageTitle
+        {
+            get { return (string)GetValue(PageTitleProperty); }
+            set { SetValue(PageTitleProperty, value); }
+        }
+        public static readonly DependencyProperty PageTitleProperty =
+            DependencyProperty.Register("PageTitle", typeof(string), typeof(EditCategoryPage), null);
+
+        /// <summary>
         /// Gets or sets the Category.
         /// </summary>
         public CategoryViewModel Category
@@ -133,10 +144,12 @@ namespace Flavordex
 
             if (e.Parameter is long)
             {
+                PageTitle = ResourceLoader.GetForCurrentView("Category").GetString("Title/Edit");
                 LoadCategory((long)e.Parameter);
             }
             else
             {
+                PageTitle = ResourceLoader.GetForCurrentView("Category").GetString("Title/Add");
                 var category = new CategoryViewModel(new Category());
                 category.Flavors.Add(new FlavorItemViewModel(new Flavor()));
                 Category = category;
