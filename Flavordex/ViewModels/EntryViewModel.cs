@@ -290,7 +290,7 @@ namespace Flavordex.ViewModels
                 newExtra.Value = value.ToString();
                 Extras.Add(new EntryExtraItemViewModel(newExtra));
             }
-            else if (value == null)
+            else if (!extra.Model.IsPreset && string.IsNullOrWhiteSpace(value as string))
             {
                 Extras.Remove(extra);
             }
