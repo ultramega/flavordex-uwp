@@ -292,7 +292,7 @@ namespace Flavordex.ViewModels
             }
             else if (extra != null)
             {
-                extra.Value = value != null ? value.ToString() : null;
+                extra.Value = value != null ? value.ToString() : "";
             }
         }
     }
