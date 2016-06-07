@@ -345,8 +345,11 @@ namespace Flavordex
             position = 0;
             foreach (var flavor in Category.Flavors)
             {
-                flavor.Model.Position = position++;
-                flavors.Add(flavor.Model);
+                if (!flavor.IsDeleted)
+                {
+                    flavor.Model.Position = position++;
+                    flavors.Add(flavor.Model);
+                }
             }
 
             return await DatabaseHelper.UpdateCategoryAsync(Category.Model, extras, flavors);
