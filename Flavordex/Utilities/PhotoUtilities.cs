@@ -131,13 +131,17 @@ namespace Flavordex.Utilities
         /// <returns>The Photo that was added.</returns>
         public static async Task<Photo> AddPhotoAsync(string name, long entryId, long position)
         {
-            var file = await GetPhotoFileAsync(name);
-            if (file == null)
+            try
             {
-                return null;
+                var file = await GetPhotoFileAsync(name);
+                if (file != null)
+                {
+                    return await AddPhotoAsync(file, entryId, position);
+                }
             }
+            catch (Exception e) { }
 
-            return await AddPhotoAsync(file, entryId, position);
+            return null;
         }
 
         /// <summary>
@@ -149,14 +153,21 @@ namespace Flavordex.Utilities
         /// <returns>The Photo that was added.</returns>
         public static async Task<Photo> AddPhotoAsync(StorageFile file, long entryId, long position)
         {
-            var photo = new Photo();
-            photo.EntryID = entryId;
-            photo.Path = await SavePhotoAsync(file);
-            photo.Hash = await GetMD5HashAsync(file);
-            photo.Position = position;
-            await DatabaseHelper.InsertPhotoAsync(photo);
+            try
+            {
+                var photo = new Photo();
+                photo.EntryID = entryId;
+                photo.Path = await SavePhotoAsync(file);
+                photo.Hash = await GetMD5HashAsync(file);
+                photo.Position = position;
+                await DatabaseHelper.InsertPhotoAsync(photo);
 
-            return photo;
+                return photo;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -166,18 +177,25 @@ namespace Flavordex.Utilities
         /// <returns>The MD5 hash of the file.</returns>
         public static async Task<string> GetMD5HashAsync(StorageFile file)
         {
-            var md5 = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Md5).CreateHash();
-            var buffer = new Windows.Storage.Streams.Buffer(8192);
-            using (var stream = await file.OpenReadAsync())
+            try
             {
-                do
+                var md5 = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithmNames.Md5).CreateHash();
+                var buffer = new Windows.Storage.Streams.Buffer(8192);
+                using (var stream = await file.OpenReadAsync())
                 {
-                    await stream.ReadAsync(buffer, 8192, InputStreamOptions.None);
-                    md5.Append(buffer);
+                    do
+                    {
+                        await stream.ReadAsync(buffer, 8192, InputStreamOptions.None);
+                        md5.Append(buffer);
+                    }
+                    while (buffer.Length > 0);
                 }
-                while (buffer.Length > 0);
+                return CryptographicBuffer.EncodeToHexString(md5.GetValueAndReset());
             }
-            return CryptographicBuffer.EncodeToHexString(md5.GetValueAndReset());
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -187,13 +205,20 @@ namespace Flavordex.Utilities
         /// <returns>The name of the saved file.</returns>
         public static async Task<string> SavePhotoAsync(StorageFile source)
         {
-            var folder = await KnownFolders.PicturesLibrary.CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
-            var destination = await folder.TryGetItemAsync(source.Name) as StorageFile;
-            if (destination == null)
+            try
             {
-                destination = await source.CopyAsync(folder);
+                var folder = await KnownFolders.PicturesLibrary.CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
+                var destination = await folder.TryGetItemAsync(source.Name) as StorageFile;
+                if (destination == null)
+                {
+                    destination = await source.CopyAsync(folder);
+                }
+                return destination.Name;
             }
-            return destination.Name;
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -203,13 +228,17 @@ namespace Flavordex.Utilities
         /// <returns>The BitmapImage containing the photo.</returns>
         public static async Task<BitmapImage> GetPhotoAsync(string name)
         {
-            var file = await GetPhotoFileAsync(name);
-            if (file != null)
+            try
             {
-                var bitmap = new BitmapImage();
-                await bitmap.SetSourceAsync(await file.OpenReadAsync());
-                return bitmap;
+                var file = await GetPhotoFileAsync(name);
+                if (file != null)
+                {
+                    var bitmap = new BitmapImage();
+                    await bitmap.SetSourceAsync(await file.OpenReadAsync());
+                    return bitmap;
+                }
             }
+            catch (Exception e) { }
             return null;
         }
 
@@ -220,11 +249,15 @@ namespace Flavordex.Utilities
         /// <returns>The StorageFile representing the photo, or null if it is not found.</returns>
         private static async Task<StorageFile> GetPhotoFileAsync(string name)
         {
-            var folder = await KnownFolders.PicturesLibrary.TryGetItemAsync(_albumDirectory) as StorageFolder;
-            if (folder != null)
+            try
             {
-                return await folder.TryGetItemAsync(name) as StorageFile;
+                var folder = await KnownFolders.PicturesLibrary.TryGetItemAsync(_albumDirectory) as StorageFolder;
+                if (folder != null)
+                {
+                    return await folder.TryGetItemAsync(name) as StorageFile;
+                }
             }
+            catch (Exception e) { }
             return null;
         }
 
@@ -248,16 +281,30 @@ namespace Flavordex.Utilities
                 file = await GenerateThumbnailAsync(entryId, name);
             }
 
-            if (file == null)
+            if (file != null)
+            {
+                try
+                {
+                    var bitmap = new BitmapImage();
+                    await bitmap.SetSourceAsync(await file.OpenReadAsync());
+                    _thumbnailCache.Store(entryId, bitmap);
+                    return bitmap;
+                }
+                catch (Exception e)
+                {
+                    try
+                    {
+                        await file.DeleteAsync();
+                    }
+                    catch { }
+                }
+            }
+            else
             {
                 _thumbnailCache.Store(entryId, EmptyBitmap);
-                return EmptyBitmap;
             }
 
-            var bitmap = new BitmapImage();
-            await bitmap.SetSourceAsync(await file.OpenReadAsync());
-            _thumbnailCache.Store(entryId, bitmap);
-            return bitmap;
+            return EmptyBitmap;
         }
 
         /// <summary>
@@ -274,20 +321,27 @@ namespace Flavordex.Utilities
                 return null;
             }
 
-            var sourceDirectory = await KnownFolders.PicturesLibrary.CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
-            var sourceFile = await sourceDirectory.TryGetItemAsync(path) as StorageFile;
-            if (sourceFile == null)
+            try
+            {
+                var sourceDirectory = await KnownFolders.PicturesLibrary.CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
+                var sourceFile = await sourceDirectory.TryGetItemAsync(path) as StorageFile;
+                if (sourceFile == null)
+                {
+                    return null;
+                }
+
+                using (var stream = await sourceFile.OpenReadAsync())
+                {
+                    var decoder = await BitmapDecoder.CreateAsync(stream);
+                    var sourceBitmap = await decoder.GetSoftwareBitmapAsync();
+                    var file = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                    await SaveThumbnailAsync(sourceBitmap, file);
+                    return file;
+                }
+            }
+            catch (Exception e)
             {
                 return null;
-            }
-
-            using (var stream = await sourceFile.OpenReadAsync())
-            {
-                var decoder = await BitmapDecoder.CreateAsync(stream);
-                var sourceBitmap = await decoder.GetSoftwareBitmapAsync();
-                var file = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-                await SaveThumbnailAsync(sourceBitmap, file);
-                return file;
             }
         }
 
@@ -335,14 +389,18 @@ namespace Flavordex.Utilities
         /// <param name="entryId">The primary ID of the entry.</param>
         public static async void DeleteThumbnail(long entryId)
         {
-            _thumbnailCache.Remove(entryId);
-            var name = string.Format("thumb_{0}.jpg", entryId);
-            var file = await ApplicationData.Current.TemporaryFolder.TryGetItemAsync(name);
-            if (file != null)
+            try
             {
-                await file.DeleteAsync();
+                _thumbnailCache.Remove(entryId);
+                var name = string.Format("thumb_{0}.jpg", entryId);
+                var file = await ApplicationData.Current.TemporaryFolder.TryGetItemAsync(name);
+                if (file != null)
+                {
+                    await file.DeleteAsync();
+                }
+                ThumbnailChanged(null, new ThumbnailChangedEventArgs(entryId));
             }
-            ThumbnailChanged(null, new ThumbnailChangedEventArgs(entryId));
+            catch (Exception e) { }
         }
     }
 }
