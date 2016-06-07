@@ -1,4 +1,6 @@
-﻿using Flavordex.ViewModels;
+﻿using Flavordex.Models.Data;
+using Flavordex.ViewModels;
+using System;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -34,6 +36,32 @@ namespace Flavordex
             base.OnNavigatedTo(e);
 
             Entry = (EntryViewModel)e.Parameter;
+            Entry.Model.RecordChanged += OnRecordChanged;
+        }
+
+        /// <summary>
+        /// Removes event handlers when the Page is navigated away from.
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            Entry.Model.RecordChanged -= OnRecordChanged;
+        }
+
+        /// <summary>
+        /// Reloads the extra fields when the record is changed.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private async void OnRecordChanged(object sender, EventArgs e)
+        {
+            Entry.Extras.Clear();
+            foreach (var extra in await DatabaseHelper.GetEntryExtrasAsync(Entry.Model.ID))
+            {
+                Entry.Extras.Add(new EntryExtraItemViewModel(extra));
+            }
         }
     }
 }
