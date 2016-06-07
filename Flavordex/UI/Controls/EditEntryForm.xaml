@@ -77,7 +77,7 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
                     IsTabStop="False" />
             </StackPanel>
         </DataTemplate>
@@ -135,7 +135,7 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
                     IsTabStop="False" />
 
                 <Border
@@ -242,7 +242,7 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
                     IsTabStop="False" />
 
                 <Border
@@ -423,7 +423,7 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
                     IsTabStop="False" />
 
                 <Border
@@ -502,7 +502,7 @@
 
                 <ItemsControl
                     ItemTemplate="{StaticResource ExtraItemTemplate}"
-                    ItemsSource="{x:Bind CustomFields}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
                     IsTabStop="False" />
 
                 <Border

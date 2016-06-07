@@ -183,6 +183,21 @@ namespace Flavordex.ViewModels
                 {
                     return null;
                 }
+                return _extras.Where(e => !e.Model.IsPreset && !string.IsNullOrWhiteSpace(e.Value)).ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Gets the editable custom extra fields for the Entry.
+        /// </summary>
+        public EntryExtraItemViewModel[] EditableCustomFields
+        {
+            get
+            {
+                if (_extras == null)
+                {
+                    return null;
+                }
                 return _extras.Where(e => !e.Model.IsPreset).ToArray();
             }
         }
@@ -258,6 +273,7 @@ namespace Flavordex.ViewModels
         private void OnExtrasCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             RaisePropertyChanged("CustomFields");
+            RaisePropertyChanged("EditableCustomFields");
         }
 
         /// <summary>
