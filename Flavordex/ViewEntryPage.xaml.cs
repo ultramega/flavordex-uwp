@@ -146,7 +146,7 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnEditEntry(object sender, RoutedEventArgs e)
         {
-            (Window.Current.Content as Frame).Navigate(typeof(EditEntryPage), Entry);
+            (Window.Current.Content as Frame).Navigate(typeof(EditEntryPage), Entry.Model.ID);
         }
 
         /// <summary>

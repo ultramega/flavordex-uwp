@@ -48,50 +48,45 @@ namespace Flavordex
             systemNavigationManager.BackRequested += OnBackRequested;
             systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
 
-            EntryViewModel entry = null;
             if (e.Parameter is long)
             {
-                entry = EntryViewModel.GetInstance(await DatabaseHelper.GetEntryAsync((long)e.Parameter));
+                var entry = EntryViewModel.GetInstance(await DatabaseHelper.GetEntryAsync((long)e.Parameter));
 
                 foreach (var extra in await DatabaseHelper.GetEntryExtrasAsync((long)e.Parameter))
                 {
                     entry.Extras.Add(new EntryExtraItemViewModel(extra));
                 }
-            }
-            else if (e.Parameter is EntryViewModel)
-            {
-                entry = (EntryViewModel)e.Parameter;
-            }
 
-            var entryExtras = new Collection<EntryExtra>();
-            var categoryExtras = await DatabaseHelper.GetCategoryExtrasAsync(entry.Model.CategoryID);
-            foreach (var item in categoryExtras)
-            {
-                var extra = new EntryExtra();
-                extra.ExtraID = item.ID;
-                extra.IsPreset = item.IsPreset;
-                extra.Name = item.Name;
-
-                var entryExtra = entry.Extras.FirstOrDefault(k => k.Model.ExtraID == item.ID);
-                if (entryExtra != null)
+                var entryExtras = new Collection<EntryExtra>();
+                var categoryExtras = await DatabaseHelper.GetCategoryExtrasAsync(entry.Model.CategoryID);
+                foreach (var item in categoryExtras)
                 {
-                    extra.ID = entryExtra.Model.ID;
-                    extra.Value = entryExtra.Value;
-                    entryExtras.Add(extra);
+                    var extra = new EntryExtra();
+                    extra.ExtraID = item.ID;
+                    extra.IsPreset = item.IsPreset;
+                    extra.Name = item.Name;
+
+                    var entryExtra = entry.Extras.FirstOrDefault(k => k.Model.ExtraID == item.ID);
+                    if (entryExtra != null)
+                    {
+                        extra.ID = entryExtra.Model.ID;
+                        extra.Value = entryExtra.Value;
+                        entryExtras.Add(extra);
+                    }
+                    else if (!item.IsDeleted)
+                    {
+                        entryExtras.Add(extra);
+                    }
                 }
-                else if (!item.IsDeleted)
+
+                entry.Extras.Clear();
+                foreach (var item in entryExtras)
                 {
-                    entryExtras.Add(extra);
+                    entry.Extras.Add(new EntryExtraItemViewModel(item));
                 }
-            }
 
-            entry.Extras.Clear();
-            foreach (var item in entryExtras)
-            {
-                entry.Extras.Add(new EntryExtraItemViewModel(item));
+                Entry = entry;
             }
-
-            Entry = entry;
         }
 
         /// <summary>
