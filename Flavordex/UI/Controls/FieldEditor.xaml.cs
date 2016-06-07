@@ -67,6 +67,28 @@ namespace Flavordex.UI.Controls
         public FieldEditor()
         {
             InitializeComponent();
+            RegisterPropertyChangedCallback(DeletedProperty, OnDeletePropertyChanged);
+        }
+
+        /// <summary>
+        /// Changes the state of the field when the Deleted property changes.
+        /// </summary>
+        /// <param name="sender">This Control.</param>
+        /// <param name="dp">The DeletedProperty.</param>
+        private void OnDeletePropertyChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            if (Deleted)
+            {
+                DeleteButton.Visibility = Visibility.Collapsed;
+                UndoButton.Visibility = Visibility.Visible;
+                Field.IsEnabled = false;
+            }
+            else
+            {
+                DeleteButton.Visibility = Visibility.Visible;
+                UndoButton.Visibility = Visibility.Collapsed;
+                Field.IsEnabled = true;
+            }
         }
 
         /// <summary>
@@ -77,9 +99,6 @@ namespace Flavordex.UI.Controls
         private void OnDelete(object sender, RoutedEventArgs e)
         {
             Deleted = true;
-            DeleteButton.Visibility = Visibility.Collapsed;
-            UndoButton.Visibility = Visibility.Visible;
-            Field.IsEnabled = false;
         }
 
         /// <summary>
@@ -90,9 +109,6 @@ namespace Flavordex.UI.Controls
         private void OnUndo(object sender, RoutedEventArgs e)
         {
             Deleted = false;
-            DeleteButton.Visibility = Visibility.Visible;
-            UndoButton.Visibility = Visibility.Collapsed;
-            Field.IsEnabled = true;
         }
 
         /// <summary>
