@@ -2,6 +2,7 @@
 using Flavordex.Models.Data;
 using Flavordex.ViewModels;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -47,19 +48,46 @@ namespace Flavordex
             systemNavigationManager.BackRequested += OnBackRequested;
             systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
 
+            EntryViewModel entry = null;
             if (e.Parameter is long)
             {
-                Entry = EntryViewModel.GetInstance(await DatabaseHelper.GetEntryAsync((long)e.Parameter));
+                entry = EntryViewModel.GetInstance(await DatabaseHelper.GetEntryAsync((long)e.Parameter));
 
                 foreach (var extra in await DatabaseHelper.GetEntryExtrasAsync((long)e.Parameter))
                 {
-                    Entry.Extras.Add(new EntryExtraItemViewModel(extra));
+                    entry.Extras.Add(new EntryExtraItemViewModel(extra));
                 }
             }
             else if (e.Parameter is EntryViewModel)
             {
-                Entry = (EntryViewModel)e.Parameter;
+                entry = (EntryViewModel)e.Parameter;
             }
+
+            var entryExtras = new Collection<EntryExtra>();
+            var categoryExtras = await DatabaseHelper.GetCategoryExtrasAsync(entry.Model.CategoryID, true);
+            foreach (var item in categoryExtras)
+            {
+                var extra = new EntryExtra();
+                extra.ExtraID = item.ID;
+                extra.IsPreset = item.IsPreset;
+                extra.Name = item.Name;
+
+                var entryExtra = entry.Extras.FirstOrDefault(k => k.Model.ExtraID == item.ID);
+                if (entryExtra != null)
+                {
+                    extra.Value = entryExtra.Value;
+                }
+
+                entryExtras.Add(extra);
+            }
+
+            entry.Extras.Clear();
+            foreach (var item in entryExtras)
+            {
+                entry.Extras.Add(new EntryExtraItemViewModel(item));
+            }
+
+            Entry = entry;
         }
 
         /// <summary>
