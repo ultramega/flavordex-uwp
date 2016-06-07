@@ -389,6 +389,10 @@ namespace Flavordex.Models.Data
             values.SetLong(Tables.EntriesExtras.ENTRY, entryId);
             foreach (var extra in extras)
             {
+                if (!extra.IsPreset && string.IsNullOrWhiteSpace(extra.Value))
+                {
+                    continue;
+                }
                 await GetExtraIdAsync(categoryId, extra);
                 if (extra.ExtraID > 0)
                 {
