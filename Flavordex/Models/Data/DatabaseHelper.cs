@@ -730,16 +730,16 @@ namespace Flavordex.Models.Data
 
                 if (extra.ID > 0)
                 {
-                    if (extra.IsDeleted)
+                    if (extra.IsDeleted || string.IsNullOrWhiteSpace(extra.Name))
                     {
                         await Database.Delete(Tables.Extras.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { extra.ID });
                     }
-                    else if (!string.IsNullOrEmpty(extra.Name))
+                    else
                     {
                         await Database.Update(Tables.Extras.TABLE_NAME, extra.GetData(), BaseColumns._ID + " = ?", new object[] { extra.ID });
                     }
                 }
-                else if (!string.IsNullOrEmpty(extra.Name))
+                else if (!string.IsNullOrWhiteSpace(extra.Name))
                 {
                     if (string.IsNullOrEmpty(extra.UUID))
                     {
