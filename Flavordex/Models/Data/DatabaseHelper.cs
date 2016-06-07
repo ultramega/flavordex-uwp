@@ -383,14 +383,13 @@ namespace Flavordex.Models.Data
                 return;
             }
 
-            await Database.Delete(Tables.EntriesExtras.TABLE_NAME, Tables.EntriesExtras.ENTRY + " = ?", new object[] { entryId });
-
             var values = new ContentValues();
             values.SetLong(Tables.EntriesExtras.ENTRY, entryId);
             foreach (var extra in extras)
             {
                 if (!extra.IsPreset && string.IsNullOrWhiteSpace(extra.Value))
                 {
+                    await Database.Delete(Tables.EntriesExtras.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { extra.ID });
                     continue;
                 }
                 await GetExtraIdAsync(categoryId, extra);

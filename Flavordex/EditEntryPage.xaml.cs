@@ -64,7 +64,7 @@ namespace Flavordex
             }
 
             var entryExtras = new Collection<EntryExtra>();
-            var categoryExtras = await DatabaseHelper.GetCategoryExtrasAsync(entry.Model.CategoryID, true);
+            var categoryExtras = await DatabaseHelper.GetCategoryExtrasAsync(entry.Model.CategoryID);
             foreach (var item in categoryExtras)
             {
                 var extra = new EntryExtra();
@@ -75,10 +75,14 @@ namespace Flavordex
                 var entryExtra = entry.Extras.FirstOrDefault(k => k.Model.ExtraID == item.ID);
                 if (entryExtra != null)
                 {
+                    extra.ID = entryExtra.Model.ID;
                     extra.Value = entryExtra.Value;
+                    entryExtras.Add(extra);
                 }
-
-                entryExtras.Add(extra);
+                else if (!item.IsDeleted)
+                {
+                    entryExtras.Add(extra);
+                }
             }
 
             entry.Extras.Clear();
