@@ -257,7 +257,7 @@ namespace Flavordex
             var entry = new Entry() { Category = category.Name, CategoryID = categoryId, Date = DateTime.Now };
             Entry = EntryViewModel.GetInstance(entry);
 
-            foreach (var item in await DatabaseHelper.GetCategoryExtrasAsync(categoryId))
+            foreach (var item in await DatabaseHelper.GetCategoryExtrasAsync(categoryId, true))
             {
                 var extra = new EntryExtra();
                 extra.ExtraID = item.ID;

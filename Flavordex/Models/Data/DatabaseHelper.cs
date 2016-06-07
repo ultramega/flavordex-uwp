@@ -605,11 +605,16 @@ namespace Flavordex.Models.Data
         /// Gets the extra fields for a category.
         /// </summary>
         /// <param name="categoryId">The primary ID of the category.</param>
-        public static async Task<Collection<Extra>> GetCategoryExtrasAsync(long categoryId)
+        /// <param name="filterDeleted">Whether to exclude deleted extra fields.</param>
+        public static async Task<Collection<Extra>> GetCategoryExtrasAsync(long categoryId, bool filterDeleted = false)
         {
             var list = new Collection<Extra>();
 
             var where = Tables.Extras.CAT + " = ?";
+            if (filterDeleted)
+            {
+                where += " AND " + Tables.Extras.DELETED + " = 0";
+            }
             var whereArgs = new object[] { categoryId };
             var sort = Tables.Extras.POS;
             var rows = await Database.Query(Tables.Extras.TABLE_NAME, null, where, whereArgs, sort);
