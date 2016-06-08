@@ -85,7 +85,7 @@ namespace Flavordex
         /// </summary>
         /// <param name="sender">The object that raised the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnRecordChanged(object sender, RecordChangedEventArgs e)
+        private async void OnRecordChanged(object sender, RecordChangedEventArgs e)
         {
             if (e.Model is Photo && (e.Model as Photo).EntryID == _entry.ID)
             {
@@ -98,7 +98,7 @@ namespace Flavordex
                         FlipView.SelectedItem = item;
                         if (FlipView.SelectedIndex == 0)
                         {
-                            PhotoUtilities.DeleteThumbnail(_entry.ID);
+                            await PhotoUtilities.DeleteThumbnailAsync(_entry.ID);
                         }
                     }
                 }
@@ -107,7 +107,7 @@ namespace Flavordex
                     var item = Photos.FirstOrDefault(k => k.Model.ID == e.Model.ID);
                     if (Photos.IndexOf(item) == 0)
                     {
-                        PhotoUtilities.DeleteThumbnail(_entry.ID);
+                        await PhotoUtilities.DeleteThumbnailAsync(_entry.ID);
                     }
                     Photos.Remove(item);
                 }

@@ -51,7 +51,7 @@ namespace Flavordex.Utilities
         public static async void DeleteEntry(Entry entry)
         {
             await DatabaseHelper.DeleteEntryAsync(entry);
-            PhotoUtilities.DeleteThumbnail(entry.ID);
+            await PhotoUtilities.DeleteThumbnailAsync(entry.ID);
         }
 
         /// <summary>

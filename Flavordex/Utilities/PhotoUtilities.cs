@@ -384,7 +384,7 @@ namespace Flavordex.Utilities
         /// Deletes the thumbnail for a journal entry.
         /// </summary>
         /// <param name="entryId">The primary ID of the entry.</param>
-        public static async void DeleteThumbnail(long entryId)
+        public static async Task DeleteThumbnailAsync(long entryId)
         {
             try
             {

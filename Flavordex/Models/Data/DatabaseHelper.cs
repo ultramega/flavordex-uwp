@@ -802,7 +802,7 @@ namespace Flavordex.Models.Data
                         RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, entry));
                     }
 
-                    PhotoUtilities.DeleteThumbnail(id);
+                    await PhotoUtilities.DeleteThumbnailAsync(id);
                 }
 
                 return true;

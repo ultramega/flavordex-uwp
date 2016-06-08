@@ -102,7 +102,7 @@ namespace Flavordex.UI.Controls
                     {
                         await PhotoUtilities.AddPhotoAsync(photo.Path, item.Entry.ID, position++);
                     }
-                    PhotoUtilities.DeleteThumbnail(item.Entry.ID);
+                    await PhotoUtilities.DeleteThumbnailAsync(item.Entry.ID);
                 }
                 ProgressBar.Value++;
             }
