@@ -155,16 +155,27 @@ namespace Flavordex.Utilities
         {
             try
             {
-                var photo = new Photo();
-                photo.EntryID = entryId;
-                photo.Path = await SavePhotoAsync(file);
-                photo.Hash = await GetMD5HashAsync(file);
-                photo.Position = position;
+                var path = await SavePhotoAsync(file);
+                var hash = await GetMD5HashAsync(file);
+
+                if (path == null || hash == null)
+                {
+                    return null;
+                }
+
+                var photo = new Photo()
+                {
+                    EntryID = entryId,
+                    Path = path,
+                    Hash = hash,
+                    Position = position
+                };
                 await DatabaseHelper.InsertPhotoAsync(photo);
 
                 return photo;
             }
             catch { }
+
             return null;
         }
 
@@ -200,21 +211,15 @@ namespace Flavordex.Utilities
         /// </summary>
         /// <param name="source">The source file.</param>
         /// <returns>The name of the saved file.</returns>
-        public static async Task<string> SavePhotoAsync(StorageFile source)
+        private static async Task<string> SavePhotoAsync(StorageFile source)
         {
-            try
+            var folder = await KnownFolders.PicturesLibrary.CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
+            var destination = await folder.TryGetItemAsync(source.Name) as StorageFile;
+            if (destination == null)
             {
-                var folder = await KnownFolders.PicturesLibrary.CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
-                var destination = await folder.TryGetItemAsync(source.Name) as StorageFile;
-                if (destination == null)
-                {
-                    destination = await source.CopyAsync(folder);
-                }
-                return destination.Name;
+                destination = await source.CopyAsync(folder);
             }
-            catch { }
-
-            return null;
+            return destination.Name;
         }
 
         /// <summary>
