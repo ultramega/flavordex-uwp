@@ -203,13 +203,13 @@ namespace Flavordex.UI.Controls
             MeasurePadding();
             PositionElements();
 
+            SelectedIndex = -1;
             if (HasItems)
             {
                 SelectedIndex = 0;
             }
             else
             {
-                SelectedIndex = -1;
                 PolygonPoints.Clear();
                 PropertyChanged(this, new PropertyChangedEventArgs("PolygonPoints"));
             }
