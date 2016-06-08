@@ -236,7 +236,7 @@ namespace Flavordex.Utilities
             }
             catch { }
 
-            return null;
+            return EmptyBitmap;
         }
 
         /// <summary>
