@@ -1,6 +1,4 @@
-﻿#define DEBUG
-
-using Flavordex.Utilities.Databases;
+﻿using Flavordex.Utilities.Databases;
 using SQLitePCL;
 using System;
 using System.Collections;
