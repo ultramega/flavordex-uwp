@@ -139,7 +139,7 @@ namespace Flavordex.Utilities
                     return await AddPhotoAsync(file, entryId, position);
                 }
             }
-            catch (Exception e) { }
+            catch { }
 
             return null;
         }
@@ -164,10 +164,8 @@ namespace Flavordex.Utilities
 
                 return photo;
             }
-            catch (Exception e)
-            {
-                return null;
-            }
+            catch { }
+            return null;
         }
 
         /// <summary>
@@ -192,10 +190,9 @@ namespace Flavordex.Utilities
                 }
                 return CryptographicBuffer.EncodeToHexString(md5.GetValueAndReset());
             }
-            catch (Exception e)
-            {
-                return null;
-            }
+            catch { }
+
+            return null;
         }
 
         /// <summary>
@@ -215,10 +212,9 @@ namespace Flavordex.Utilities
                 }
                 return destination.Name;
             }
-            catch (Exception e)
-            {
-                return null;
-            }
+            catch { }
+
+            return null;
         }
 
         /// <summary>
@@ -238,7 +234,8 @@ namespace Flavordex.Utilities
                     return bitmap;
                 }
             }
-            catch (Exception e) { }
+            catch { }
+
             return null;
         }
 
@@ -257,7 +254,8 @@ namespace Flavordex.Utilities
                     return await folder.TryGetItemAsync(name) as StorageFile;
                 }
             }
-            catch (Exception e) { }
+            catch { }
+
             return null;
         }
 
@@ -290,7 +288,7 @@ namespace Flavordex.Utilities
                     _thumbnailCache.Store(entryId, bitmap);
                     return bitmap;
                 }
-                catch (Exception e)
+                catch
                 {
                     try
                     {
@@ -339,10 +337,9 @@ namespace Flavordex.Utilities
                     return file;
                 }
             }
-            catch (Exception e)
-            {
-                return null;
-            }
+            catch { }
+
+            return null;
         }
 
         /// <summary>
@@ -400,7 +397,7 @@ namespace Flavordex.Utilities
                 }
                 ThumbnailChanged(null, new ThumbnailChangedEventArgs(entryId));
             }
-            catch (Exception e) { }
+            catch { }
         }
     }
 }
