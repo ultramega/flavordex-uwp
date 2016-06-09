@@ -155,6 +155,8 @@ csx/
 
 # Windows Store app package directory
 AppPackages/
+BundleArtifacts/
+_*
 
 # Visual Studio cache files
 # files ending in .cache can be ignored
@@ -210,3 +212,6 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+# License Header Manager
+*.licenseheader
