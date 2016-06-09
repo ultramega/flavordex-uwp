@@ -24,10 +24,38 @@
             <FlipView.ItemTemplate>
                 <DataTemplate
                     x:DataType="vm:PhotoItemViewModel">
-                    <Image
-                        Source="{x:Bind Bitmap, Mode=OneWay}"
-                        Holding="OnHolding"
-                        RightTapped="OnRightTapped" />
+                    <Grid>
+                        <Image
+                            Source="{x:Bind Bitmap, Mode=OneWay}"
+                            Holding="OnHolding"
+                            RightTapped="OnRightTapped" />
+
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Visibility="{x:Bind PhotoNotFound, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                            <TextBlock
+                                x:Uid="ms-resource:///Photos/Message/NotFound"
+                                HorizontalAlignment="Center"
+                                Style="{ThemeResource SubheaderTextBlockStyle}" />
+
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Margin="0,20"
+                                Text="{x:Bind FileName}" />
+
+                            <Button
+                                x:Uid="ms-resource:///Photos/Button/LocatePhoto"
+                                HorizontalAlignment="Stretch"
+                                Margin="0,0,0,10"
+                                Click="OnLocatePhoto" />
+
+                            <Button
+                                x:Uid="ms-resource:///Photos/Button/RemovePhoto"
+                                HorizontalAlignment="Stretch"
+                                Click="OnRemovePhoto" />
+                        </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </FlipView.ItemTemplate>
         </FlipView>

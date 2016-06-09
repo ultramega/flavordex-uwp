@@ -145,6 +145,31 @@ namespace Flavordex.Utilities
         }
 
         /// <summary>
+        /// Updates the path and hash of a Photo.
+        /// </summary>
+        /// <param name="photo">The Photo to update.</param>
+        /// <param name="file">The photo file.</param>
+        public static async Task UpdatePhotoAsync(Photo photo, StorageFile file)
+        {
+            try
+            {
+                var path = await SavePhotoAsync(file);
+                var hash = await GetMD5HashAsync(file);
+
+                if (path == null || hash == null)
+                {
+                    return;
+                }
+
+                photo.Path = path;
+                photo.Hash = hash;
+
+                await DatabaseHelper.UpdatePhotoAsync(photo);
+            }
+            catch { }
+        }
+
+        /// <summary>
         /// Adds a Photo to a journal entry.
         /// </summary>
         /// <param name="file">The photo file to add.</param>
@@ -170,7 +195,7 @@ namespace Flavordex.Utilities
                     Hash = hash,
                     Position = position
                 };
-                await DatabaseHelper.InsertPhotoAsync(photo);
+                await DatabaseHelper.UpdatePhotoAsync(photo);
 
                 return photo;
             }

@@ -17,7 +17,7 @@ namespace Flavordex.ViewModels
         /// Triggers the PropertyChanged event for the indicated property.
         /// </summary>
         /// <param name="name">The name of the property that changed.</param>
-        protected void RaisePropertyChanged([CallerMemberName]string name = null)
+        protected virtual void RaisePropertyChanged([CallerMemberName]string name = null)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
         }

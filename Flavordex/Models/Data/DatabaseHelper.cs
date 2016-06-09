@@ -487,16 +487,23 @@ namespace Flavordex.Models.Data
         }
 
         /// <summary>
-        /// Inserts a Photo into the database.
+        /// Updates or inserts a Photo in the database.
         /// </summary>
-        /// <param name="photo">The Photo to insert.</param>
-        /// <returns>Whether the Photo was successfully added.</returns>
-        public static async Task<bool> InsertPhotoAsync(Photo photo)
+        /// <param name="photo">The Photo to update or insert.</param>
+        /// <returns>Whether the update was successful.</returns>
+        public static async Task<bool> UpdatePhotoAsync(Photo photo)
         {
-            photo.ID = await Database.Insert(Tables.Photos.TABLE_NAME, photo.GetData());
-            RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Insert, photo));
+            if (photo.ID > 0)
+            {
+                await Database.Update(Tables.Photos.TABLE_NAME, photo.GetData(), BaseColumns._ID + " = ?", new object[] { photo.ID });
+            }
+            else
+            {
+                photo.ID = await Database.Insert(Tables.Photos.TABLE_NAME, photo.GetData());
+                RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Insert, photo));
+                _entryCache.Changed(photo.EntryID);
+            }
             photo.Changed();
-            _entryCache.Changed(photo.EntryID);
             return photo.ID > 0;
         }
 

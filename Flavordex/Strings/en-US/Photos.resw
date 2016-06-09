@@ -39,6 +39,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Button.LocatePhoto.Content" xml:space="preserve">
+    <value>Locate photo…</value>
+  </data>
+  <data name="Button.RemovePhoto.Content" xml:space="preserve">
+    <value>Remove photo</value>
+  </data>
   <data name="Button.SelectPhoto.Content" xml:space="preserve">
     <value>Browse for photos…</value>
   </data>
@@ -56,6 +62,9 @@
   </data>
   <data name="Message.NoPhotos.Text" xml:space="preserve">
     <value>No Photos</value>
+  </data>
+  <data name="Message.NotFound.Text" xml:space="preserve">
+    <value>Photo not found</value>
   </data>
   <data name="Command.AddPhoto.Label" xml:space="preserve">
     <value>Add Photo</value>

@@ -182,5 +182,35 @@ namespace Flavordex
                 }
             }
         }
+
+        /// <summary>
+        /// Opens a file picker to replace a missing photo when the Locate Photo button is clicked.
+        /// </summary>
+        /// <param name="sender">The Button.</param>
+        /// <param name="e">The event arguments.</param>
+        private async void OnLocatePhoto(object sender, RoutedEventArgs e)
+        {
+            var photo = (sender as FrameworkElement).DataContext as PhotoItemViewModel;
+            var file = await PhotoUtilities.GetPicker().PickSingleFileAsync();
+            if (file != null)
+            {
+                await PhotoUtilities.UpdatePhotoAsync(photo.Model, file);
+                if (Photos.IndexOf(photo) == 0)
+                {
+                    await PhotoUtilities.DeleteThumbnailAsync(_entry.ID);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes a missing photo when the Remove Photo button is clicked.
+        /// </summary>
+        /// <param name="sender">The Button.</param>
+        /// <param name="e">The event arguments.</param>
+        private async void OnRemovePhoto(object sender, RoutedEventArgs e)
+        {
+            var photo = (sender as FrameworkElement).DataContext as PhotoItemViewModel;
+            await DatabaseHelper.DeletePhotoAsync(photo.Model);
+        }
     }
 }
