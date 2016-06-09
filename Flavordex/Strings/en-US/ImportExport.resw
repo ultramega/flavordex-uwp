@@ -69,17 +69,4 @@
   <data name="Message.NoData.Text" xml:space="preserve">
     <value>No valid entries were found.</value>
   </data>
-  <!-- unused -->
-  <data name="Title.Exporting" xml:space="preserve">
-    <value>Exporting…</value>
-  </data>
-  <data name="Message.ImportComplete" xml:space="preserve">
-    <value>Import complete.</value>
-  </data>
-  <data name="Message.ExportComplete" xml:space="preserve">
-    <value>Export complete.</value>
-  </data>
-  <data name="Error.CsvParse" xml:space="preserve">
-    <value>Unable to parse the .csv file</value>
-  </data>
 </root>
