@@ -64,8 +64,11 @@ namespace Flavordex.Models.Data
         /// </summary>
         public static void Close()
         {
-            _database.Dispose();
-            _database = null;
+            if (_database != null)
+            {
+                _database.Dispose();
+                _database = null;
+            }
         }
 
         /// <summary>
