@@ -309,15 +309,18 @@ namespace Flavordex.Utilities
         private static Collection<Photo> ParsePhotos(CsvRecord record)
         {
             var list = new Collection<Photo>();
-            JsonArray json;
-            if (JsonArray.TryParse(record.photos, out json))
+            if (!string.IsNullOrWhiteSpace(record.photos))
             {
-                foreach (var item in json)
+                JsonArray json;
+                if (JsonArray.TryParse(record.photos, out json))
                 {
-                    list.Add(new Photo()
+                    foreach (var item in json)
                     {
-                        Path = item.GetString()
-                    });
+                        list.Add(new Photo()
+                        {
+                            Path = item.GetString()
+                        });
+                    }
                 }
             }
             return list;
