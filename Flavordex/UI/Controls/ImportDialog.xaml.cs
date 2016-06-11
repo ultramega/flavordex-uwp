@@ -135,8 +135,7 @@ namespace Flavordex.UI.Controls
             }
 
             PrimaryButtonText = SecondaryButtonText = "";
-            CategoryList.Visibility = Visibility.Collapsed;
-            ListView.Visibility = Visibility.Collapsed;
+            ListPanel.Visibility = Visibility.Collapsed;
             ProgressBar.Maximum = ListView.SelectedItems.Count;
             ProgressPanel.Visibility = Visibility.Visible;
             foreach (ImportRecord item in ListView.SelectedItems)
