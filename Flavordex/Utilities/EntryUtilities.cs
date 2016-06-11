@@ -269,11 +269,14 @@ namespace Flavordex.Utilities
             var list = new Collection<EntryFlavor>();
             foreach (var item in ParseJsonObject(record.flavors))
             {
-                list.Add(new EntryFlavor()
+                if (item.Value.ValueType == JsonValueType.Number)
                 {
-                    Name = item.Key,
-                    Value = (long)item.Value.GetNumber()
-                });
+                    list.Add(new EntryFlavor()
+                    {
+                        Name = item.Key,
+                        Value = (long)item.Value.GetNumber()
+                    });
+                }
             }
             return list;
         }
