@@ -174,8 +174,9 @@
                 <Grid.RowDefinitions>
                     <RowDefinition
                         Height="Auto" />
+                    <RowDefinition />
                     <RowDefinition
-                        Height="*" />
+                        Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -318,67 +319,66 @@
                                     </Button>
                                 </RelativePanel>
                             </ListView.Header>
-
-                            <ListView.Footer>
-                                <Grid
-                                    x:Name="ExportBar"
-                                    x:DeferLoadStrategy="Lazy"
-                                    Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
-                                    Visibility="{x:Bind List.ExportMode, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
-                                    <Grid.Resources>
-                                        <Style
-                                            TargetType="Button">
-                                            <Setter
-                                                Property="Margin"
-                                                Value="4" />
-                                        </Style>
-                                    </Grid.Resources>
-
-                                    <StackPanel
-                                        Orientation="Horizontal"
-                                        HorizontalAlignment="Right">
-                                        <Button
-                                            x:Uid="ms-resource:///ImportExport/Button/CheckAll"
-                                            Click="OnCheckAll">
-                                            <FontIcon
-                                                FontFamily="Segoe MDL2 Assets"
-                                                Glyph="&#xE73A;" />
-                                        </Button>
-
-                                        <Button
-                                            x:Uid="ms-resource:///ImportExport/Button/UncheckAll"
-                                            Click="OnUncheckAll">
-                                            <FontIcon
-                                                FontFamily="Segoe MDL2 Assets"
-                                                Glyph="&#xE739;" />
-                                        </Button>
-
-                                        <Button
-                                            IsEnabled="{x:Bind EnableExport, Mode=OneWay}"
-                                            Click="OnExport">
-                                            <StackPanel
-                                                Orientation="Horizontal">
-                                                <SymbolIcon
-                                                    Symbol="Upload" />
-
-                                                <TextBlock
-                                                    x:Uid="ms-resource:///ImportExport/Button/ExportSelected"
-                                                    Margin="4,0,0,0" />
-                                            </StackPanel>
-                                        </Button>
-
-                                        <Button
-                                            x:Uid="ms-resource:///ImportExport/Button/Cancel"
-                                            Click="OnCancelExport">
-                                            <SymbolIcon
-                                                Symbol="Cancel" />
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                            </ListView.Footer>
                         </ListView>
                     </SemanticZoom.ZoomedInView>
                 </SemanticZoom>
+
+                <Grid
+                    Grid.Row="2"
+                    x:Name="ExportBar"
+                    x:DeferLoadStrategy="Lazy"
+                    Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}"
+                    Visibility="{x:Bind List.ExportMode, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+                    <Grid.Resources>
+                        <Style
+                            TargetType="Button">
+                            <Setter
+                                Property="Margin"
+                                Value="4" />
+                        </Style>
+                    </Grid.Resources>
+
+                    <StackPanel
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                        <Button
+                            x:Uid="ms-resource:///ImportExport/Button/CheckAll"
+                            Click="OnCheckAll">
+                            <FontIcon
+                                FontFamily="Segoe MDL2 Assets"
+                                Glyph="&#xE73A;" />
+                        </Button>
+
+                        <Button
+                            x:Uid="ms-resource:///ImportExport/Button/UncheckAll"
+                            Click="OnUncheckAll">
+                            <FontIcon
+                                FontFamily="Segoe MDL2 Assets"
+                                Glyph="&#xE739;" />
+                        </Button>
+
+                        <Button
+                            IsEnabled="{x:Bind EnableExport, Mode=OneWay}"
+                            Click="OnExport">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <SymbolIcon
+                                    Symbol="Upload" />
+
+                                <TextBlock
+                                    x:Uid="ms-resource:///ImportExport/Button/ExportSelected"
+                                    Margin="4,0,0,0" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button
+                            x:Uid="ms-resource:///ImportExport/Button/Cancel"
+                            Click="OnCancelExport">
+                            <SymbolIcon
+                                Symbol="Cancel" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
 
                 <Frame
                     x:Name="DetailFrame"
