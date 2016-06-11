@@ -194,6 +194,14 @@ namespace Flavordex.Utilities
                         {
                             var row = csv.GetRecord<CsvRecord>();
 
+                            if (string.IsNullOrWhiteSpace(row.title))
+                            {
+                                continue;
+                            }
+
+                            var date = DateTime.Now;
+                            DateTime.TryParse(row.date, out date);
+
                             var entry = new Entry()
                             {
                                 Title = row.title,
@@ -202,10 +210,11 @@ namespace Flavordex.Utilities
                                 Origin = row.origin,
                                 Price = row.price,
                                 Location = row.location,
-                                Date = DateTime.Parse(row.date),
+                                Date = date,
                                 Rating = row.rating,
                                 Notes = row.notes
                             };
+
 
                             var isDuplicate = await DatabaseHelper.EntryUuidExists(row.uuid);
                             if (!isDuplicate)
