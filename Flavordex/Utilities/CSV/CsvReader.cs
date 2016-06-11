@@ -150,78 +150,81 @@ namespace Flavordex.Utilities.CSV
             var property = record.GetType().GetTypeInfo().GetDeclaredProperty(name);
             if (property != null)
             {
+                object parsed = null;
                 switch (property.PropertyType.Name)
                 {
                     case "Boolean":
                         bool parsedBoolean;
                         bool.TryParse(value, out parsedBoolean);
-                        property.SetValue(record, parsedBoolean);
+                        parsed = parsedBoolean;
                         break;
                     case "Byte":
                         byte parsedByte;
                         byte.TryParse(value, out parsedByte);
-                        property.SetValue(record, parsedByte);
+                        parsed = parsedByte;
                         break;
                     case "SByte":
                         sbyte parsedsSByte;
                         sbyte.TryParse(value, out parsedsSByte);
-                        property.SetValue(record, parsedsSByte);
+                        parsed = parsedsSByte;
                         break;
                     case "Char":
                         char parsedChar;
                         char.TryParse(value, out parsedChar);
-                        property.SetValue(record, parsedChar);
+                        parsed = parsedChar;
                         break;
                     case "Decimal":
                         decimal parsedDecimal;
                         decimal.TryParse(value, out parsedDecimal);
-                        property.SetValue(record, parsedDecimal);
+                        parsed = parsedDecimal;
                         break;
                     case "Double":
                         double parsedDouble;
                         double.TryParse(value, out parsedDouble);
-                        property.SetValue(record, parsedDouble);
+                        parsed = parsedDouble;
                         break;
                     case "Single":
                         float parsedSingle;
                         float.TryParse(value, out parsedSingle);
-                        property.SetValue(record, parsedSingle);
+                        parsed = parsedSingle;
                         break;
                     case "Int32":
                         int parsedInt32;
                         int.TryParse(value, out parsedInt32);
-                        property.SetValue(record, parsedInt32);
+                        parsed = parsedInt32;
                         break;
                     case "UInt32":
                         uint parsedUInt32;
                         uint.TryParse(value, out parsedUInt32);
-                        property.SetValue(record, parsedUInt32);
+                        parsed = parsedUInt32;
                         break;
                     case "Int64":
                         long parsedInt64;
                         long.TryParse(value, out parsedInt64);
-                        property.SetValue(record, parsedInt64);
+                        parsed = parsedInt64;
                         break;
                     case "UInt64":
                         ulong parsedUInt64;
                         ulong.TryParse(value, out parsedUInt64);
-                        property.SetValue(record, parsedUInt64);
+                        parsed = parsedUInt64;
                         break;
                     case "Int16":
                         short parsedInt16;
                         short.TryParse(value, out parsedInt16);
-                        property.SetValue(record, parsedInt16);
+                        parsed = parsedInt16;
                         break;
                     case "UInt16":
                         ushort parsedUInt16;
                         ushort.TryParse(value, out parsedUInt16);
-                        property.SetValue(record, parsedUInt16);
+                        parsed = parsedUInt16;
                         break;
                     case "String":
                     case "Object":
-                        property.SetValue(record, value);
+                        parsed = value;
                         break;
                 }
+
+                property.SetValue(record, parsed);
             }
         }
 
