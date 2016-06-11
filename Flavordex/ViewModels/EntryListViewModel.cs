@@ -438,7 +438,7 @@ namespace Flavordex.ViewModels
             var item = new EntryItemViewModel(entry);
             _entries.Add(item);
 
-            if (Matches(item))
+            if (IsCategorySelected && Matches(item))
             {
                 Entries.Insert(FindSortedIndex(entry), item);
             }
@@ -722,6 +722,10 @@ namespace Flavordex.ViewModels
         /// <returns>True if the EntryItemViewModel matches the parameters.</returns>
         private bool Matches(EntryItemViewModel item)
         {
+            if (Settings.ListCategory > 0 && item.Model.CategoryID != Settings.ListCategory)
+            {
+                return false;
+            }
             if (_filter.Title != null && !item.Title.ToLower().Contains(_filter.Title.ToLower()))
             {
                 return false;
