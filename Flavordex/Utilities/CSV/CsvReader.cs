@@ -103,7 +103,7 @@ namespace Flavordex.Utilities.CSV
                     continue;
                 }
 
-                if ((!useQuotes && character == ',') || (useQuotes && character == '"'))
+                if ((!useQuotes && (character == ',' || character == '\r' || character == '\n')) || (useQuotes && character == '"'))
                 {
                     inValue = false;
                     fields.Add(field);
