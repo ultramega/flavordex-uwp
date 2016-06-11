@@ -54,6 +54,9 @@
   <data name="Button.UncheckDuplicates" xml:space="preserve">
     <value>Uncheck {0} {1}</value>
   </data>
+  <data name="DefaultCategory" xml:space="preserve">
+    <value>Imported {0}</value>
+  </data>
   <data name="Dialog.Import.PrimaryButtonText" xml:space="preserve">
     <value>Import Selected</value>
   </data>

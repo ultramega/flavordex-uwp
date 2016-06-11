@@ -1,6 +1,7 @@
 ﻿using Flavordex.Models.Data;
 using Flavordex.Utilities;
 using Flavordex.ViewModels;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.ApplicationModel.Resources;
@@ -14,6 +15,16 @@ namespace Flavordex.UI.Controls
     /// </summary>
     public sealed partial class ImportDialog : ContentDialog
     {
+        /// <summary>
+        /// The format string for the default category name.
+        /// </summary>
+        private static readonly string _defaultCategory = ResourceLoader.GetForCurrentView("ImportExport").GetString("DefaultCategory");
+
+        /// <summary>
+        /// The format string for the date.
+        /// </summary>
+        private static readonly string _dateFormat = ResourceLoader.GetForCurrentView().GetString("DateFormat");
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -117,7 +128,7 @@ namespace Flavordex.UI.Controls
         {
             var deferral = args.GetDeferral();
 
-            var defaultCategory = "Default";
+            var defaultCategory = string.Format(_defaultCategory, DateTime.Now.ToString(_dateFormat));
             if (CategoryList.SelectedItem != null)
             {
                 defaultCategory = (CategoryList.SelectedItem as CategoryItemViewModel).Model.Name;
