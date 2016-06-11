@@ -12,6 +12,11 @@ namespace Flavordex.Utilities.Databases
     public class Database : IDisposable
     {
         /// <summary>
+        /// Whether this disposable object has been disposed.
+        /// </summary>
+        private bool _disposed;
+
+        /// <summary>
         /// Gets or sets the database connection.
         /// </summary>
         public SQLiteConnection Connection { get; private set; }
@@ -39,31 +44,6 @@ namespace Flavordex.Utilities.Databases
                     SetVersion(loader.GetVersion());
                 }
             }
-        }
-
-        /// <summary>
-        /// Destructor.
-        /// </summary>
-        ~Database()
-        {
-            Dispose(false);
-        }
-
-        /// <summary>
-        /// Disposes of the database object.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Disposes of the database connection.
-        /// </summary>
-        protected virtual void Dispose(bool disposing)
-        {
-            Connection.Dispose();
         }
 
         /// <summary>
@@ -280,6 +260,31 @@ namespace Flavordex.Utilities.Databases
                     return Connection.ChangesCount();
                 }
             });
+        }
+
+        /// <summary>
+        /// Disposes this disposable object.
+        /// </summary>
+        /// <param name="disposing">Whether to clean up managed resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    Connection.Dispose();
+                }
+
+                _disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Disposes this disposable object.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

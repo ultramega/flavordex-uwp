@@ -14,7 +14,7 @@ namespace Flavordex.Utilities.CSV
         /// <summary>
         /// Whether this disposable object has been disposed.
         /// </summary>
-        private bool _disposed = false;
+        private bool _disposed;
 
         /// <summary>
         /// The TextWriter representing the CSV file.
