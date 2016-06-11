@@ -181,6 +181,8 @@
     <Compile Include="UI\Controls\SettingsPane.xaml.cs">
       <DependentUpon>SettingsPane.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\CSV\CsvReader.cs" />
+    <Compile Include="Utilities\CSV\CsvWriter.cs" />
     <Compile Include="Utilities\Databases\ContentValues.cs" />
     <Compile Include="Utilities\Databases\Model.cs" />
     <Compile Include="Settings.cs" />

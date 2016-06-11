@@ -1,7 +1,7 @@
-﻿using CsvHelper;
-using Flavordex.Models;
+﻿using Flavordex.Models;
 using Flavordex.Models.Data;
 using Flavordex.UI.Controls;
+using Flavordex.Utilities.CSV;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -93,11 +93,10 @@ namespace Flavordex.Utilities
             {
                 using (var stream = await file.OpenStreamForWriteAsync())
                 {
+                    stream.SetLength(0);
                     var writer = new StreamWriter(stream);
-                    using (var csv = new CsvWriter(writer))
+                    using (var csv = new CsvWriter<CsvRecord>(writer))
                     {
-                        csv.Configuration.QuoteAllFields = true;
-                        csv.WriteHeader(typeof(CsvRecord));
                         foreach (var entryId in entryIds)
                         {
                             var entry = await DatabaseHelper.GetEntryAsync(entryId);
