@@ -69,4 +69,10 @@
   <data name="Message.NoData.Text" xml:space="preserve">
     <value>No valid entries were found.</value>
   </data>
+  <data name="SelectCategory.Header" xml:space="preserve">
+    <value>Default Category</value>
+  </data>
+  <data name="SelectCategory.PlaceholderText" xml:space="preserve">
+    <value>Select category</value>
+  </data>
 </root>

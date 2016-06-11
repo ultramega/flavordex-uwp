@@ -1,6 +1,8 @@
 ﻿using Flavordex.Models.Data;
 using Flavordex.Utilities;
+using Flavordex.ViewModels;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -27,6 +29,32 @@ namespace Flavordex.UI.Controls
             {
                 ListView.ItemsSource = records;
             }
+
+            if (records.Any(e => string.IsNullOrEmpty(e.Entry.Category)))
+            {
+                ShowCategories();
+            }
+        }
+
+        /// <summary>
+        /// Loads the list of categories to set the default.
+        /// </summary>
+        private async void ShowCategories()
+        {
+            var categories = new Collection<CategoryItemViewModel>();
+            foreach (var item in await DatabaseHelper.GetCategoryListAsync())
+            {
+                categories.Add(new CategoryItemViewModel(item));
+            }
+            foreach (var item in categories.OrderBy(e => e.Name))
+            {
+                CategoryList.Items.Add(item);
+            }
+            if (Settings.ListCategory > 0)
+            {
+                CategoryList.SelectedItem = categories.FirstOrDefault(e => e.Model.ID == Settings.ListCategory);
+            }
+            CategoryList.Visibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -89,12 +117,24 @@ namespace Flavordex.UI.Controls
         {
             var deferral = args.GetDeferral();
 
+            var defaultCategory = "Default";
+            if (CategoryList.SelectedItem != null)
+            {
+                defaultCategory = (CategoryList.SelectedItem as CategoryItemViewModel).Model.Name;
+            }
+
             PrimaryButtonText = SecondaryButtonText = "";
+            CategoryList.Visibility = Visibility.Collapsed;
             ListView.Visibility = Visibility.Collapsed;
             ProgressBar.Maximum = ListView.SelectedItems.Count;
             ProgressPanel.Visibility = Visibility.Visible;
             foreach (ImportRecord item in ListView.SelectedItems)
             {
+                if (string.IsNullOrWhiteSpace(item.Entry.Category))
+                {
+                    item.Entry.Category = defaultCategory;
+                }
+
                 if (await DatabaseHelper.UpdateEntryAsync(item.Entry, item.Extras, item.Flavors))
                 {
                     var position = 0;
