@@ -10,6 +10,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Style="{ThemeResource ContentDialogStyle}"
     IsPrimaryButtonEnabled="False"
     PrimaryButtonClick="OnPrimaryButtonClicked">
     <ContentDialog.TitleTemplate>
@@ -33,6 +34,8 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition />
+            <RowDefinition
+                Height="Auto" />
         </Grid.RowDefinitions>
 
         <ComboBox
@@ -113,19 +116,18 @@
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
-
-            <ListView.Footer>
-                <Button
-                    x:Name="DuplicateButton"
-                    HorizontalAlignment="Stretch"
-                    Margin="0,6"
-                    Visibility="Collapsed"
-                    Click="OnUncheckDuplicates" />
-            </ListView.Footer>
         </ListView>
 
+        <Button
+            Grid.Row="2"
+            x:Name="DuplicateButton"
+            HorizontalAlignment="Stretch"
+            Margin="0,6"
+            Visibility="Collapsed"
+            Click="OnUncheckDuplicates" />
+
         <Grid
-            Grid.RowSpan="2"
+            Grid.RowSpan="3"
             x:Name="ProgressPanel"
             Visibility="Collapsed">
             <Grid.RowDefinitions>

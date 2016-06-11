@@ -8,41 +8,44 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    <StackPanel>
-        <TextBox
-            x:Uid="ms-resource:///Entry/Input/Title"
-            Text="{x:Bind Title, Mode=TwoWay}" />
+    <ScrollViewer
+        VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBox
+                x:Uid="ms-resource:///Entry/Input/Title"
+                Text="{x:Bind Title, Mode=TwoWay}" />
 
-        <TextBox
-            x:Uid="ms-resource:///Entry/Input/Maker"
-            Text="{x:Bind Maker, Mode=TwoWay}" />
+            <TextBox
+                x:Uid="ms-resource:///Entry/Input/Maker"
+                Text="{x:Bind Maker, Mode=TwoWay}" />
 
-        <TextBox
-            x:Uid="ms-resource:///Entry/Input/Origin"
-            Text="{x:Bind Origin, Mode=TwoWay}" />
+            <TextBox
+                x:Uid="ms-resource:///Entry/Input/Origin"
+                Text="{x:Bind Origin, Mode=TwoWay}" />
 
-        <TextBox
-            x:Uid="ms-resource:///Entry/Input/Location"
-            Text="{x:Bind Location, Mode=TwoWay}" />
+            <TextBox
+                x:Uid="ms-resource:///Entry/Input/Location"
+                Text="{x:Bind Location, Mode=TwoWay}" />
 
-        <Border
-            Style="{StaticResource DividerStyle}">
-            <TextBlock
-                x:Uid="ms-resource:///Entry/Header/Date"
-                Style="{ThemeResource SubtitleTextBlockStyle}"
-                HorizontalAlignment="Center" />
-        </Border>
+            <Border
+                Style="{StaticResource DividerStyle}">
+                <TextBlock
+                    x:Uid="ms-resource:///Entry/Header/Date"
+                    Style="{ThemeResource SubtitleTextBlockStyle}"
+                    HorizontalAlignment="Center" />
+            </Border>
 
-        <CalendarDatePicker
-            x:Name="StartDatePicker"
-            x:Uid="Input/StartDate"
-            DateChanged="OnStartDateChange"
-            HorizontalAlignment="Stretch" />
+            <CalendarDatePicker
+                x:Name="StartDatePicker"
+                x:Uid="Input/StartDate"
+                DateChanged="OnStartDateChange"
+                HorizontalAlignment="Stretch" />
 
-        <CalendarDatePicker
-            x:Name="EndDatePicker"
-            x:Uid="Input/EndDate"
-            DateChanged="OnEndDateChange"
-            HorizontalAlignment="Stretch" />
-    </StackPanel>
+            <CalendarDatePicker
+                x:Name="EndDatePicker"
+                x:Uid="Input/EndDate"
+                DateChanged="OnEndDateChange"
+                HorizontalAlignment="Stretch" />
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

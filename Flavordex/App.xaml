@@ -177,6 +177,42 @@
                 x:Key="ContentDialogStyle"
                 TargetType="ContentDialog">
                 <Setter
+                    Property="Foreground"
+                    Value="{ThemeResource SystemControlPageTextBaseHighBrush}" />
+
+                <Setter
+                    Property="Background"
+                    Value="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}" />
+
+                <Setter
+                    Property="HorizontalAlignment"
+                    Value="Center" />
+
+                <Setter
+                    Property="VerticalAlignment"
+                    Value="Top" />
+
+                <Setter
+                    Property="IsTabStop"
+                    Value="False" />
+
+                <Setter
+                    Property="MaxHeight"
+                    Value="{ThemeResource ContentDialogMaxHeight}" />
+
+                <Setter
+                    Property="MinHeight"
+                    Value="{ThemeResource ContentDialogMinHeight}" />
+
+                <Setter
+                    Property="MaxWidth"
+                    Value="{ThemeResource ContentDialogMaxWidth}" />
+
+                <Setter
+                    Property="MinWidth"
+                    Value="{ThemeResource ContentDialogMinWidth}" />
+
+                <Setter
                     Property="Template">
                     <Setter.Value>
                         <ControlTemplate
@@ -220,7 +256,7 @@
                                             <ScrollViewer
                                                 x:Name="ContentScrollViewer"
                                                 HorizontalScrollBarVisibility="Disabled"
-                                                VerticalScrollBarVisibility="Auto"
+                                                VerticalScrollBarVisibility="Disabled"
                                                 ZoomMode="Disabled"
                                                 Margin="{ThemeResource ContentDialogContentScrollViewerMargin}"
                                                 IsTabStop="False">
@@ -228,7 +264,8 @@
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition
                                                             Height="Auto" />
-                                                        <RowDefinition />
+                                                        <RowDefinition
+                                                            Height="*" />
                                                     </Grid.RowDefinitions>
 
                                                     <ContentControl
@@ -237,7 +274,7 @@
                                                         Content="{TemplateBinding Title}"
                                                         ContentTemplate="{TemplateBinding TitleTemplate}"
                                                         FontSize="20"
-                                                        FontFamily="Segoe UI"
+                                                        FontFamily="XamlAutoFontFamily"
                                                         FontWeight="Normal"
                                                         Foreground="{TemplateBinding Foreground}"
                                                         HorizontalAlignment="Left"
