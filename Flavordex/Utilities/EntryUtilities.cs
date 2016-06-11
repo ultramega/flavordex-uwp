@@ -62,13 +62,13 @@ namespace Flavordex.Utilities
             public string uuid { get; set; }
             public string title { get; set; }
             public string cat { get; set; }
-            public string maker { get; set; }
-            public string origin { get; set; }
-            public string price { get; set; }
-            public string location { get; set; }
+            public string maker { get; set; } = "";
+            public string origin { get; set; } = "";
+            public string price { get; set; } = "";
+            public string location { get; set; } = "";
             public string date { get; set; }
-            public double rating { get; set; }
-            public string notes { get; set; }
+            public double rating { get; set; } = 0.0;
+            public string notes { get; set; } = "";
             public string extras { get; set; }
             public string flavors { get; set; }
             public string photos { get; set; }
@@ -199,9 +199,6 @@ namespace Flavordex.Utilities
                                 continue;
                             }
 
-                            var date = DateTime.Now;
-                            DateTime.TryParse(row.date, out date);
-
                             var entry = new Entry()
                             {
                                 Title = row.title,
@@ -210,11 +207,12 @@ namespace Flavordex.Utilities
                                 Origin = row.origin,
                                 Price = row.price,
                                 Location = row.location,
-                                Date = date,
                                 Rating = row.rating,
                                 Notes = row.notes
                             };
 
+                            DateTime date;
+                            entry.Date = DateTime.TryParse(row.date, out date) ? date : DateTime.Now;
 
                             var isDuplicate = await DatabaseHelper.EntryUuidExists(row.uuid);
                             if (!isDuplicate)
