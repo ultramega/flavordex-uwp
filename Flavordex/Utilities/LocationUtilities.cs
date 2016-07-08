@@ -31,8 +31,8 @@ namespace Flavordex.Utilities
             var location = new Location()
             {
                 Name = name,
-                Latitude = Location.Coordinate.Latitude,
-                Longitude = Location.Coordinate.Longitude
+                Latitude = Location.Coordinate.Point.Position.Latitude,
+                Longitude = Location.Coordinate.Point.Position.Longitude
             };
             DatabaseHelper.InsertLocation(location);
         }
@@ -67,8 +67,8 @@ namespace Flavordex.Utilities
 
             var locationA = new BasicGeoposition()
             {
-                Latitude = position.Coordinate.Latitude,
-                Longitude = position.Coordinate.Longitude
+                Latitude = position.Coordinate.Point.Position.Latitude,
+                Longitude = position.Coordinate.Point.Position.Longitude
             };
             var locationB = new BasicGeoposition();
             var minimum = double.MaxValue;
