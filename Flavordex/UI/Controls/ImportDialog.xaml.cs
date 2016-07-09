@@ -28,20 +28,20 @@ namespace Flavordex.UI.Controls
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="records">The list of records from a CSV file.</param>
-        public ImportDialog(Collection<ImportRecord> records)
+        /// <param name="collection">The ImportCollection.</param>
+        public ImportDialog(ImportCollection collection)
         {
             InitializeComponent();
-            if (records == null || records.Count == 0)
+            if (collection == null || collection.Entries.Count == 0)
             {
                 EmptyList.Visibility = Visibility.Visible;
             }
             else
             {
-                ListView.ItemsSource = records;
+                ListView.ItemsSource = collection.Entries;
             }
 
-            if (records.Any(e => string.IsNullOrEmpty(e.Entry.Category)))
+            if (!collection.HasCategory)
             {
                 ShowCategories();
             }

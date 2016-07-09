@@ -14,19 +14,19 @@ namespace Flavordex.Utilities
         public Entry Entry { get; internal set; }
 
         /// <summary>
-        /// Gets or sets the extra fields for the journal entry.
+        /// Gets the extra fields for the journal entry.
         /// </summary>
-        public Collection<EntryExtra> Extras { get; internal set; }
+        public Collection<EntryExtra> Extras { get; } = new Collection<EntryExtra>();
 
         /// <summary>
-        /// Gets or sets the flavors for the journal entry.
+        /// Gets the flavors for the journal entry.
         /// </summary>
-        public Collection<EntryFlavor> Flavors { get; internal set; }
+        public Collection<EntryFlavor> Flavors { get; } = new Collection<EntryFlavor>();
 
         /// <summary>
-        /// Gets or sets the photos for the journal entry.
+        /// Gets the photos for the journal entry.
         /// </summary>
-        public Collection<Photo> Photos { get; internal set; }
+        public Collection<Photo> Photos { get; } = new Collection<Photo>();
 
         /// <summary>
         /// Whether this record has been detected as a duplicate.

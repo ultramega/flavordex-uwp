@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Resources;
 using Windows.Data.Json;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Controls;
@@ -15,25 +17,57 @@ namespace Flavordex.Utilities
 {
     public class CsvUtilities
     {
-        /// <summary>
-        /// Container for CSV records.
-        /// </summary>
-        private class CsvRecord
+        private static string[] LEGACY_FIELDS_COMMON = new string[]
         {
-            public string uuid { get; set; }
-            public string title { get; set; }
-            public string cat { get; set; }
-            public string maker { get; set; } = "";
-            public string origin { get; set; } = "";
-            public string price { get; set; } = "";
-            public string location { get; set; } = "";
-            public string date { get; set; }
-            public double rating { get; set; } = 0.0;
-            public string notes { get; set; } = "";
-            public string extras { get; set; }
-            public string flavors { get; set; }
-            public string photos { get; set; }
-        }
+            "title",
+            "maker",
+            "origin",
+            "location",
+            "date",
+            "price",
+            "rating",
+            "notes",
+            "flavors",
+            "photos"
+        };
+
+        private static string[] LEGACY_FIELDS_BEER = new string[]
+        {
+            "style",
+            "serving",
+            "stats_ibu",
+            "stats_abv",
+            "stats_og",
+            "stats_fg"
+        };
+
+        private static string[] LEGACY_FIELDS_COFFEE = new string[]
+        {
+            "roaster",
+            "roast_date",
+            "grind",
+            "brew_method",
+            "stats_dose",
+            "stats_mass",
+            "stats_temp",
+            "stats_extime",
+            "stats_tds",
+            "stats_yield"
+        };
+
+        private static string[] LEGACY_FIELDS_WHISKEY = new string[]
+        {
+            "style",
+            "stats_age",
+            "stats_abv"
+        };
+
+        private static string[] LEGACY_FIELDS_WINE = new string[]
+        {
+            "varietal",
+            "stats_vintage",
+            "stats_abv"
+        };
 
         /// <summary>
         /// Exports a list of journal entries to a CSV file.
@@ -56,28 +90,12 @@ namespace Flavordex.Utilities
                 {
                     stream.SetLength(0);
                     var writer = new StreamWriter(stream);
-                    using (var csv = new CsvWriter<CsvRecord>(writer))
+                    using (var csv = new CsvWriter(writer))
                     {
+                        WriteHeaders(csv);
                         foreach (var entryId in entryIds)
                         {
-                            var entry = await DatabaseHelper.GetEntryAsync(entryId);
-                            var record = new CsvRecord()
-                            {
-                                uuid = entry.UUID,
-                                title = entry.Title,
-                                cat = entry.Category,
-                                maker = entry.Maker,
-                                origin = entry.Origin,
-                                price = entry.Price,
-                                location = entry.Location,
-                                date = entry.Date.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm'Z'"),
-                                rating = entry.Rating,
-                                notes = entry.Notes,
-                                extras = await SerializeExtrasAsync(entry.ID),
-                                flavors = await SerializeFlavorsAsync(entry.ID),
-                                photos = await SerializePhotosAsync(entry.ID)
-                            };
-                            csv.WriteRecord(record);
+                            WriteEntry(csv, await DatabaseHelper.GetEntryAsync(entryId));
                         }
                     }
                 }
@@ -86,6 +104,56 @@ namespace Flavordex.Utilities
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Write the header row to a CSV file.
+        /// </summary>
+        /// <param name="writer">The CsvWriter.</param>
+        private static void WriteHeaders(CsvWriter writer)
+        {
+            string[] fields = new string[] {
+                Tables.Entries.UUID,
+                Tables.Entries.TITLE,
+                Tables.Entries.CAT,
+                Tables.Entries.MAKER,
+                Tables.Entries.ORIGIN,
+                Tables.Entries.PRICE,
+                Tables.Entries.LOCATION,
+                Tables.Entries.DATE,
+                Tables.Entries.RATING,
+                Tables.Entries.NOTES,
+                Tables.Extras.TABLE_NAME,
+                Tables.Flavors.TABLE_NAME,
+                Tables.Photos.TABLE_NAME
+            };
+            writer.WriteRecord(fields);
+        }
+
+        /// <summary>
+        /// Write an entry to the CSV file.
+        /// </summary>
+        /// <param name="writer">The CsvWriter.</param>
+        /// <param name="entry">The Entry.</param>
+        private static async void WriteEntry(CsvWriter writer, Entry entry)
+        {
+            var record = new string[]
+            {
+                entry.UUID,
+                entry.Title,
+                entry.Category,
+                entry.Maker,
+                entry.Origin,
+                entry.Price,
+                entry.Location,
+                entry.Date.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm'Z'"),
+                entry.Rating.ToString(),
+                entry.Notes,
+                await SerializeExtrasAsync(entry.ID),
+                await SerializeFlavorsAsync(entry.ID),
+                await SerializePhotosAsync(entry.ID)
+            };
+            writer.WriteRecord(record);
         }
 
         /// <summary>
@@ -150,48 +218,32 @@ namespace Flavordex.Utilities
                     var reader = new StreamReader(stream);
                     using (var csv = new CsvReader(reader))
                     {
-                        var records = new Collection<ImportRecord>();
-                        while (csv.Read())
+                        if (csv.Read())
                         {
-                            var row = csv.GetRecord<CsvRecord>();
-
-                            if (string.IsNullOrWhiteSpace(row.title))
+                            var fields = csv.GetRecord();
+                            if (!fields.Contains(Tables.Entries.TITLE))
                             {
-                                continue;
+                                return false;
                             }
 
-                            var entry = new Entry()
-                            {
-                                Title = row.title,
-                                Category = row.cat,
-                                Maker = row.maker,
-                                Origin = row.origin,
-                                Price = row.price,
-                                Location = row.location,
-                                Rating = row.rating,
-                                Notes = row.notes
-                            };
+                            var collection = new ImportCollection();
+                            collection.HasCategory = fields.Contains(Tables.Entries.CAT);
+                            DetectFormat(collection, fields);
 
-                            DateTime date;
-                            entry.Date = DateTime.TryParse(row.date, out date) ? date : DateTime.Now;
-
-                            var isDuplicate = await DatabaseHelper.EntryUuidExists(row.uuid);
-                            if (!isDuplicate)
+                            var rowMap = new Dictionary<string, string>();
+                            while (csv.Read())
                             {
-                                entry.UUID = row.uuid;
+                                rowMap.Clear();
+                                var row = csv.GetRecord();
+                                for (var i = 0; i < row.Length; i++)
+                                {
+                                    rowMap[fields[i]] = row[i];
+                                }
+                                await ReadRow(collection, rowMap);
                             }
 
-                            records.Add(new ImportRecord()
-                            {
-                                Entry = entry,
-                                Extras = ParseExtras(row),
-                                Flavors = ParseFlavors(row),
-                                Photos = ParsePhotos(row),
-                                IsDuplicate = isDuplicate
-                            });
+                            return await new ImportDialog(collection).ShowAsync() == ContentDialogResult.Primary;
                         }
-
-                        return await new ImportDialog(records).ShowAsync() == ContentDialogResult.Primary;
                     }
                 }
             }
@@ -200,44 +252,279 @@ namespace Flavordex.Utilities
         }
 
         /// <summary>
+        /// Determines the format of the CSV file.
+        /// </summary>
+        /// <param name="collection">The ImportCollection.</param>
+        /// <param name="fields">The list of field names.</param>
+        private static void DetectFormat(ImportCollection collection, string[] fields)
+        {
+            if (fields.Intersect(LEGACY_FIELDS_COMMON).Count() == LEGACY_FIELDS_COMMON.Length)
+            {
+                var test = fields.Intersect(LEGACY_FIELDS_BEER);
+                if (fields.Intersect(LEGACY_FIELDS_BEER).Count() == LEGACY_FIELDS_BEER.Length)
+                {
+                    collection.LegacyFormat = Constants.CAT_BEER;
+                }
+                else if (fields.Intersect(LEGACY_FIELDS_COFFEE).Count() == LEGACY_FIELDS_COFFEE.Length)
+                {
+                    collection.LegacyFormat = Constants.CAT_COFFEE;
+                }
+                else if (fields.Intersect(LEGACY_FIELDS_WHISKEY).Count() == LEGACY_FIELDS_WHISKEY.Length)
+                {
+                    collection.LegacyFormat = Constants.CAT_WHISKEY;
+                }
+                else if (fields.Intersect(LEGACY_FIELDS_WINE).Count() == LEGACY_FIELDS_WINE.Length)
+                {
+                    collection.LegacyFormat = Constants.CAT_WINE;
+                }
+                else
+                {
+                    return;
+                }
+                collection.HasCategory = true;
+            }
+        }
+
+        /// <summary>
+        /// Reads a record from a CSV file into an ImportCollection object.
+        /// </summary>
+        /// <param name="collection">The ImportCollection.</param>
+        /// <param name="rowMap">A map of column names to values.</param>
+        private static async Task ReadRow(ImportCollection collection, Dictionary<string, string> rowMap)
+        {
+            string value;
+            rowMap.TryGetValue(Tables.Entries.TITLE, out value);
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return;
+            }
+
+            var entry = new Entry();
+            entry.Title = value;
+
+            if (collection.LegacyFormat == null)
+            {
+                rowMap.TryGetValue(Tables.Entries.CAT, out value);
+                if (collection.HasCategory && string.IsNullOrWhiteSpace(value))
+                {
+                    return;
+                }
+                entry.Category = value;
+            }
+            else
+            {
+                entry.Category = collection.LegacyFormat;
+            }
+
+            rowMap.TryGetValue(Tables.Entries.MAKER, out value);
+            entry.Maker = value;
+            rowMap.TryGetValue(Tables.Entries.ORIGIN, out value);
+            entry.Origin = value;
+            rowMap.TryGetValue(Tables.Entries.PRICE, out value);
+            entry.Price = value;
+            rowMap.TryGetValue(Tables.Entries.LOCATION, out value);
+            entry.Location = value;
+
+            if (rowMap.TryGetValue(Tables.Entries.RATING, out value))
+            {
+                double rating;
+                double.TryParse(value, out rating);
+                entry.Rating = rating;
+            }
+
+            if (rowMap.TryGetValue(Tables.Entries.DATE, out value))
+            {
+                DateTime date;
+                entry.Date = DateTime.TryParse(value, out date) ? date : DateTime.Now;
+            }
+            else
+            {
+                entry.Date = DateTime.Now;
+            }
+
+            rowMap.TryGetValue(Tables.Entries.NOTES, out value);
+            entry.Notes = value;
+
+            var isDuplicate = false;
+            if (rowMap.TryGetValue(Tables.Entries.UUID, out value))
+            {
+                isDuplicate = await DatabaseHelper.EntryUuidExists(value);
+                if (!isDuplicate)
+                {
+                    entry.UUID = value;
+                }
+            }
+
+            var record = new ImportRecord()
+            {
+                Entry = entry,
+                IsDuplicate = isDuplicate
+            };
+
+            if (collection.LegacyFormat != null)
+            {
+                ParseLegacyExtras(record, rowMap, collection.LegacyFormat);
+                ParseLegacyFlavors(record, rowMap, collection.LegacyFormat);
+                ParseLegacyPhotos(record, rowMap);
+            }
+            else
+            {
+                ParseFlavors(record, rowMap);
+                ParsePhotos(record, rowMap);
+            }
+            ParseExtras(record, rowMap);
+
+            collection.Entries.Add(record);
+        }
+
+        /// <summary>
         /// Parse the extra fields from a CSV record.
         /// </summary>
-        /// <param name="record">The CsvRecord.</param>
-        /// <returns>A Collection of EntryExtras.</returns>
-        private static Collection<EntryExtra> ParseExtras(CsvRecord record)
+        /// <param name="collection">The ImportCollection.</param>
+        /// <param name="rowMap">A map of column names to values.</param>
+        private static void ParseExtras(ImportRecord record, Dictionary<string, string> rowMap)
         {
-            var list = new Collection<EntryExtra>();
-            foreach (var item in ParseJsonObject(record.extras))
+            string value;
+            if (!rowMap.TryGetValue(Tables.Extras.TABLE_NAME, out value))
             {
-                list.Add(new EntryExtra()
+                return;
+            }
+            foreach (var item in ParseJsonObject(value))
+            {
+                record.Extras.Add(new EntryExtra()
                 {
                     Name = item.Key,
                     Value = item.Value.GetString()
                 });
             }
-            return list;
+        }
+
+        /// <summary>
+        /// Reads the columns of a legacy format into extra fields.
+        /// </summary>
+        /// <param name="collection">The ImportCollection.</param>
+        /// <param name="rowMap">A map of column names to values.</param>
+        /// <param name="format">The legacy format.</param>
+        private static void ParseLegacyExtras(ImportRecord record, Dictionary<string, string> rowMap, string format)
+        {
+            foreach (var item in rowMap)
+            {
+                if (LEGACY_FIELDS_COMMON.Contains(item.Key))
+                {
+                    continue;
+                }
+                switch (format)
+                {
+                    case Constants.CAT_BEER:
+                        if (!LEGACY_FIELDS_BEER.Contains(item.Key))
+                        {
+                            continue;
+                        }
+                        break;
+                    case Constants.CAT_COFFEE:
+                        if (!LEGACY_FIELDS_COFFEE.Contains(item.Key))
+                        {
+                            continue;
+                        }
+                        break;
+                    case Constants.CAT_WHISKEY:
+                        if (!LEGACY_FIELDS_WHISKEY.Contains(item.Key))
+                        {
+                            continue;
+                        }
+                        break;
+                    case Constants.CAT_WINE:
+                        if (!LEGACY_FIELDS_WINE.Contains(item.Key))
+                        {
+                            continue;
+                        }
+                        break;
+                    default:
+                        return;
+                }
+                record.Extras.Add(new EntryExtra()
+                {
+                    Name = '_' + item.Key,
+                    Value = item.Value
+                });
+            }
         }
 
         /// <summary>
         /// Parse the flavors from a CSV record.
         /// </summary>
-        /// <param name="record">The CsvRecord.</param>
-        /// <returns>A Collection of EntryFlavors.</returns>
-        private static Collection<EntryFlavor> ParseFlavors(CsvRecord record)
+        /// <param name="collection">The ImportCollection.</param>
+        /// <param name="rowMap">A map of column names to values.</param>
+        private static void ParseFlavors(ImportRecord record, Dictionary<string, string> rowMap)
         {
-            var list = new Collection<EntryFlavor>();
-            foreach (var item in ParseJsonObject(record.flavors))
+            string value;
+            if (!rowMap.TryGetValue(Tables.Flavors.TABLE_NAME, out value))
+            {
+                return;
+            }
+            foreach (var item in ParseJsonObject(value))
             {
                 if (item.Value.ValueType == JsonValueType.Number)
                 {
-                    list.Add(new EntryFlavor()
+                    record.Flavors.Add(new EntryFlavor()
                     {
                         Name = item.Key,
                         Value = (long)item.Value.GetNumber()
                     });
                 }
             }
-            return list;
+        }
+
+        /// <summary>
+        /// Reads the flavors from a legacy formatted CSV record.
+        /// </summary>
+        /// <param name="collection">The ImportCollection.</param>
+        /// <param name="rowMap">A map of column names to values.</param>
+        /// <param name="format">The legacy format.</param>
+        private static void ParseLegacyFlavors(ImportRecord record, Dictionary<string, string> rowMap, string format)
+        {
+            string value;
+            if (!rowMap.TryGetValue(Tables.Flavors.TABLE_NAME, out value) || string.IsNullOrWhiteSpace(value))
+            {
+                return;
+            }
+
+            string[] names;
+            switch (format)
+            {
+                case Constants.CAT_BEER:
+                    names = ResourceLoader.GetForViewIndependentUse("Beer").GetString("FlavorNames").Split(';');
+                    break;
+                case Constants.CAT_COFFEE:
+                    names = ResourceLoader.GetForViewIndependentUse("Coffee").GetString("FlavorNames").Split(';');
+                    break;
+                case Constants.CAT_WHISKEY:
+                    names = ResourceLoader.GetForViewIndependentUse("Whiskey").GetString("FlavorNames").Split(';');
+                    break;
+                case Constants.CAT_WINE:
+                    names = ResourceLoader.GetForViewIndependentUse("Wine").GetString("FlavorNames").Split(';');
+                    break;
+                default:
+                    return;
+            }
+
+            var flavors = value.Split(',');
+            if (flavors.Length != names.Length)
+            {
+                return;
+            }
+
+            for (var i = 0; i < flavors.Length; i++)
+            {
+                long flavorValue;
+                long.TryParse(flavors[i], out flavorValue);
+                flavorValue = Math.Max(0, Math.Min(5, flavorValue));
+                record.Flavors.Add(new EntryFlavor()
+                {
+                    Name = names[i],
+                    Value = flavorValue
+                });
+            }
         }
 
         /// <summary>
@@ -266,26 +553,49 @@ namespace Flavordex.Utilities
         /// <summary>
         /// Parse the photos from a CSV record.
         /// </summary>
-        /// <param name="record">The CsvRecord.</param>
-        /// <returns>A Collection of Photos.</returns>
-        private static Collection<Photo> ParsePhotos(CsvRecord record)
+        /// <param name="collection">The ImportCollection.</param>
+        /// <param name="rowMap">A map of column names to values.</param>
+        private static void ParsePhotos(ImportRecord record, Dictionary<string, string> rowMap)
         {
-            var list = new Collection<Photo>();
-            if (!string.IsNullOrWhiteSpace(record.photos))
+            string value;
+            if (!rowMap.TryGetValue(Tables.Photos.TABLE_NAME, out value) || string.IsNullOrWhiteSpace(value))
             {
-                JsonArray json;
-                if (JsonArray.TryParse(record.photos, out json))
+                return;
+            }
+
+            JsonArray json;
+            if (JsonArray.TryParse(value, out json))
+            {
+                foreach (var item in json)
                 {
-                    foreach (var item in json)
+                    record.Photos.Add(new Photo()
                     {
-                        list.Add(new Photo()
-                        {
-                            Path = item.GetString()
-                        });
-                    }
+                        Path = item.GetString()
+                    });
                 }
             }
-            return list;
+        }
+
+        /// <summary>
+        /// Reads the photos from a legacy formatted CSV record.
+        /// </summary>
+        /// <param name="collection">The ImportCollection.</param>
+        /// <param name="rowMap">A map of column names to values.</param>
+        private static void ParseLegacyPhotos(ImportRecord record, Dictionary<string, string> rowMap)
+        {
+            string value;
+            if (!rowMap.TryGetValue(Tables.Photos.TABLE_NAME, out value) || string.IsNullOrWhiteSpace(value))
+            {
+                return;
+            }
+
+            foreach (var photo in value.Split(','))
+            {
+                record.Photos.Add(new Photo()
+                {
+                    Path = photo.Trim().Substring(0, photo.IndexOf('|'))
+                });
+            }
         }
     }
 }

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace Flavordex.Utilities.CSV
 {
     /// <summary>
     /// Simple writer for CSV files.
     /// </summary>
-    /// <typeparam name="T">The Type of object representing a row.</typeparam>
-    public class CsvWriter<T> : IDisposable
+    public class CsvWriter : IDisposable
     {
         /// <summary>
         /// Whether this disposable object has been disposed.
@@ -32,32 +30,18 @@ namespace Flavordex.Utilities.CSV
                 throw new ArgumentNullException("writer");
             }
             _writer = writer;
-            WriteHeaders();
-        }
-
-        /// <summary>
-        /// Writes the header row.
-        /// </summary>
-        private void WriteHeaders()
-        {
-            var headers = new List<string>();
-            foreach (var field in typeof(T).GetTypeInfo().DeclaredProperties)
-            {
-                headers.Add('"' + field.Name + '"');
-            }
-            _writer.WriteLine(string.Join(",", headers));
         }
 
         /// <summary>
         /// Writes a row to the CSV file.
         /// </summary>
         /// <param name="record">The record to write.</param>
-        public void WriteRecord(T record)
+        public void WriteRecord(string[] record)
         {
             var fields = new List<string>();
-            foreach (var field in typeof(T).GetTypeInfo().DeclaredProperties)
+            foreach (var field in record)
             {
-                fields.Add(PrepareValue(field.GetValue(record)));
+                fields.Add(PrepareValue(field));
             }
 
             _writer.WriteLine(string.Join(",", fields));

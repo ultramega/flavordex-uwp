@@ -244,6 +244,7 @@
     <Compile Include="Utilities\Databases\RecordChangedAction.cs" />
     <Compile Include="Utilities\Databases\RecordChangedEventArgs.cs" />
     <Compile Include="Utilities\EntryUtilities.cs" />
+    <Compile Include="Utilities\ImportCollection.cs" />
     <Compile Include="Utilities\ImportRecord.cs" />
     <Compile Include="Utilities\LocationUtilities.cs" />
     <Compile Include="Utilities\PhotoUtilities.cs" />
