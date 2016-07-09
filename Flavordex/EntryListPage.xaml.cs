@@ -524,7 +524,7 @@ namespace Flavordex
             {
                 items.Add((item as EntryItemViewModel).Model.ID);
             }
-            SetExportMode(!await EntryUtilities.ExportEntriesAsync(items));
+            SetExportMode(!await CsvUtilities.ExportEntriesAsync(items));
         }
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace Flavordex
         private async void OnStartImport(object sender, RoutedEventArgs e)
         {
             ListCommandBar.IsOpen = false;
-            await EntryUtilities.ImportEntriesAsync();
+            await CsvUtilities.ImportEntriesAsync();
         }
 
         /// <summary>
