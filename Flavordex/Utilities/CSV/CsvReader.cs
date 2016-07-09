@@ -108,7 +108,7 @@ namespace Flavordex.Utilities.CSV
                     inValue = false;
                     fields.Add(field);
                     field = "";
-                    if (useQuotes)
+                    if (useQuotes && _reader.Peek() == ',')
                     {
                         _reader.Read();
                     }
