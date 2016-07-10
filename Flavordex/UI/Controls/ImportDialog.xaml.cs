@@ -148,9 +148,18 @@ namespace Flavordex.UI.Controls
                 if (await DatabaseHelper.UpdateEntryAsync(item.Entry, item.Extras, item.Flavors))
                 {
                     var position = 0;
-                    foreach (var photo in item.Photos)
+                    foreach (var photoItem in item.Photos)
                     {
-                        await PhotoUtilities.AddPhotoAsync(photo.Path, item.Entry.ID, position++);
+                        var photo = await PhotoUtilities.AddPhotoAsync(photoItem.Path, item.Entry.ID, position);
+                        if (photo == null)
+                        {
+                            photo = new Models.Photo()
+                            {
+                                EntryID = item.Entry.ID,
+                                Path = photoItem.Path
+                            };
+                            await DatabaseHelper.UpdatePhotoAsync(photo);
+                        }
                     }
                     await PhotoUtilities.DeleteThumbnailAsync(item.Entry.ID);
                 }
