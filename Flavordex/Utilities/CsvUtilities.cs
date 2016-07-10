@@ -227,7 +227,6 @@ namespace Flavordex.Utilities
                             }
 
                             var collection = new ImportCollection();
-                            collection.HasCategory = fields.Contains(Tables.Entries.CAT);
                             DetectFormat(collection, fields);
 
                             var rowMap = new Dictionary<string, string>();
@@ -281,7 +280,6 @@ namespace Flavordex.Utilities
                 {
                     return;
                 }
-                collection.HasCategory = true;
             }
         }
 
@@ -305,10 +303,6 @@ namespace Flavordex.Utilities
             if (collection.LegacyFormat == null)
             {
                 rowMap.TryGetValue(Tables.Entries.CAT, out value);
-                if (collection.HasCategory && string.IsNullOrWhiteSpace(value))
-                {
-                    return;
-                }
                 entry.Category = value;
             }
             else

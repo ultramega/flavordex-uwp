@@ -41,7 +41,7 @@ namespace Flavordex.UI.Controls
                 ListView.ItemsSource = collection.Entries;
             }
 
-            if (!collection.HasCategory)
+            if (collection.Entries.Any(e => string.IsNullOrWhiteSpace(e.Entry.Category)))
             {
                 ShowCategories();
             }
