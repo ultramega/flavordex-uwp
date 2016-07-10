@@ -121,18 +121,7 @@ namespace Flavordex
             if (result == ContentDialogResult.Primary)
             {
                 Radar.IsInteractive = true;
-
-                var flavors = new ObservableCollection<RadarItem>();
-                foreach (var flavor in await DatabaseHelper.GetCategoryFlavorsAsync(_entry.CategoryID))
-                {
-                    flavors.Add(new EntryFlavorItemViewModel(new EntryFlavor()
-                    {
-                        EntryID = _entry.ID,
-                        Name = flavor.Name,
-                        Position = flavor.Position
-                    }));
-                }
-                Flavors = flavors;
+                LoadCategoryFlavors();
             }
         }
 
@@ -160,6 +149,31 @@ namespace Flavordex
             foreach (var flavor in await DatabaseHelper.GetEntryFlavorsAsync(_entry.ID))
             {
                 flavors.Add(new EntryFlavorItemViewModel(flavor));
+            }
+            if (flavors.Count > 0)
+            {
+                Flavors = flavors;
+            }
+            else
+            {
+                LoadCategoryFlavors();
+            }
+        }
+
+        /// <summary>
+        /// Loads the default Flavors for the Category.
+        /// </summary>
+        private async void LoadCategoryFlavors()
+        {
+            var flavors = new ObservableCollection<RadarItem>();
+            foreach (var flavor in await DatabaseHelper.GetCategoryFlavorsAsync(_entry.CategoryID))
+            {
+                flavors.Add(new EntryFlavorItemViewModel(new EntryFlavor()
+                {
+                    EntryID = _entry.ID,
+                    Name = flavor.Name,
+                    Position = flavor.Position
+                }));
             }
             Flavors = flavors;
         }
