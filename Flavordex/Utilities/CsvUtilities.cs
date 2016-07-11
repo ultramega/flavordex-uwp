@@ -95,7 +95,7 @@ namespace Flavordex.Utilities
                         WriteHeaders(csv);
                         foreach (var entryId in entryIds)
                         {
-                            WriteEntry(csv, await DatabaseHelper.GetEntryAsync(entryId));
+                            await WriteEntry(csv, await DatabaseHelper.GetEntryAsync(entryId));
                         }
                     }
                 }
@@ -135,7 +135,7 @@ namespace Flavordex.Utilities
         /// </summary>
         /// <param name="writer">The CsvWriter.</param>
         /// <param name="entry">The Entry.</param>
-        private static async void WriteEntry(CsvWriter writer, Entry entry)
+        private static async Task WriteEntry(CsvWriter writer, Entry entry)
         {
             var record = new string[]
             {
