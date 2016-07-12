@@ -78,6 +78,19 @@ namespace Flavordex.Models.Data
         /// <returns>A Collection of Entries.</returns>
         public static async Task<Collection<Entry>> GetEntryListAsync(long categoryId)
         {
+            var where = categoryId > 0 ? Tables.Entries.CAT_ID + " = ?" : null;
+            var whereArgs = categoryId > 0 ? new object[] { categoryId } : null;
+            return await GetEntryListAsync(where, whereArgs);
+        }
+
+        /// <summary>
+        /// Gets a list of all journal entries from one or all categories.
+        /// </summary>
+        /// <param name="where">The where clause for the query.</param>
+        /// <param name="whereArgs">The arguments for the where clause.</param>
+        /// <returns>A Collection of Entries.</returns>
+        public static async Task<Collection<Entry>> GetEntryListAsync(string where, object[] whereArgs)
+        {
             var list = new Collection<Entry>();
 
             var projection = new string[]
@@ -90,8 +103,6 @@ namespace Flavordex.Models.Data
                 Tables.Entries.RATING,
                 Tables.Entries.DATE
             };
-            var where = categoryId > 0 ? Tables.Entries.CAT_ID + " = ?" : null;
-            var whereArgs = categoryId > 0 ? new object[] { categoryId } : null;
             var rows = await Database.Query(Tables.Entries.VIEW_NAME, projection, where, whereArgs);
             foreach (var row in rows)
             {
