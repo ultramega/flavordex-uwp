@@ -136,10 +136,10 @@ namespace Flavordex.Utilities.Databases
         {
             return await Task.Run(() =>
             {
-                var cols = projection == null ? "*" : string.Join(", ", projection);
-                where = where == null ? "" : " WHERE " + where;
-                sort = sort == null ? "" : " ORDER BY " + sort;
-                limit = limit == null ? "" : " LIMIT " + limit;
+                var cols = projection == null || projection.Length == 0 ? "*" : string.Join(", ", projection);
+                where = string.IsNullOrWhiteSpace(where) ? "" : " WHERE " + where;
+                sort = string.IsNullOrWhiteSpace(sort) ? "" : " ORDER BY " + sort;
+                limit = string.IsNullOrWhiteSpace(limit) ? "" : " LIMIT " + limit;
                 var sql = string.Format("SELECT {0} FROM {1}{2}{3}{4};", cols, table, where, sort, limit);
 
                 using (var stmt = Connection.Prepare(sql))
@@ -209,10 +209,14 @@ namespace Flavordex.Utilities.Databases
         {
             return await Task.Run(() =>
             {
+                if(whereArgs == null)
+                {
+                    whereArgs = new object[0];
+                }
                 var cols = string.Join(" = ?, ", values.Keys) + " = ?";
                 var args = new object[values.Count + whereArgs.Length];
                 values.Values.CopyTo(args, 0);
-                where = where == null ? "" : " WHERE " + where;
+                where = string.IsNullOrWhiteSpace(where) ? "" : " WHERE " + where;
                 if (whereArgs != null)
                 {
                     whereArgs.CopyTo(args, values.Count);
@@ -243,7 +247,7 @@ namespace Flavordex.Utilities.Databases
         {
             return await Task.Run(() =>
             {
-                where = where == null ? "" : " WHERE " + where;
+                where = string.IsNullOrWhiteSpace(where) ? "" : " WHERE " + where;
                 var sql = string.Format("DELETE FROM {0}{1};", table, where);
 
                 using (var stmt = Connection.Prepare(sql))
