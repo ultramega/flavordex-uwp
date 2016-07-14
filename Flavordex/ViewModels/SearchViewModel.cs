@@ -143,10 +143,10 @@ namespace Flavordex.ViewModels
         /// Checks whether a journal entry matches the current search parameters.
         /// </summary>
         /// <param name="entry">
-        /// The EntryItemViewModel representing the journal entry to check.
+        /// The journal entry to check.
         /// </param>
         /// <returns>Whether the journal entry matches the current search parameters.</returns>
-        public async Task<bool> Matches(EntryItemViewModel entry)
+        public async Task<bool> Matches(Entry entry)
         {
             var where = BaseColumns._ID + " = ?";
             if (_where.Length > 0)
@@ -154,7 +154,7 @@ namespace Flavordex.ViewModels
                 where += " AND (" + _where.ToString() + ")";
             }
             var whereArgs = new object[_whereArgs == null ? 1 : _whereArgs.Count + 1];
-            whereArgs[0] = entry.Model.ID;
+            whereArgs[0] = entry.ID;
             if (_whereArgs != null)
             {
                 _whereArgs.CopyTo(whereArgs, 1);

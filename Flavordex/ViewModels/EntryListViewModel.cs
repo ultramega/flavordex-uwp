@@ -1,8 +1,6 @@
 ﻿using Flavordex.Models;
 using Flavordex.Models.Data;
 using Flavordex.Utilities.Databases;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -40,11 +38,6 @@ namespace Flavordex.ViewModels
         /// The Category representing all Categories.
         /// </summary>
         private Category _allEntries = new Category() { Name = _resources.GetString("Category/All") };
-
-        /// <summary>
-        /// The unfiltered list of EntryItemViewModels.
-        /// </summary>
-        private Collection<EntryItemViewModel> _entries = new Collection<EntryItemViewModel>();
 
         /// <summary>
         /// Gets the list of EntryItemViewModels to display.
@@ -196,7 +189,7 @@ namespace Flavordex.ViewModels
                 if (_exportMode != value)
                 {
                     _exportMode = value;
-                    foreach (var item in _entries)
+                    foreach (var item in Entries)
                     {
                         item.ThumbnailVisibility = value ? Visibility.Collapsed : Visibility.Visible;
                     }
@@ -255,18 +248,13 @@ namespace Flavordex.ViewModels
         {
             if (Settings.ListCategory > -1)
             {
-                _entries.Clear();
-                var entries = _search == null ? await DatabaseHelper.GetEntryListAsync(Settings.ListCategory) : await _search.GetList();
-                foreach (var entry in entries)
-                {
-                    _entries.Add(new EntryItemViewModel(entry));
-                }
-
                 Entries.Clear();
-                foreach (var item in _entries)
+                var entries = _search == null ? await DatabaseHelper.GetEntryListAsync(Settings.ListCategory) : await _search.GetList();
+                foreach (var item in entries)
                 {
-                    item.ThumbnailVisibility = ExportMode ? Visibility.Collapsed : Visibility.Visible;
-                    Entries.Add(item);
+                    var entry = new EntryItemViewModel(item);
+                    entry.ThumbnailVisibility = ExportMode ? Visibility.Collapsed : Visibility.Visible;
+                    Entries.Add(entry);
                 }
                 SortList();
 
@@ -367,12 +355,9 @@ namespace Flavordex.ViewModels
         /// <param name="entry">The entry to add.</param>
         private async void InsertEntry(Entry entry)
         {
-            var item = new EntryItemViewModel(entry);
-            _entries.Add(item);
-
-            if ((Settings.ListCategory == 0 || entry.CategoryID == Settings.ListCategory) && (_search == null || (await _search.Matches(item))))
+            if ((Settings.ListCategory == 0 || entry.CategoryID == Settings.ListCategory) && (_search == null || (await _search.Matches(entry))))
             {
-                Entries.Insert(FindSortedIndex(entry), item);
+                Entries.Insert(FindSortedIndex(entry), new EntryItemViewModel(entry));
             }
 
             _allEntries.EntryCount++;
@@ -392,16 +377,9 @@ namespace Flavordex.ViewModels
         /// Moves an Entry to its sorted position.
         /// </summary>
         /// <param name="entry">The Entry to sort.</param>
-        private async void SortEntry(Entry entry)
+        private void SortEntry(Entry entry)
         {
-            var item = _entries.FirstOrDefault(e => e.Model == entry);
-
-            if (item != null && !(await _search.Matches(item)))
-            {
-                Entries.Remove(item);
-                return;
-            }
-
+            var item = Entries.FirstOrDefault(e => e.Model == entry);
             var index = Entries.IndexOf(item);
             var newIndex = FindSortedIndex(entry);
             if (index > -1 && newIndex > index)
@@ -530,11 +508,10 @@ namespace Flavordex.ViewModels
         /// <param name="entry">The Entry to remove.</param>
         private void DeleteEntry(Entry entry)
         {
-            var item = _entries.FirstOrDefault(e => e.Model == entry);
+            var item = Entries.FirstOrDefault(e => e.Model == entry);
             if (item != null)
             {
                 Entries.Remove(item);
-                _entries.Remove(item);
 
                 _allEntries.EntryCount--;
                 _allEntries.Changed();
