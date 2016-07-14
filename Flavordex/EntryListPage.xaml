@@ -130,7 +130,8 @@
         x:Name="SplitView"
         PanePlacement="Right">
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
+            <VisualStateGroup
+                x:Name="PageVisualStates">
                 <VisualState
                     x:Name="WideState" />
 
@@ -205,10 +206,9 @@
                             Click="OnAddEntry" />
 
                         <AppBarButton
-                            x:Uid="ms-resource:///EntryList/Command/Filter"
-                            Icon="Filter"
-                            Visibility="{Binding IsZoomedInViewActive, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Zoom}"
-                            Click="OnFilterClick" />
+                            x:Uid="ms-resource:///EntryList/Command/Search"
+                            Icon="Find"
+                            Click="OnSearchClick" />
 
                         <AppBarButton
                             x:Uid="ms-resource:///EntryList/Command/Sort"
@@ -298,28 +298,7 @@
                             ItemTemplate="{StaticResource EntryItemTemplate}"
                             ItemsSource="{x:Bind List.Entries}"
                             SelectedItem="{x:Bind List.SelectedEntry, Mode=OneWay}"
-                            SelectionChanged="OnItemSelected">
-                            <ListView.Header>
-                                <RelativePanel
-                                    Visibility="{x:Bind List.FilterMessageVisibility, Mode=OneWay}"
-                                    Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
-                                    <TextBlock
-                                        RelativePanel.AlignVerticalCenterWithPanel="True"
-                                        Margin="4,0"
-                                        Style="{ThemeResource CaptionTextBlockStyle}"
-                                        Text="{x:Bind List.FilterMessage, Mode=OneWay}" />
-
-                                    <Button
-                                        RelativePanel.AlignRightWithPanel="True"
-                                        Click="OnClearFilterClick">
-                                        <Button.Content>
-                                            <SymbolIcon
-                                                Symbol="Clear" />
-                                        </Button.Content>
-                                    </Button>
-                                </RelativePanel>
-                            </ListView.Header>
-                        </ListView>
+                            SelectionChanged="OnItemSelected" />
                     </SemanticZoom.ZoomedInView>
                 </SemanticZoom>
 
@@ -388,33 +367,6 @@
                     BorderBrush="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
                     BorderThickness="1,0,0,0"
                     Navigated="OnDetailFrameNavigated" />
-
-                <ContentDialog
-                    Grid.RowSpan="2"
-                    Grid.ColumnSpan="2"
-                    x:Name="FilterDialog"
-                    x:DeferLoadStrategy="Lazy"
-                    x:Uid="ms-resource:///EntryList/Dialog/Filter"
-                    Style="{StaticResource ContentDialogStyle}">
-                    <ContentDialog.TitleTemplate>
-                        <DataTemplate>
-                            <StackPanel
-                                Orientation="Horizontal">
-                                <SymbolIcon
-                                    Symbol="Filter" />
-
-                                <TextBlock
-                                    x:Uid="ms-resource:///EntryList/Title/Filter"
-                                    Style="{ThemeResource TitleTextBlockStyle}"
-                                    Margin="10,0,0,0" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ContentDialog.TitleTemplate>
-
-                    <c:EntryListFilterForm
-                        x:Name="FilterControl"
-                        Margin="0,8,0,0" />
-                </ContentDialog>
             </Grid>
         </SplitView.Content>
     </SplitView>

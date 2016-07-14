@@ -39,61 +39,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="All" xml:space="preserve">
-    <value>All</value>
+  <data name="Button.Clear.Content" xml:space="preserve">
+    <value>Clear</value>
   </data>
-  <data name="Category.All" xml:space="preserve">
-    <value>All Categories</value>
+  <data name="Button.Search.Content" xml:space="preserve">
+    <value>Search Entries</value>
   </data>
-  <data name="Command.AddCategory.Label" xml:space="preserve">
-    <value>Create Category</value>
+  <data name="Input.Category.Header" xml:space="preserve">
+    <value>Category</value>
   </data>
-  <data name="Command.AddEntry.Label" xml:space="preserve">
-    <value>Add Entry</value>
+  <data name="Input.EndDate.Header" xml:space="preserve">
+    <value>Before</value>
   </data>
-  <data name="Command.Search.Label" xml:space="preserve">
-    <value>Search</value>
+  <data name="Input.StartDate.Header" xml:space="preserve">
+    <value>After</value>
   </data>
-  <data name="Command.Sort.Label" xml:space="preserve">
-    <value>Sort List</value>
+  <data name="Input.Title.Header" xml:space="preserve">
+    <value>Entry Title</value>
   </data>
-  <data name="Menu.DeleteCategory.Text" xml:space="preserve">
-    <value>Delete Category</value>
+  <data name="Maximum.Text" xml:space="preserve">
+    <value>Maximum:</value>
   </data>
-  <data name="Menu.DeleteEntry.Text" xml:space="preserve">
-    <value>Delete Entry</value>
+  <data name="Minimum.Text" xml:space="preserve">
+    <value>Minimum:</value>
   </data>
-  <data name="Menu.EditCategory.Text" xml:space="preserve">
-    <value>Edit Category</value>
-  </data>
-  <data name="Menu.EditEntry.Text" xml:space="preserve">
-    <value>Edit Entry</value>
-  </data>
-  <data name="Menu.ShareEntry.Text" xml:space="preserve">
-    <value>Share Entry</value>
-  </data>
-  <data name="Menu.SortDate.Text" xml:space="preserve">
-    <value>Date</value>
-  </data>
-  <data name="Menu.SortName.Text" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="Menu.SortRating.Text" xml:space="preserve">
-    <value>Rating</value>
-  </data>
-  <data name="Message.NoEntries" xml:space="preserve">
-    <value>No entries found.</value>
-  </data>
-  <data name="Message.NoEntriesFilter" xml:space="preserve">
-    <value>No entries found matching your filters.</value>
-  </data>
-  <data name="Title.Categories" xml:space="preserve">
-    <value>Categories</value>
-  </data>
-  <data name="Title.EntriesList" xml:space="preserve">
-    <value>{0} Entries</value>
-  </data>
-  <data name="Title.Sort.Text" xml:space="preserve">
-    <value>Sort by…</value>
+  <data name="Title.Text" xml:space="preserve">
+    <value>Search Entries</value>
   </data>
 </root>

@@ -56,6 +56,7 @@ namespace Flavordex
                 VisualStateManager.GoToState(this, "NarrowState", false);
             }
             Window.Current.SizeChanged += OnWindowSizeChanged;
+            (Application.Current as App).SearchSubmitted += OnSearchSubmitted;
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace Flavordex
             }
             else
             {
-                VisualStateManager.GoToState(this, List.SelectedEntry != null ? "NarrowSelectedState" : "NarrowState", false);
+                VisualStateManager.GoToState(this, DetailFrame.SourcePageType != typeof(WelcomePage) ? "NarrowSelectedState" : "NarrowState", false);
             }
         }
 
@@ -129,6 +130,11 @@ namespace Flavordex
             if (List.SelectedEntryId > -1)
             {
                 List.SelectedEntryId = -1;
+                e.Handled = true;
+            }
+            else if (DetailFrame.SourcePageType != typeof(WelcomePage))
+            {
+                DetailFrame.Navigate(typeof(WelcomePage));
                 e.Handled = true;
             }
         }
@@ -163,13 +169,10 @@ namespace Flavordex
                     {
                         DetailFrame.Navigate(typeof(ViewEntryPage), entryId);
                     }
-
-                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
                 }
                 else
                 {
-                    SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-                    DetailFrame.Navigate(typeof(WelcomePage), null);
+                    DetailFrame.Navigate(typeof(WelcomePage));
                 }
             }
         }
@@ -197,6 +200,7 @@ namespace Flavordex
             }
             else
             {
+                (Application.Current as App).Search = null;
                 Settings.ListCategory = -1;
             }
         }
@@ -210,9 +214,11 @@ namespace Flavordex
         private void OnDetailFrameNavigated(object sender, NavigationEventArgs e)
         {
             DetailFrame.BackStack.Clear();
+            var visibility = e.SourcePageType != typeof(WelcomePage) ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = visibility;
             if (Window.Current.Bounds.Width < 720)
             {
-                VisualStateManager.GoToState(this, e.SourcePageType == typeof(ViewEntryPage) ? "NarrowSelectedState" : "NarrowState", true);
+                VisualStateManager.GoToState(this, e.SourcePageType != typeof(WelcomePage) ? "NarrowSelectedState" : "NarrowState", true);
             }
         }
 
@@ -368,50 +374,27 @@ namespace Flavordex
         /// </summary>
         /// <param name="sender">The AppBarButton.</param>
         /// <param name="e">The event arguments.</param>
-        private async void OnFilterClick(object sender, RoutedEventArgs e)
+        private void OnSearchClick(object sender, RoutedEventArgs e)
         {
-            FindName("FilterDialog");
-            var result = await FilterDialog.ShowAsync();
-            if (result == ContentDialogResult.Primary)
+            if (DetailFrame.CurrentSourcePageType != typeof(EntrySearchPage))
             {
-                List.ListFilter = new EntryListViewModel.Filter()
-                {
-                    Title = FilterControl.Title,
-                    Maker = FilterControl.Maker,
-                    Origin = FilterControl.Origin,
-                    Location = FilterControl.Location,
-                    StartDate = FilterControl.StartDate,
-                    EndDate = FilterControl.EndDate
-                };
-            }
-            else
-            {
-                var filter = List.ListFilter;
-
-                FilterControl.Title = filter.Title;
-                FilterControl.Maker = filter.Maker;
-                FilterControl.Origin = filter.Origin;
-                FilterControl.Location = filter.Location;
-                FilterControl.StartDate = filter.StartDate;
-                FilterControl.EndDate = filter.EndDate;
+                List.SelectedEntryId = -1;
+                DetailFrame.Navigate(typeof(EntrySearchPage));
             }
         }
 
         /// <summary>
-        /// Clears the list filtering parameters when the clear filters Button is clicked.
+        /// Updates the current list search parameters when a search query is submitted.
         /// </summary>
-        /// <param name="sender">The clear filters Button.</param>
+        /// <param name="sender">The object that raised the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnClearFilterClick(object sender, RoutedEventArgs e)
+        private void OnSearchSubmitted(object sender, EventArgs e)
         {
-            FilterControl.Title = null;
-            FilterControl.Maker = null;
-            FilterControl.Origin = null;
-            FilterControl.Location = null;
-            FilterControl.StartDate = null;
-            FilterControl.EndDate = null;
-
-            List.ListFilter = new EntryListViewModel.Filter();
+            List.Search = (Application.Current as App).Search;
+            if (PageVisualStates.CurrentState == NarrowSelectedState)
+            {
+                DetailFrame.Navigate(typeof(WelcomePage));
+            }
         }
 
         /// <summary>

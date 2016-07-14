@@ -1,4 +1,5 @@
 ﻿using Flavordex.Models.Data;
+using Flavordex.ViewModels;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -13,6 +14,42 @@ namespace Flavordex
     /// </summary>
     sealed partial class App : Application
     {
+        /// <summary>
+        /// Occurs when a search query is submitted.
+        /// </summary>
+        public event SearchSubmittedHandler SearchSubmitted = delegate { };
+
+        /// <summary>
+        /// The handler for the SearchSubmitted event.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
+        public delegate void SearchSubmittedHandler(object sender, EventArgs e);
+
+        /// <summary>
+        /// The SearchViewModel containing the current search data.
+        /// </summary>
+        private SearchViewModel _search;
+
+        /// <summary>
+        /// Gets or sets the SearchViewModel containing the current search data.
+        /// </summary>
+        public SearchViewModel Search
+        {
+            get
+            {
+                return _search;
+            }
+            set
+            {
+                _search = value;
+                if (value != null)
+                {
+                    SearchSubmitted(this, new EventArgs());
+                }
+            }
+        }
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -34,7 +71,7 @@ namespace Flavordex
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                //this.DebugSettings.EnableFrameRateCounter = true;
+                DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
 

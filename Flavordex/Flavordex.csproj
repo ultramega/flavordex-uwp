@@ -95,6 +95,9 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="Flavordex_StoreKey.pfx" />
     <None Include="project.json" />
+    <PRIResource Include="Strings\en-US\Search.resw">
+      <SubType>Designer</SubType>
+    </PRIResource>
     <PRIResource Include="Strings\en-US\Settings.resw">
       <SubType>Designer</SubType>
     </PRIResource>
@@ -164,6 +167,9 @@
     <Compile Include="EditEntryPage.xaml.cs">
       <DependentUpon>EditEntryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EntrySearchPage.xaml.cs">
+      <DependentUpon>EntrySearchPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\EntryExtra.cs" />
     <Compile Include="Models\EntryFlavor.cs" />
     <Compile Include="UI\Controls\AboutPage.xaml.cs">
@@ -202,9 +208,6 @@
     </Compile>
     <Compile Include="UI\Controls\FieldEditor.xaml.cs">
       <DependentUpon>FieldEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\EntryListFilterForm.xaml.cs">
-      <DependentUpon>EntryListFilterForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\DateTimeToStringConverter.cs" />
     <Compile Include="UI\EntryTemplateSelector.cs" />
@@ -275,6 +278,7 @@
     <Compile Include="ViewModels\ExtraItemViewModel.cs" />
     <Compile Include="ViewModels\EntryViewModel.cs" />
     <Compile Include="ViewModels\FlavorItemViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="ViewModels\WineEntryViewModel.cs" />
     <Compile Include="ViewModels\WhiskeyEntryViewModel.cs" />
@@ -367,6 +371,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EntrySearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Controls\AboutPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -392,10 +400,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Controls\FieldEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\EntryListFilterForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

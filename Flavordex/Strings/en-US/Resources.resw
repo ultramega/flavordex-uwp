@@ -108,12 +108,6 @@
   <data name="Fields" xml:space="preserve">
     <value>Entry Title;Maker;Origin;Price;Tasting Location;Date/Time</value>
   </data>
-  <data name="Input.EndDate.Header" xml:space="preserve">
-    <value>Ending</value>
-  </data>
-  <data name="Input.StartDate.Header" xml:space="preserve">
-    <value>Starting</value>
-  </data>
   <data name="Menu.Export.Text" xml:space="preserve">
     <value>Export to CSV</value>
   </data>

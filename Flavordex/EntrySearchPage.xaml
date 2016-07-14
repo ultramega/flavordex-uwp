@@ -1,0 +1,665 @@
+﻿<Page
+    x:Class="Flavordex.EntrySearchPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Flavordex"
+    xmlns:ui="using:Flavordex.UI"
+    xmlns:model="using:Flavordex.Models"
+    xmlns:vm="using:Flavordex.ViewModels"
+    xmlns:rating="using:Bratched.Tools.RatingControl"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="OnPageLoaded">
+    <Page.Resources>
+        <DataTemplate
+            x:Key="ExtraItemTemplate"
+            x:DataType="vm:EntryExtraItemViewModel">
+            <TextBox
+                Header="{x:Bind Name}"
+                Text="{x:Bind Value, Mode=TwoWay}" />
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="MakerSuggestItemTemplate"
+            x:DataType="model:Maker">
+            <StackPanel>
+                <TextBlock
+                    Text="{x:Bind Name}" />
+
+                <TextBlock
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Text="{x:Bind Location}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="LocationDateTemplate"
+            x:DataType="vm:EntryViewModel">
+            <StackPanel>
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Location"
+                    Text="{x:Bind Location, Mode=TwoWay}" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <CalendarDatePicker
+                        x:Name="StartDatePicker"
+                        x:Uid="ms-resource:///Search/Input/StartDate"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,2,0"
+                        Loaded="DatePickerLoaded"
+                        DateChanged="OnStartDateChange" />
+
+                    <CalendarDatePicker
+                        Grid.Column="1"
+                        x:Name="EndDatePicker"
+                        x:Uid="ms-resource:///Search/Input/EndDate"
+                        HorizontalAlignment="Stretch"
+                        Margin="2,0,0,0"
+                        Loaded="DatePickerLoaded"
+                        DateChanged="OnEndDateChange" />
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="GenericDetailsTemplate"
+            x:DataType="vm:EntryViewModel">
+            <StackPanel>
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Entry/Input/Maker"
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Origin"
+                    Text="{x:Bind Origin, Mode=TwoWay}" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Price"
+                    Text="{x:Bind Price, Mode=TwoWay}" />
+
+                <ContentControl
+                    ContentTemplate="{StaticResource LocationDateTemplate}"
+                    Content="{x:Bind}"
+                    HorizontalContentAlignment="Stretch" />
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
+                    IsTabStop="False" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="BeerDetailsTemplate"
+            x:DataType="vm:BeerEntryViewModel">
+            <StackPanel>
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Beer/Input/Style"
+                    ItemsSource="{x:Bind BeerStyleSuggestions, Mode=OneWay}"
+                    Text="{x:Bind Style, Mode=TwoWay}" />
+
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Entry/Input/Maker"
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Origin"
+                    Text="{x:Bind Origin, Mode=TwoWay}" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Price"
+                    Text="{x:Bind Price, Mode=TwoWay}" />
+
+                <ComboBox
+                    x:Uid="ms-resource:///Beer/Input/ServingType"
+                    ItemsSource="{x:Bind ServingTypes}"
+                    SelectedIndex="{x:Bind ServingType, Mode=TwoWay}" />
+
+                <ContentControl
+                    ContentTemplate="{StaticResource LocationDateTemplate}"
+                    Content="{x:Bind}"
+                    HorizontalContentAlignment="Stretch" />
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
+                    IsTabStop="False" />
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Beer/Header/Stats"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="4" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox
+                        x:Uid="ms-resource:///Beer/Input/IBU"
+                        Text="{x:Bind IBU, Mode=TwoWay}" />
+
+                    <TextBox
+                        Grid.Row="1"
+                        x:Uid="ms-resource:///Beer/Input/ABV"
+                        Text="{x:Bind ABV, Mode=TwoWay}" />
+
+                    <TextBox
+                        Grid.Column="2"
+                        x:Uid="ms-resource:///Beer/Input/OG"
+                        Text="{x:Bind OG, Mode=TwoWay}" />
+
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        x:Uid="ms-resource:///Beer/Input/FG"
+                        Text="{x:Bind FG, Mode=TwoWay}" />
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="CoffeeDetailsTemplate"
+            x:DataType="vm:CoffeeEntryViewModel">
+            <StackPanel>
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Entry/Input/Maker"
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Origin"
+                    Text="{x:Bind Origin, Mode=TwoWay}" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Coffee/Input/Roaster"
+                    Text="{x:Bind Roaster, Mode=TwoWay}" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Coffee/Input/RoastDate"
+                    Text="{x:Bind RoastDate, Mode=TwoWay}" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Coffee/Input/Grind"
+                    Text="{x:Bind Grind, Mode=TwoWay}" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Price"
+                    Text="{x:Bind Price, Mode=TwoWay}" />
+
+                <ComboBox
+                    x:Uid="ms-resource:///Coffee/Input/BrewMethod"
+                    ItemsSource="{x:Bind BrewMethods}"
+                    SelectedIndex="{x:Bind BrewMethod, Mode=TwoWay}" />
+
+                <ContentControl
+                    ContentTemplate="{StaticResource LocationDateTemplate}"
+                    Content="{x:Bind}"
+                    HorizontalContentAlignment="Stretch" />
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
+                    IsTabStop="False" />
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Coffee/Header/Stats"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox
+                        x:Uid="ms-resource:///Coffee/Input/Dose"
+                        Text="{x:Bind Dose, Mode=TwoWay}" />
+
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom"
+                        Margin="2,0,0,4"
+                        Text="g" />
+
+                    <TextBox
+                        Grid.Row="1"
+                        x:Uid="ms-resource:///Coffee/Input/WaterMass"
+                        Visibility="{x:Bind IsEspresso, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!, Mode=OneWay}"
+                        Text="{x:Bind Mass, Mode=TwoWay}" />
+
+                    <TextBox
+                        Grid.Row="1"
+                        x:Uid="ms-resource:///Coffee/Input/EspressoMass"
+                        Visibility="{x:Bind IsEspresso, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
+                        Text="{x:Bind Mass, Mode=TwoWay}" />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom"
+                        Margin="2,0,0,4"
+                        Text="g" />
+
+                    <TextBox
+                        Grid.Row="2"
+                        x:Uid="ms-resource:///Coffee/Input/Temperature"
+                        Text="{x:Bind Temperature, Mode=TwoWay}" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom"
+                        Margin="2,0,0,4"
+                        Text="°C" />
+
+                    <Grid
+                        Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.ColumnSpan="3"
+                            x:Uid="ms-resource:///Coffee/Header/ExtractionTime"
+                            Margin="0,0,0,8" />
+
+                        <TextBox
+                            Grid.Row="1"
+                            x:Uid="ms-resource:///Coffee/Input/ExtractionTimeMinutes"
+                            Text="{x:Bind ExtractionTimeMinutes, Mode=TwoWay}" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Margin="2,0"
+                            Text=":" />
+
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            x:Uid="ms-resource:///Coffee/Input/ExtractionTimeSeconds"
+                            Text="{x:Bind ExtractionTimeSeconds, Mode=TwoWay}" />
+                    </Grid>
+
+                    <TextBox
+                        Grid.Row="4"
+                        x:Uid="ms-resource:///Coffee/Input/TDS"
+                        Text="{x:Bind TDS, Mode=TwoWay}" />
+
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom"
+                        Margin="2,0,0,4"
+                        Text="%" />
+
+                    <TextBox
+                        Grid.Row="5"
+                        x:Uid="ms-resource:///Coffee/Input/Yield"
+                        Text="{x:Bind Yield, Mode=TwoWay}" />
+
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom"
+                        Margin="2,0,0,4"
+                        Text="%" />
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="WhiskeyDetailsTemplate"
+            x:DataType="vm:WhiskeyEntryViewModel">
+            <StackPanel>
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Whiskey/Input/Type"
+                    ItemsSource="{x:Bind WhiskeyTypeSuggestions, Mode=OneWay}"
+                    Text="{x:Bind Type, Mode=TwoWay}" />
+
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Entry/Input/Maker"
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Origin"
+                    Text="{x:Bind Origin, Mode=TwoWay}" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Price"
+                    Text="{x:Bind Price, Mode=TwoWay}" />
+
+                <ContentControl
+                    ContentTemplate="{StaticResource LocationDateTemplate}"
+                    Content="{x:Bind}"
+                    HorizontalContentAlignment="Stretch" />
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
+                    IsTabStop="False" />
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Whiskey/Header/Stats"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="4" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox
+                        x:Uid="ms-resource:///Whiskey/Input/Age"
+                        Text="{x:Bind Age, Mode=TwoWay}" />
+
+                    <TextBox
+                        Grid.Column="2"
+                        x:Uid="ms-resource:///Whiskey/Input/ABV"
+                        Text="{x:Bind ABV, Mode=TwoWay}" />
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="WineDetailsTemplate"
+            x:DataType="vm:WineEntryViewModel">
+            <StackPanel>
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Wine/Input/Varietal"
+                    ItemsSource="{x:Bind WineVarietalSuggestions, Mode=OneWay}"
+                    Text="{x:Bind Varietal, Mode=TwoWay}" />
+
+                <AutoSuggestBox
+                    x:Uid="ms-resource:///Entry/Input/Maker"
+                    ItemTemplate="{StaticResource MakerSuggestItemTemplate}"
+                    ItemsSource="{x:Bind MakerSuggestions, Mode=OneWay}"
+                    TextMemberPath="Name"
+                    Text="{x:Bind Maker, Mode=TwoWay}"
+                    QuerySubmitted="OnMakerSelected" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Origin"
+                    Text="{x:Bind Origin, Mode=TwoWay}" />
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Price"
+                    Text="{x:Bind Price, Mode=TwoWay}" />
+
+                <ContentControl
+                    ContentTemplate="{StaticResource LocationDateTemplate}"
+                    Content="{x:Bind}"
+                    HorizontalContentAlignment="Stretch" />
+
+                <ItemsControl
+                    ItemTemplate="{StaticResource ExtraItemTemplate}"
+                    ItemsSource="{x:Bind EditableCustomFields}"
+                    IsTabStop="False" />
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Wine/Header/Stats"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="4" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox
+                        x:Uid="ms-resource:///Wine/Input/Vintage"
+                        Text="{x:Bind Vintage, Mode=TwoWay}" />
+
+                    <TextBox
+                        Grid.Column="2"
+                        x:Uid="ms-resource:///Wine/Input/ABV"
+                        Text="{x:Bind ABV, Mode=TwoWay}" />
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <ui:EntryTemplateSelector
+            x:Key="EntryTemplateSelector"
+            GenericTemplate="{StaticResource GenericDetailsTemplate}"
+            BeerTemplate="{StaticResource BeerDetailsTemplate}"
+            CoffeeTemplate="{StaticResource CoffeeDetailsTemplate}"
+            WhiskeyTemplate="{StaticResource WhiskeyDetailsTemplate}"
+            WineTemplate="{StaticResource WineDetailsTemplate}" />
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer
+            VerticalScrollBarVisibility="Auto">
+            <StackPanel
+                Margin="12">
+                <TextBlock
+                    x:Uid="ms-resource:///Search/Title"
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    HorizontalAlignment="Center" />
+
+                <ComboBox
+                    x:Uid="ms-resource:///Search/Input/Category"
+                    x:Name="CategoryComboBox"
+                    HorizontalAlignment="Stretch"
+                    Margin="0,0,0,6"
+                    ItemsSource="{x:Bind Categories}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="vm:CategoryItemViewModel">
+                            <TextBlock
+                                Text="{x:Bind Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Entry/Header/Details"
+                        Style="{StaticResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <TextBox
+                    x:Uid="ms-resource:///Search/Input/Title"
+                    Text="{x:Bind Data.Entry.Title, Mode=TwoWay}" />
+
+                <ContentControl
+                    ContentTemplateSelector="{StaticResource EntryTemplateSelector}"
+                    Content="{x:Bind Data.Entry, Mode=OneWay}"
+                    HorizontalContentAlignment="Stretch" />
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Entry/Header/Rating"
+                        Style="{StaticResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        x:Uid="ms-resource:///Search/Minimum"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center" />
+
+                    <rating:RatingControl
+                        Grid.Column="1"
+                        Height="30"
+                        Margin="8"
+                        RoundValueSlice="0.5"
+                        Value="{x:Bind Data.MinimumRating, Mode=TwoWay}"
+                        IsEditable="True"
+                        AllowHover="False">
+                        <rating:RatingControl.FullItemsDefinition>
+                            <rating:RateItemDefinition
+                                BackgroundColor="{ThemeResource SystemControlHighlightAccentBrush}"
+                                OutlineColor="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                        </rating:RatingControl.FullItemsDefinition>
+
+                        <rating:RatingControl.EmptyItemsDefinition>
+                            <rating:RateItemDefinition
+                                BackgroundColor="{ThemeResource SystemControlBackgroundBaseMediumBrush}"
+                                OutlineColor="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                        </rating:RatingControl.EmptyItemsDefinition>
+                    </rating:RatingControl>
+
+                    <TextBlock
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Text="{x:Bind Data.MinimumRating, Mode=OneWay}" />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        x:Uid="ms-resource:///Search/Maximum"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center" />
+
+                    <rating:RatingControl
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Height="30"
+                        Margin="8"
+                        RoundValueSlice="0.5"
+                        Value="{x:Bind Data.MaximumRating, Mode=TwoWay}"
+                        IsEditable="True"
+                        AllowHover="False">
+                        <rating:RatingControl.FullItemsDefinition>
+                            <rating:RateItemDefinition
+                                BackgroundColor="{ThemeResource SystemControlHighlightAccentBrush}"
+                                OutlineColor="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                        </rating:RatingControl.FullItemsDefinition>
+
+                        <rating:RatingControl.EmptyItemsDefinition>
+                            <rating:RateItemDefinition
+                                BackgroundColor="{ThemeResource SystemControlBackgroundBaseMediumBrush}"
+                                OutlineColor="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+                        </rating:RatingControl.EmptyItemsDefinition>
+                    </rating:RatingControl>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Text="{x:Bind Data.MaximumRating, Mode=OneWay}" />
+                </Grid>
+
+                <Border
+                    Style="{StaticResource DividerStyle}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Entry/Header/Notes"
+                        Style="{StaticResource SubtitleTextBlockStyle}"
+                        HorizontalAlignment="Center" />
+                </Border>
+
+                <TextBox
+                    x:Uid="ms-resource:///Entry/Input/Notes"
+                    Text="{x:Bind Data.Entry.Notes, Mode=TwoWay}"
+                    AcceptsReturn="True"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right">
+            <Button
+                x:Uid="ms-resource:///Search/Button/Clear"
+                Margin="6"
+                Click="OnClear" />
+
+            <Button
+                x:Uid="ms-resource:///Search/Button/Search"
+                Margin="6"
+                FontWeight="SemiBold"
+                Click="OnSearch" />
+        </StackPanel>
+    </Grid>
+</Page>

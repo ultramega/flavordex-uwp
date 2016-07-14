@@ -17,42 +17,6 @@ namespace Flavordex.ViewModels
     public class EntryListViewModel : ViewModel
     {
         /// <summary>
-        /// The parameters to use to filter the list.
-        /// </summary>
-        public struct Filter
-        {
-            /// <summary>
-            /// Gets or sets the entry title search query.
-            /// </summary>
-            public string Title { get; set; }
-
-            /// <summary>
-            /// Gets or sets the product maker name search query.
-            /// </summary>
-            public string Maker { get; set; }
-
-            /// <summary>
-            /// Gets or sets the product origin search query.
-            /// </summary>
-            public string Origin { get; set; }
-
-            /// <summary>
-            /// Gets or sets the tasting location search query.
-            /// </summary>
-            public string Location { get; set; }
-
-            /// <summary>
-            /// Gets or sets the minimum date of entries.
-            /// </summary>
-            public DateTimeOffset? StartDate { get; set; }
-
-            /// <summary>
-            /// Gets or sets the maximum date of entries.
-            /// </summary>
-            public DateTimeOffset? EndDate { get; set; }
-        }
-
-        /// <summary>
         /// A reference to the string ResourceLoader.
         /// </summary>
         private static readonly ResourceLoader _resources = ResourceLoader.GetForCurrentView("EntryList");
@@ -71,11 +35,6 @@ namespace Flavordex.ViewModels
         /// The category name for the unfiltered entry list.
         /// </summary>
         private static readonly string _all = _resources.GetString("All");
-
-        /// <summary>
-        /// The format string for the active list filters message.
-        /// </summary>
-        private static readonly string _filterMessageFormat = _resources.GetString("Message/ActiveFilters");
 
         /// <summary>
         /// The Category representing all Categories.
@@ -98,23 +57,26 @@ namespace Flavordex.ViewModels
         public ObservableCollection<CategoryItemViewModel> Categories { get; } = new ObservableCollection<CategoryItemViewModel>();
 
         /// <summary>
-        /// The currently active list filters.
+        /// The currently active search parameters.
         /// </summary>
-        private Filter _filter = new Filter();
+        private SearchViewModel _search;
 
         /// <summary>
-        /// Gets or sets currently active list filters.
+        /// Gets or sets currently active search parameters.
         /// </summary>
-        public Filter ListFilter
+        public SearchViewModel Search
         {
             get
             {
-                return _filter;
+                return _search;
             }
             set
             {
-                _filter = value;
-                FilterList();
+                _search = value;
+                if (value != null)
+                {
+                    Settings.ListCategory = 0;
+                }
             }
         }
 
@@ -136,39 +98,6 @@ namespace Flavordex.ViewModels
             {
                 _listTitle = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// The filter message text.
-        /// </summary>
-        private string _filterMessage;
-
-        /// <summary>
-        /// Gets or sets the filter message text.
-        /// </summary>
-        public string FilterMessage
-        {
-            get
-            {
-                return _filterMessage;
-            }
-            private set
-            {
-                _filterMessage = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("FilterMessageVisibility");
-            }
-        }
-
-        /// <summary>
-        /// Gets the Visibility of the filter message.
-        /// </summary>
-        public Visibility FilterMessageVisibility
-        {
-            get
-            {
-                return FilterMessage == null ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
@@ -244,7 +173,7 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return _resources.GetString(FilterMessage == null ? "Message/NoEntries" : "Message/NoEntriesFilter");
+                return _resources.GetString(Search == null ? "Message/NoEntries" : "Message/NoEntriesFilter");
             }
         }
 
@@ -327,7 +256,8 @@ namespace Flavordex.ViewModels
             if (Settings.ListCategory > -1)
             {
                 _entries.Clear();
-                foreach (var entry in await DatabaseHelper.GetEntryListAsync(Settings.ListCategory))
+                var entries = _search == null ? await DatabaseHelper.GetEntryListAsync(Settings.ListCategory) : await _search.GetList();
+                foreach (var entry in entries)
                 {
                     _entries.Add(new EntryItemViewModel(entry));
                 }
@@ -349,6 +279,8 @@ namespace Flavordex.ViewModels
             else
             {
                 ListTitle = _categoriesTitle;
+                _search = null;
+
             }
 
             RaisePropertyChanged("EmptyListVisibility");
@@ -433,12 +365,12 @@ namespace Flavordex.ViewModels
         /// Adds an Entry to the list.
         /// </summary>
         /// <param name="entry">The entry to add.</param>
-        private void InsertEntry(Entry entry)
+        private async void InsertEntry(Entry entry)
         {
             var item = new EntryItemViewModel(entry);
             _entries.Add(item);
 
-            if (IsCategorySelected && Matches(item))
+            if (IsCategorySelected && entry.CategoryID == Settings.ListCategory && (_search == null || (await _search.Matches(item))))
             {
                 Entries.Insert(FindSortedIndex(entry), item);
             }
@@ -460,11 +392,11 @@ namespace Flavordex.ViewModels
         /// Moves an Entry to its sorted position.
         /// </summary>
         /// <param name="entry">The Entry to sort.</param>
-        private void SortEntry(Entry entry)
+        private async void SortEntry(Entry entry)
         {
             var item = _entries.FirstOrDefault(e => e.Model == entry);
 
-            if (item != null && !Matches(item))
+            if (item != null && !(await _search.Matches(item)))
             {
                 Entries.Remove(item);
                 return;
@@ -664,93 +596,6 @@ namespace Flavordex.ViewModels
             {
                 Entries.Add(item);
             }
-        }
-
-        /// <summary>
-        /// Filters the list of Entries according to the filtering parameters and updates the
-        /// active filters message.
-        /// </summary>
-        private void FilterList()
-        {
-            var fields = new List<string>();
-            if (!string.IsNullOrWhiteSpace(_filter.Title))
-            {
-                fields.Add(_resources.GetString("Filter/Title"));
-            }
-            if (!string.IsNullOrWhiteSpace(_filter.Maker))
-            {
-                fields.Add(_resources.GetString("Filter/Maker"));
-            }
-            if (!string.IsNullOrWhiteSpace(_filter.Origin))
-            {
-                fields.Add(_resources.GetString("Filter/Origin"));
-            }
-            if (!string.IsNullOrWhiteSpace(_filter.Location))
-            {
-                fields.Add(_resources.GetString("Filter/Location"));
-            }
-            if (_filter.StartDate.HasValue || _filter.EndDate.HasValue)
-            {
-                fields.Add(_resources.GetString("Filter/Date"));
-            }
-
-            if (fields.Count > 0)
-            {
-                FilterMessage = string.Format(_filterMessageFormat, string.Join(", ", fields));
-            }
-            else
-            {
-                FilterMessage = null;
-            }
-
-            Entries.Clear();
-            foreach (var item in _entries.Where(Matches))
-            {
-                Entries.Add(item);
-            }
-
-            SortList();
-
-            RaisePropertyChanged("EmptyListMessage");
-            RaisePropertyChanged("EmptyListVisibility");
-        }
-
-        /// <summary>
-        /// Determines if an Entry matches the current filtering parameters.
-        /// </summary>
-        /// <param name="item">An EntryItemViewModel.</param>
-        /// <returns>True if the EntryItemViewModel matches the parameters.</returns>
-        private bool Matches(EntryItemViewModel item)
-        {
-            if (Settings.ListCategory > 0 && item.Model.CategoryID != Settings.ListCategory)
-            {
-                return false;
-            }
-            if (_filter.Title != null && !item.Title.ToLower().Contains(_filter.Title.ToLower()))
-            {
-                return false;
-            }
-            if (_filter.Maker != null && !item.Maker.ToLower().Contains(_filter.Maker.ToLower()))
-            {
-                return false;
-            }
-            if (_filter.Origin != null && !item.Model.Origin.ToLower().Contains(_filter.Origin.ToLower()))
-            {
-                return false;
-            }
-            if (_filter.Location != null && !item.Model.Location.ToLower().Contains(_filter.Location.ToLower()))
-            {
-                return false;
-            }
-            if (_filter.StartDate.HasValue && item.Model.Date.Date < _filter.StartDate.Value.Date)
-            {
-                return false;
-            }
-            if (_filter.EndDate.HasValue && item.Model.Date.Date > _filter.EndDate.Value.Date)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }
