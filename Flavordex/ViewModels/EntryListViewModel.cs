@@ -370,7 +370,7 @@ namespace Flavordex.ViewModels
             var item = new EntryItemViewModel(entry);
             _entries.Add(item);
 
-            if (IsCategorySelected && entry.CategoryID == Settings.ListCategory && (_search == null || (await _search.Matches(item))))
+            if ((Settings.ListCategory == 0 || entry.CategoryID == Settings.ListCategory) && (_search == null || (await _search.Matches(item))))
             {
                 Entries.Insert(FindSortedIndex(entry), item);
             }
