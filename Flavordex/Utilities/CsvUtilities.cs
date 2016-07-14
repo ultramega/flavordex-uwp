@@ -15,8 +15,14 @@ using Windows.UI.Xaml.Controls;
 
 namespace Flavordex.Utilities
 {
+    /// <summary>
+    /// Helpers for importing and exporting CSV files.
+    /// </summary>
     public class CsvUtilities
     {
+        /// <summary>
+        /// The names of the fields common to all legacy formats.
+        /// </summary>
         private static string[] LEGACY_FIELDS_COMMON = new string[]
         {
             "title",
@@ -31,6 +37,9 @@ namespace Flavordex.Utilities
             "photos"
         };
 
+        /// <summary>
+        /// The names of the fields of the Beer Journal legacy format.
+        /// </summary>
         private static string[] LEGACY_FIELDS_BEER = new string[]
         {
             "style",
@@ -41,6 +50,9 @@ namespace Flavordex.Utilities
             "stats_fg"
         };
 
+        /// <summary>
+        /// The names of the fields of the Coffee Journal legacy format.
+        /// </summary>
         private static string[] LEGACY_FIELDS_COFFEE = new string[]
         {
             "roaster",
@@ -55,6 +67,9 @@ namespace Flavordex.Utilities
             "stats_yield"
         };
 
+        /// <summary>
+        /// The names of the fields of the Whiskey Journal legacy format.
+        /// </summary>
         private static string[] LEGACY_FIELDS_WHISKEY = new string[]
         {
             "style",
@@ -62,6 +77,9 @@ namespace Flavordex.Utilities
             "stats_abv"
         };
 
+        /// <summary>
+        /// The names of the fields of the Wine Journal legacy format.
+        /// </summary>
         private static string[] LEGACY_FIELDS_WINE = new string[]
         {
             "varietal",
