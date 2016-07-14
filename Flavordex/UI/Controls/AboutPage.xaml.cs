@@ -18,7 +18,8 @@ namespace Flavordex.UI.Controls
             get
             {
                 var version = Package.Current.Id.Version;
-                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+                return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor,
+                    version.Build, version.Revision);
             }
         }
 

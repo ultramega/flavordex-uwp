@@ -54,7 +54,8 @@ namespace Flavordex.Utilities
         /// </summary>
         /// <param name="sender">The object that raised the event.</param>
         /// <param name="e">The event arguments.</param>
-        public delegate void ThumbnailChangedEventHandler(object sender, ThumbnailChangedEventArgs e);
+        public delegate void ThumbnailChangedEventHandler(object sender,
+            ThumbnailChangedEventArgs e);
 
         /// <summary>
         /// The arguments for the ThumbnailChanged event.
@@ -176,7 +177,8 @@ namespace Flavordex.Utilities
         /// <param name="entryId">The primary ID of the journal entry.</param>
         /// <param name="position">The sorting position of the Photo.</param>
         /// <returns>The Photo that was added.</returns>
-        public static async Task<Photo> AddPhotoAsync(StorageFile file, long entryId, long position)
+        public static async Task<Photo> AddPhotoAsync(StorageFile file, long entryId,
+            long position)
         {
             try
             {
@@ -238,7 +240,8 @@ namespace Flavordex.Utilities
         /// <returns>The name of the saved file.</returns>
         private static async Task<string> SavePhotoAsync(StorageFile source)
         {
-            var folder = await KnownFolders.PicturesLibrary.CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
+            var folder = await KnownFolders.PicturesLibrary
+                .CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
             var destination = await folder.TryGetItemAsync(source.Name) as StorageFile;
             if (destination == null)
             {
@@ -278,7 +281,8 @@ namespace Flavordex.Utilities
         {
             try
             {
-                var folder = await KnownFolders.PicturesLibrary.TryGetItemAsync(_albumDirectory) as StorageFolder;
+                var folder = await KnownFolders.PicturesLibrary
+                    .TryGetItemAsync(_albumDirectory) as StorageFolder;
                 if (folder != null)
                 {
                     return await folder.TryGetItemAsync(name) as StorageFile;
@@ -302,7 +306,8 @@ namespace Flavordex.Utilities
             }
 
             var name = string.Format("thumb_{0}.jpg", entryId);
-            var file = await ApplicationData.Current.TemporaryFolder.TryGetItemAsync(name) as StorageFile;
+            var file = await ApplicationData.Current.TemporaryFolder
+                .TryGetItemAsync(name) as StorageFile;
 
             if (file == null)
             {
@@ -351,7 +356,8 @@ namespace Flavordex.Utilities
 
             try
             {
-                var sourceDirectory = await KnownFolders.PicturesLibrary.CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
+                var sourceDirectory = await KnownFolders.PicturesLibrary
+                    .CreateFolderAsync(_albumDirectory, CreationCollisionOption.OpenIfExists);
                 var sourceFile = await sourceDirectory.TryGetItemAsync(path) as StorageFile;
                 if (sourceFile == null)
                 {
@@ -362,7 +368,8 @@ namespace Flavordex.Utilities
                 {
                     var decoder = await BitmapDecoder.CreateAsync(stream);
                     var sourceBitmap = await decoder.GetSoftwareBitmapAsync();
-                    var file = await ApplicationData.Current.TemporaryFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                    var file = await ApplicationData.Current.TemporaryFolder
+                        .CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
                     await SaveThumbnailAsync(sourceBitmap, file);
                     return file;
                 }
@@ -377,7 +384,8 @@ namespace Flavordex.Utilities
         /// </summary>
         /// <param name="sourceBitmap">The source bitmap.</param>
         /// <param name="outputFile">The destination file.</param>
-        private static async Task SaveThumbnailAsync(SoftwareBitmap sourceBitmap, StorageFile outputFile)
+        private static async Task SaveThumbnailAsync(SoftwareBitmap sourceBitmap,
+            StorageFile outputFile)
         {
             using (var stream = await outputFile.OpenAsync(FileAccessMode.ReadWrite))
             {

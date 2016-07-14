@@ -14,12 +14,14 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of beer styles.
         /// </summary>
-        private static string[] _beerStyles = ResourceLoader.GetForCurrentView("Beer").GetString("Styles").Split(';');
+        private static string[] _beerStyles =
+            ResourceLoader.GetForCurrentView("Beer").GetString("Styles").Split(';');
 
         /// <summary>
         /// The list of beer serving type options.
         /// </summary>
-        private static string[] _servingTypes = ResourceLoader.GetForCurrentView("Beer").GetString("ServingTypes").Split(';');
+        private static string[] _servingTypes =
+            ResourceLoader.GetForCurrentView("Beer").GetString("ServingTypes").Split(';');
 
         /// <summary>
         /// Gets the list of beer style suggestions.

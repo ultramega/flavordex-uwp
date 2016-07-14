@@ -288,7 +288,8 @@ namespace Flavordex.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(extra.Value))
             {
-                _where.Append("(SELECT 1 FROM ").Append(Tables.EntriesExtras.TABLE_NAME).Append(" WHERE ").Append(Tables.EntriesExtras.EXTRA).Append(" = ? AND ");
+                _where.Append("(SELECT 1 FROM ").Append(Tables.EntriesExtras.TABLE_NAME)
+                    .Append(" WHERE ").Append(Tables.EntriesExtras.EXTRA).Append(" = ? AND ");
                 _whereArgs.Add(extra.Model.ExtraID);
                 if (comparison == Comparison.Like)
                 {
@@ -300,7 +301,8 @@ namespace Flavordex.ViewModels
                 }
                 else
                 {
-                    _where.Append(Tables.EntriesExtras.VALUE).Append(' ').Append(comparison).Append(" ? AND ");
+                    _where.Append(Tables.EntriesExtras.VALUE).Append(' ').Append(comparison)
+                        .Append(" ? AND ");
                     _whereArgs.Add(extra.Value);
                 }
                 _where.Remove(_where.Length - 4, 4);

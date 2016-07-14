@@ -25,7 +25,8 @@ namespace Flavordex
             set { SetValue(FlavorsProperty, value); }
         }
         public static readonly DependencyProperty FlavorsProperty =
-            DependencyProperty.Register("Flavors", typeof(Collection<RadarItem>), typeof(ViewFlavorsPage), null);
+            DependencyProperty.Register("Flavors", typeof(Collection<RadarItem>),
+                typeof(ViewFlavorsPage), null);
 
         /// <summary>
         /// The journal entry.

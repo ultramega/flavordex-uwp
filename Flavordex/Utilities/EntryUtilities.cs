@@ -13,12 +13,14 @@ namespace Flavordex.Utilities
         /// <summary>
         /// The format string for the sharing subject.
         /// </summary>
-        private static readonly string _shareSubjectFormat = ResourceLoader.GetForCurrentView().GetString("Share/Subject");
+        private static readonly string _shareSubjectFormat =
+            ResourceLoader.GetForCurrentView().GetString("Share/Subject");
 
         /// <summary>
         /// The format string for the sharing body.
         /// </summary>
-        private static readonly string _shareBodyFormat = ResourceLoader.GetForCurrentView().GetString("Share/Body");
+        private static readonly string _shareBodyFormat =
+            ResourceLoader.GetForCurrentView().GetString("Share/Body");
 
         /// <summary>
         /// Opens the sharing UI for a journal entry.
@@ -26,10 +28,13 @@ namespace Flavordex.Utilities
         /// <param name="entry">The Entry to share.</param>
         public static void ShareEntry(Entry entry)
         {
-            DataTransferManager.GetForCurrentView().DataRequested += (DataTransferManager sender, DataRequestedEventArgs args) =>
+            DataTransferManager.GetForCurrentView().DataRequested +=
+                (DataTransferManager sender, DataRequestedEventArgs args) =>
             {
-                args.Request.Data.Properties.Title = string.Format(_shareSubjectFormat, entry.Title);
-                args.Request.Data.SetText(string.Format(_shareBodyFormat, entry.Title, entry.Rating));
+                args.Request.Data.Properties.Title =
+                    string.Format(_shareSubjectFormat, entry.Title);
+                args.Request.Data.SetText(string.Format(_shareBodyFormat, entry.Title,
+                    entry.Rating));
             };
             DataTransferManager.ShowShareUI();
         }

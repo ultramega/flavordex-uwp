@@ -23,7 +23,8 @@ namespace Flavordex
             set { SetValue(EntryProperty, value); }
         }
         public static readonly DependencyProperty EntryProperty =
-            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(ViewEntryPage), null);
+            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(ViewEntryPage),
+                null);
 
         /// <summary>
         /// Gets or sets whether the details tab is visible.
@@ -34,7 +35,8 @@ namespace Flavordex
             set { SetValue(IsDetailsVisibleProperty, value); }
         }
         public static readonly DependencyProperty IsDetailsVisibleProperty =
-            DependencyProperty.Register("IsDetailsVisible", typeof(bool), typeof(ViewEntryPage), new PropertyMetadata(false));
+            DependencyProperty.Register("IsDetailsVisible", typeof(bool), typeof(ViewEntryPage),
+                new PropertyMetadata(false));
 
         /// <summary>
         /// Gets or sets whether the flavors tab is visible.
@@ -45,7 +47,8 @@ namespace Flavordex
             set { SetValue(IsFlavorsVisibleProperty, value); }
         }
         public static readonly DependencyProperty IsFlavorsVisibleProperty =
-            DependencyProperty.Register("IsFlavorsVisible", typeof(bool), typeof(ViewEntryPage), new PropertyMetadata(false));
+            DependencyProperty.Register("IsFlavorsVisible", typeof(bool), typeof(ViewEntryPage),
+                new PropertyMetadata(false));
 
         /// <summary>
         /// Gets or sets whether the photos tab is visible.
@@ -56,7 +59,8 @@ namespace Flavordex
             set { SetValue(IsPhotosVisibleProperty, value); }
         }
         public static readonly DependencyProperty IsPhotosVisibleProperty =
-            DependencyProperty.Register("IsPhotosVisible", typeof(bool), typeof(ViewEntryPage), new PropertyMetadata(false));
+            DependencyProperty.Register("IsPhotosVisible", typeof(bool), typeof(ViewEntryPage),
+                new PropertyMetadata(false));
 
         /// <summary>
         /// The primary ID of the journal entry.

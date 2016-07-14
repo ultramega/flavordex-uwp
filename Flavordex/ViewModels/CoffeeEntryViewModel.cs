@@ -13,7 +13,8 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of brewing method options.
         /// </summary>
-        private static string[] _brewMethods = ResourceLoader.GetForCurrentView("Coffee").GetString("BrewMethods").Split(';');
+        private static string[] _brewMethods =
+            ResourceLoader.GetForCurrentView("Coffee").GetString("BrewMethods").Split(';');
 
         /// <summary>
         /// Gets the list of brewing method options.

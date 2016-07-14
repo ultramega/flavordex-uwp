@@ -183,7 +183,8 @@ namespace Flavordex.ViewModels
                 {
                     return null;
                 }
-                return _extras.Where(e => !e.Model.IsPreset && !string.IsNullOrWhiteSpace(e.Value)).ToArray();
+                return _extras.Where(e => !e.Model.IsPreset
+                && !string.IsNullOrWhiteSpace(e.Value)).ToArray();
             }
         }
 
@@ -205,7 +206,8 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of ExtraItemViewModels for the Entry.
         /// </summary>
-        private ObservableCollection<EntryExtraItemViewModel> _extras = new ObservableCollection<EntryExtraItemViewModel>();
+        private ObservableCollection<EntryExtraItemViewModel> _extras =
+            new ObservableCollection<EntryExtraItemViewModel>();
 
         /// <summary>
         /// Gets or sets the list of ExtraItemViewModels for the Entry.

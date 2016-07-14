@@ -80,8 +80,10 @@ namespace Flavordex.Models.Data
         {
             var uri = new Uri("ms-appx:///Assets/SQL/" + name + ".sql");
 
-            var file = StorageFile.GetFileFromApplicationUriAsync(uri).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
-            return FileIO.ReadTextAsync(file).AsTask().ConfigureAwait(false).GetAwaiter().GetResult();
+            var file = StorageFile.GetFileFromApplicationUriAsync(uri).AsTask()
+                .ConfigureAwait(false).GetAwaiter().GetResult();
+            return FileIO.ReadTextAsync(file).AsTask().ConfigureAwait(false).GetAwaiter()
+                .GetResult();
         }
 
         /// <summary>
@@ -99,7 +101,8 @@ namespace Flavordex.Models.Data
                 Tables.Extras.Beer.STATS_OG,
                 Tables.Extras.Beer.STATS_FG
             };
-            var flavors = ResourceLoader.GetForViewIndependentUse("Beer").GetString("FlavorNames").Split(';');
+            var flavors = ResourceLoader.GetForViewIndependentUse("Beer").GetString("FlavorNames")
+                .Split(';');
             InsertPreset(conn, Constants.CAT_BEER, extras, flavors);
         }
 
@@ -115,7 +118,8 @@ namespace Flavordex.Models.Data
                 Tables.Extras.Wine.STATS_VINTAGE,
                 Tables.Extras.Wine.STATS_ABV
             };
-            var flavors = ResourceLoader.GetForViewIndependentUse("Wine").GetString("FlavorNames").Split(';');
+            var flavors = ResourceLoader.GetForViewIndependentUse("Wine").GetString("FlavorNames")
+                .Split(';');
             InsertPreset(conn, Constants.CAT_WINE, extras, flavors);
         }
 
@@ -131,7 +135,8 @@ namespace Flavordex.Models.Data
                 Tables.Extras.Whiskey.STATS_AGE,
                 Tables.Extras.Whiskey.STATS_ABV
             };
-            var flavors = ResourceLoader.GetForViewIndependentUse("Whiskey").GetString("FlavorNames").Split(';');
+            var flavors = ResourceLoader.GetForViewIndependentUse("Whiskey")
+                .GetString("FlavorNames").Split(';');
             InsertPreset(conn, Constants.CAT_WHISKEY, extras, flavors);
         }
 
@@ -154,7 +159,8 @@ namespace Flavordex.Models.Data
                 Tables.Extras.Coffee.STATS_TDS,
                 Tables.Extras.Coffee.STATS_YIELD
             };
-            var flavors = ResourceLoader.GetForViewIndependentUse("Coffee").GetString("FlavorNames").Split(';');
+            var flavors = ResourceLoader.GetForViewIndependentUse("Coffee")
+                .GetString("FlavorNames").Split(';');
             InsertPreset(conn, Constants.CAT_COFFEE, extras, flavors);
         }
 
@@ -165,7 +171,8 @@ namespace Flavordex.Models.Data
         /// <param name="name">The internal name of the category.</param>
         /// <param name="extras">The list of internal extra field names.</param>
         /// <param name="flavors">The list of flavor names.</param>
-        private static void InsertPreset(SQLiteConnection conn, string name, string[] extras, string[] flavors)
+        private static void InsertPreset(SQLiteConnection conn, string name, string[] extras,
+            string[] flavors)
         {
             var sql = string.Format("INSERT INTO {0} ({1}, {2}, {3}) VALUES (?, ?, 1);",
                 Tables.Cats.TABLE_NAME, Tables.Cats.UUID, Tables.Cats.NAME, Tables.Cats.PRESET);
@@ -177,8 +184,10 @@ namespace Flavordex.Models.Data
             }
             long id = conn.LastInsertRowId();
 
-            sql = string.Format("INSERT INTO {0} ({1}, {2}, {3}, {4}, {5}) VALUES (?, ?, ?, ?, 1);",
-                Tables.Extras.TABLE_NAME, Tables.Extras.UUID, Tables.Extras.CAT, Tables.Extras.NAME, Tables.Extras.POS, Tables.Extras.PRESET);
+            sql = string.Format(
+                "INSERT INTO {0} ({1}, {2}, {3}, {4}, {5}) VALUES (?, ?, ?, ?, 1);",
+                Tables.Extras.TABLE_NAME, Tables.Extras.UUID, Tables.Extras.CAT,
+                Tables.Extras.NAME, Tables.Extras.POS, Tables.Extras.PRESET);
             using (var stmt = conn.Prepare(sql))
             {
                 stmt.Bind(2, id);
@@ -193,7 +202,8 @@ namespace Flavordex.Models.Data
             }
 
             sql = string.Format("INSERT INTO {0} ({1}, {2}, {3}) VALUES (?, ?, ?);",
-                Tables.Flavors.TABLE_NAME, Tables.Flavors.CAT, Tables.Flavors.NAME, Tables.Flavors.POS);
+                Tables.Flavors.TABLE_NAME, Tables.Flavors.CAT, Tables.Flavors.NAME,
+                Tables.Flavors.POS);
             using (var stmt = conn.Prepare(sql))
             {
                 stmt.Bind(1, id);

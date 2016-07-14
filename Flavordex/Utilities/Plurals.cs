@@ -10,7 +10,8 @@ namespace Flavordex.Utilities
         /// <summary>
         /// A reference to the plural string resources.
         /// </summary>
-        private static readonly ResourceLoader _resources = ResourceLoader.GetForCurrentView("Plurals");
+        private static readonly ResourceLoader _resources =
+            ResourceLoader.GetForCurrentView("Plurals");
 
         /// <summary>
         /// Get the appropriate form of the word based on the count.

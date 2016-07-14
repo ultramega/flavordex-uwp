@@ -31,7 +31,8 @@ namespace Flavordex
             set { SetValue(PageTitleProperty, value); }
         }
         public static readonly DependencyProperty PageTitleProperty =
-            DependencyProperty.Register("PageTitle", typeof(string), typeof(EditCategoryPage), null);
+            DependencyProperty.Register("PageTitle", typeof(string), typeof(EditCategoryPage),
+                null);
 
         /// <summary>
         /// Gets or sets the Category.
@@ -42,7 +43,8 @@ namespace Flavordex
             set { SetValue(CategoryProperty, value); }
         }
         public static readonly DependencyProperty CategoryProperty =
-            DependencyProperty.Register("Category", typeof(CategoryViewModel), typeof(EditCategoryPage), null);
+            DependencyProperty.Register("Category", typeof(CategoryViewModel),
+                typeof(EditCategoryPage), null);
 
         /// <summary>
         /// Gets or sets the visibility of the delete button.
@@ -53,7 +55,8 @@ namespace Flavordex
             set { SetValue(DeleteButtonVisibilityProperty, value); }
         }
         public static readonly DependencyProperty DeleteButtonVisibilityProperty =
-            DependencyProperty.Register("DeleteButtonVisibility", typeof(Visibility), typeof(EditCategoryPage), new PropertyMetadata(Visibility.Collapsed));
+            DependencyProperty.Register("DeleteButtonVisibility", typeof(Visibility),
+                typeof(EditCategoryPage), new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
         /// Gets or sets the default fields for the Category.
@@ -64,12 +67,14 @@ namespace Flavordex
             set { SetValue(FieldsProperty, value); }
         }
         public static readonly DependencyProperty FieldsProperty =
-            DependencyProperty.Register("Fields", typeof(string[]), typeof(EditCategoryPage), null);
+            DependencyProperty.Register("Fields", typeof(string[]), typeof(EditCategoryPage),
+                null);
 
         /// <summary>
         /// Gets the list of items to show on the RadarGraph.
         /// </summary>
-        private ObservableCollection<RadarItem> RadarItems { get; } = new ObservableCollection<RadarItem>();
+        private ObservableCollection<RadarItem> RadarItems { get; } =
+            new ObservableCollection<RadarItem>();
 
         /// <summary>
         /// Constructor.
@@ -89,24 +94,26 @@ namespace Flavordex
         {
             if (Category != null)
             {
+                string fields;
                 switch (Category.Model.Name)
                 {
                     case Constants.CAT_BEER:
-                        Fields = ResourceLoader.GetForCurrentView("Beer").GetString("Fields").Split(';');
+                        fields = ResourceLoader.GetForCurrentView("Beer").GetString("Fields");
                         break;
                     case Constants.CAT_WINE:
-                        Fields = ResourceLoader.GetForCurrentView("Wine").GetString("Fields").Split(';');
+                        fields = ResourceLoader.GetForCurrentView("Wine").GetString("Fields");
                         break;
                     case Constants.CAT_WHISKEY:
-                        Fields = ResourceLoader.GetForCurrentView("Whiskey").GetString("Fields").Split(';');
+                        fields = ResourceLoader.GetForCurrentView("Whiskey").GetString("Fields");
                         break;
                     case Constants.CAT_COFFEE:
-                        Fields = ResourceLoader.GetForCurrentView("Coffee").GetString("Fields").Split(';');
+                        fields = ResourceLoader.GetForCurrentView("Coffee").GetString("Fields");
                         break;
                     default:
-                        Fields = ResourceLoader.GetForCurrentView().GetString("Fields").Split(';');
+                        fields = ResourceLoader.GetForCurrentView().GetString("Fields");
                         break;
                 }
+                Fields = fields.Split(';');
 
                 foreach (var item in Category.Extras)
                 {
@@ -120,7 +127,8 @@ namespace Flavordex
                     RadarItems.Add(item);
                 }
 
-                DeleteButtonVisibility = Category.Model.ID > 0 && !Category.IsPreset ? Visibility.Visible : Visibility.Collapsed;
+                DeleteButtonVisibility = Category.Model.ID > 0 && !Category.IsPreset
+                    ? Visibility.Visible : Visibility.Collapsed;
 
                 if (!Category.IsPreset)
                 {
@@ -157,7 +165,8 @@ namespace Flavordex
 
             var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested += OnBackRequested;
-            systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            systemNavigationManager.AppViewBackButtonVisibility =
+                AppViewBackButtonVisibility.Visible;
         }
 
         /// <summary>
@@ -170,7 +179,8 @@ namespace Flavordex
 
             var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested -= OnBackRequested;
-            systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+            systemNavigationManager.AppViewBackButtonVisibility =
+                AppViewBackButtonVisibility.Collapsed;
         }
 
         /// <summary>
@@ -242,7 +252,8 @@ namespace Flavordex
                 if (sender is ExtraItemViewModel)
                 {
                     var extra = sender as ExtraItemViewModel;
-                    if (extra.IsDeleted && extra.Model.ID == 0 && string.IsNullOrWhiteSpace(extra.Name))
+                    if (extra.IsDeleted && extra.Model.ID == 0
+                        && string.IsNullOrWhiteSpace(extra.Name))
                     {
                         Category.Extras.Remove(extra);
                     }
@@ -273,7 +284,8 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnAddExtra(object sender, RoutedEventArgs e)
         {
-            if (Category.Extras.Count == 0 || !string.IsNullOrWhiteSpace(Category.Extras.Last().Name))
+            if (Category.Extras.Count == 0
+                || !string.IsNullOrWhiteSpace(Category.Extras.Last().Name))
             {
                 AddExtra(new Extra());
             }
@@ -286,7 +298,8 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnAddFlavor(object sender, RoutedEventArgs e)
         {
-            if (Category.Flavors.Count == 0 || !string.IsNullOrWhiteSpace(Category.Flavors.Last().Name))
+            if (Category.Flavors.Count == 0
+                || !string.IsNullOrWhiteSpace(Category.Flavors.Last().Name))
             {
                 AddFlavor(new Flavor() { Position = Category.Flavors.Count });
             }
@@ -300,7 +313,8 @@ namespace Flavordex
         private void OnFieldLoaded(object sender, RoutedEventArgs e)
         {
             var field = sender as FieldEditor;
-            if (string.IsNullOrWhiteSpace(field.Value) && TitleField.FocusState == FocusState.Unfocused)
+            if (string.IsNullOrWhiteSpace(field.Value)
+                && TitleField.FocusState == FocusState.Unfocused)
             {
                 (field.FindName("Field") as TextBox).Focus(FocusState.Programmatic);
             }
@@ -312,7 +326,8 @@ namespace Flavordex
         /// <param name="categoryId">The primary ID of the Category.</param>
         private async void LoadCategory(long categoryId)
         {
-            var category = new CategoryViewModel(await DatabaseHelper.GetCategoryAsync(categoryId));
+            var category =
+                new CategoryViewModel(await DatabaseHelper.GetCategoryAsync(categoryId));
 
             foreach (var extra in await DatabaseHelper.GetCategoryExtrasAsync(categoryId))
             {

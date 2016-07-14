@@ -21,7 +21,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(EntryProperty, value); }
         }
         public static readonly DependencyProperty EntryProperty =
-            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(EditEntryForm), null);
+            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(EditEntryForm),
+                null);
 
         /// <summary>
         /// Constructor.
@@ -69,7 +70,8 @@ namespace Flavordex.UI.Controls
         /// </summary>
         /// <param name="sender">The maker AutoSuggestBox.</param>
         /// <param name="args">The event arguments.</param>
-        private void OnMakerSelected(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void OnMakerSelected(AutoSuggestBox sender,
+            AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             var maker = args.ChosenSuggestion as Maker;
             Entry.Origin = maker.Location;

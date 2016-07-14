@@ -13,7 +13,8 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of wine varietals.
         /// </summary>
-        private static string[] _wineVarietals = ResourceLoader.GetForCurrentView("Wine").GetString("Varietals").Split(';');
+        private static string[] _wineVarietals =
+            ResourceLoader.GetForCurrentView("Wine").GetString("Varietals").Split(';');
 
         /// <summary>
         /// Gets the list of wine varietal suggestions.
@@ -26,7 +27,8 @@ namespace Flavordex.ViewModels
                 {
                     return null;
                 }
-                return _wineVarietals.Where(e => e.ToLower().Contains(Varietal.ToLower())).ToArray();
+                return _wineVarietals.Where(e => e.ToLower().Contains(Varietal.ToLower()))
+                    .ToArray();
             }
         }
 

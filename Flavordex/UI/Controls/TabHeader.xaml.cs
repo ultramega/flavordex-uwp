@@ -17,7 +17,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(SymbolProperty, value); }
         }
         public static readonly DependencyProperty SymbolProperty =
-            DependencyProperty.Register("Symbol", typeof(Symbol), typeof(TabHeader), new PropertyMetadata(0));
+            DependencyProperty.Register("Symbol", typeof(Symbol), typeof(TabHeader),
+                new PropertyMetadata(0));
 
         /// <summary>
         /// Gets or sets the label text.

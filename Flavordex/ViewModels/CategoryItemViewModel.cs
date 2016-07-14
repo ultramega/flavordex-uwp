@@ -12,7 +12,8 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The format string for the entry count string.
         /// </summary>
-        private static readonly string _countFormat = ResourceLoader.GetForCurrentView().GetString("EntryCount");
+        private static readonly string _countFormat =
+            ResourceLoader.GetForCurrentView().GetString("EntryCount");
 
         /// <summary>
         /// Gets the name of the Category.

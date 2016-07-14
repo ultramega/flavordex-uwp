@@ -93,13 +93,15 @@ namespace Flavordex.Utilities
         /// <param name="locationA">The first location.</param>
         /// <param name="locationB">The second location.</param>
         /// <returns>The distance in kilometers.</returns>
-        private static double GetDistanceBetween(BasicGeoposition locationA, BasicGeoposition locationB)
+        private static double GetDistanceBetween(BasicGeoposition locationA,
+            BasicGeoposition locationB)
         {
             var distanceLatitude = DegreesToRadians(locationB.Latitude - locationA.Latitude);
             var distanceLongitude = DegreesToRadians(locationB.Longitude - locationA.Longitude);
-            var a = Math.Sin(distanceLatitude / 2) * Math.Sin(distanceLatitude / 2) +
-                Math.Cos(DegreesToRadians(locationA.Latitude)) * Math.Cos(DegreesToRadians(locationB.Latitude)) *
-                Math.Sin(distanceLongitude / 2) * Math.Sin(distanceLongitude / 2);
+            var a = Math.Sin(distanceLatitude / 2) * Math.Sin(distanceLatitude / 2)
+                + Math.Cos(DegreesToRadians(locationA.Latitude))
+                * Math.Cos(DegreesToRadians(locationB.Latitude)) * Math.Sin(distanceLongitude / 2)
+                * Math.Sin(distanceLongitude / 2);
             return 2 * Math.Asin(Math.Min(1, Math.Sqrt(a))) * 6371;
         }
 

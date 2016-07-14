@@ -72,7 +72,8 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of ExtraItemViewModels for the Category.
         /// </summary>
-        private ObservableCollection<ExtraItemViewModel> _extras = new ObservableCollection<ExtraItemViewModel>();
+        private ObservableCollection<ExtraItemViewModel> _extras =
+            new ObservableCollection<ExtraItemViewModel>();
 
         /// <summary>
         /// Gets or sets the list of ExtraItemViewModels for the Category.
@@ -95,7 +96,8 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of FlavorItemViewModels for the Category.
         /// </summary>
-        private ObservableCollection<FlavorItemViewModel> _flavors = new ObservableCollection<FlavorItemViewModel>();
+        private ObservableCollection<FlavorItemViewModel> _flavors =
+            new ObservableCollection<FlavorItemViewModel>();
 
         /// <summary>
         /// Gets or sets the list of FlavorItemViewModels for the Category.

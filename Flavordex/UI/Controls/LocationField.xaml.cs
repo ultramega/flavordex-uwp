@@ -19,7 +19,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(EntryProperty, value); }
         }
         public static readonly DependencyProperty EntryProperty =
-            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(LocationField), null);
+            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(LocationField),
+                null);
 
         /// <summary>
         /// Constructor.
@@ -39,7 +40,8 @@ namespace Flavordex.UI.Controls
         /// <param name="dp">The EntryProperty.</param>
         private async void OnEntryPropertyChanged(DependencyObject sender, DependencyProperty dp)
         {
-            if (Settings.DetectLocation && Entry.Model.ID == 0 && string.IsNullOrWhiteSpace(Entry.Location))
+            if (Settings.DetectLocation && Entry.Model.ID == 0
+                && string.IsNullOrWhiteSpace(Entry.Location))
             {
                 Progress.IsActive = true;
 

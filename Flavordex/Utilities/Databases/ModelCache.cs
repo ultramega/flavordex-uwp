@@ -12,7 +12,8 @@ namespace Flavordex.Utilities.Databases
         /// <summary>
         /// The data stored in the cache.
         /// </summary>
-        private Dictionary<long, WeakReference<T>> _cache = new Dictionary<long, WeakReference<T>>();
+        private Dictionary<long, WeakReference<T>> _cache =
+            new Dictionary<long, WeakReference<T>>();
 
         /// <summary>
         /// Gets an item from the cache, creating it if needed.

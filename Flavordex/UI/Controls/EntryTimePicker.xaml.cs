@@ -19,7 +19,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(EntryProperty, value); }
         }
         public static readonly DependencyProperty EntryProperty =
-            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(EntryTimePicker), null);
+            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(EntryTimePicker),
+                null);
 
         /// <summary>
         /// Gets or sets the header of the Control.
@@ -61,7 +62,8 @@ namespace Flavordex.UI.Controls
         /// </summary>
         /// <param name="sender">The DatePicker.</param>
         /// <param name="args">The event arguments.</param>
-        private void OnDateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        private void OnDateChanged(CalendarDatePicker sender,
+            CalendarDatePickerDateChangedEventArgs args)
         {
             if (!args.NewDate.HasValue)
             {
@@ -86,7 +88,8 @@ namespace Flavordex.UI.Controls
             {
                 var date = Entry.Date;
                 var time = e.NewTime;
-                Entry.Date = new DateTime(date.Year, date.Month, date.Day, time.Hours, time.Minutes, time.Seconds);
+                Entry.Date = new DateTime(date.Year, date.Month, date.Day, time.Hours,
+                    time.Minutes, time.Seconds);
                 DatePicker.Date = Entry.Date;
             }
         }

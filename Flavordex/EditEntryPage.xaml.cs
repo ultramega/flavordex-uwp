@@ -24,7 +24,8 @@ namespace Flavordex
             set { SetValue(EntryProperty, value); }
         }
         public static readonly DependencyProperty EntryProperty =
-            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(EditEntryPage), null);
+            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(EditEntryPage),
+                null);
 
         /// <summary>
         /// Constructor.
@@ -46,19 +47,22 @@ namespace Flavordex
 
             var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested += OnBackRequested;
-            systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            systemNavigationManager.AppViewBackButtonVisibility =
+                AppViewBackButtonVisibility.Visible;
 
             if (e.Parameter is long)
             {
-                var entry = EntryViewModel.GetInstance(await DatabaseHelper.GetEntryAsync((long)e.Parameter));
+                var id = (long)e.Parameter;
+                var entry = EntryViewModel.GetInstance(await DatabaseHelper.GetEntryAsync(id));
 
-                foreach (var extra in await DatabaseHelper.GetEntryExtrasAsync((long)e.Parameter))
+                foreach (var extra in await DatabaseHelper.GetEntryExtrasAsync(id))
                 {
                     entry.Extras.Add(new EntryExtraItemViewModel(extra));
                 }
 
                 var entryExtras = new Collection<EntryExtra>();
-                var categoryExtras = await DatabaseHelper.GetCategoryExtrasAsync(entry.Model.CategoryID);
+                var categoryExtras =
+                    await DatabaseHelper.GetCategoryExtrasAsync(entry.Model.CategoryID);
                 foreach (var item in categoryExtras)
                 {
                     var extra = new EntryExtra();
@@ -99,7 +103,8 @@ namespace Flavordex
 
             var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested -= OnBackRequested;
-            systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+            systemNavigationManager.AppViewBackButtonVisibility =
+                AppViewBackButtonVisibility.Collapsed;
         }
 
         /// <summary>

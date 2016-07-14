@@ -17,7 +17,8 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// A reference to the string ResourceLoader.
         /// </summary>
-        private static readonly ResourceLoader _resources = ResourceLoader.GetForCurrentView("EntryList");
+        private static readonly ResourceLoader _resources =
+            ResourceLoader.GetForCurrentView("EntryList");
 
         /// <summary>
         /// The title of the categories list.
@@ -27,7 +28,8 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The format string for the entry list title.
         /// </summary>
-        private static readonly string _entriesTitleFormat = _resources.GetString("Title/EntriesList");
+        private static readonly string _entriesTitleFormat =
+            _resources.GetString("Title/EntriesList");
 
         /// <summary>
         /// The category name for the unfiltered entry list.
@@ -37,17 +39,20 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The Category representing all Categories.
         /// </summary>
-        private Category _allEntries = new Category() { Name = _resources.GetString("Category/All") };
+        private Category _allEntries =
+            new Category() { Name = _resources.GetString("Category/All") };
 
         /// <summary>
         /// Gets the list of EntryItemViewModels to display.
         /// </summary>
-        public ObservableCollection<EntryItemViewModel> Entries { get; } = new ObservableCollection<EntryItemViewModel>();
+        public ObservableCollection<EntryItemViewModel> Entries { get; } =
+            new ObservableCollection<EntryItemViewModel>();
 
         /// <summary>
         /// Gets the list of CategoryItemViewModels to display.
         /// </summary>
-        public ObservableCollection<CategoryItemViewModel> Categories { get; } = new ObservableCollection<CategoryItemViewModel>();
+        public ObservableCollection<CategoryItemViewModel> Categories { get; } =
+            new ObservableCollection<CategoryItemViewModel>();
 
         /// <summary>
         /// The currently active search parameters.
@@ -155,7 +160,8 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return IsCategorySelected && Entries.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+                return IsCategorySelected && Entries.Count == 0
+                    ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -166,7 +172,8 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return _resources.GetString(Search == null ? "Message/NoEntries" : "Message/NoEntriesFilter");
+                return _resources.GetString(Search == null
+                    ? "Message/NoEntries" : "Message/NoEntriesFilter");
             }
         }
 
@@ -191,7 +198,8 @@ namespace Flavordex.ViewModels
                     _exportMode = value;
                     foreach (var item in Entries)
                     {
-                        item.ThumbnailVisibility = value ? Visibility.Collapsed : Visibility.Visible;
+                        item.ThumbnailVisibility = value
+                            ? Visibility.Collapsed : Visibility.Visible;
                     }
                     RaisePropertyChanged();
                 }
@@ -249,11 +257,14 @@ namespace Flavordex.ViewModels
             if (Settings.ListCategory > -1)
             {
                 Entries.Clear();
-                var entries = _search == null ? await DatabaseHelper.GetEntryListAsync(Settings.ListCategory) : await _search.GetList();
+                var entries = _search == null
+                    ? await DatabaseHelper.GetEntryListAsync(Settings.ListCategory)
+                    : await _search.GetList();
                 foreach (var item in entries)
                 {
                     var entry = new EntryItemViewModel(item);
-                    entry.ThumbnailVisibility = ExportMode ? Visibility.Collapsed : Visibility.Visible;
+                    entry.ThumbnailVisibility =
+                        ExportMode ? Visibility.Collapsed : Visibility.Visible;
                     Entries.Add(entry);
                 }
                 SortList();
@@ -261,7 +272,8 @@ namespace Flavordex.ViewModels
                 var category = Categories.FirstOrDefault(e => e.Model.ID == Settings.ListCategory);
                 if (category != null)
                 {
-                    ListTitle = string.Format(_entriesTitleFormat, category.Model.ID == 0 ? _all : category.Name);
+                    ListTitle = string.Format(_entriesTitleFormat,
+                        category.Model.ID == 0 ? _all : category.Name);
                 }
             }
             else
@@ -355,7 +367,8 @@ namespace Flavordex.ViewModels
         /// <param name="entry">The entry to add.</param>
         private async void InsertEntry(Entry entry)
         {
-            if ((Settings.ListCategory == 0 || entry.CategoryID == Settings.ListCategory) && (_search == null || (await _search.Matches(entry))))
+            if ((Settings.ListCategory == 0 || entry.CategoryID == Settings.ListCategory)
+                && (_search == null || await _search.Matches(entry)))
             {
                 Entries.Insert(FindSortedIndex(entry), new EntryItemViewModel(entry));
             }

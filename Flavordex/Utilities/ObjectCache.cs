@@ -63,7 +63,8 @@ namespace Flavordex.Utilities
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException("Capacity", value, "Capacity must be greater than 0");
+                    throw new ArgumentOutOfRangeException("Capacity", value,
+                        "Capacity must be greater than 0");
                 }
                 _capacity = value;
                 TrimToSize(value);

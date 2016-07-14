@@ -18,12 +18,14 @@ namespace Flavordex.UI.Controls
         /// <summary>
         /// The format string for the default category name.
         /// </summary>
-        private static readonly string _defaultCategory = ResourceLoader.GetForCurrentView("ImportExport").GetString("DefaultCategory");
+        private static readonly string _defaultCategory =
+            ResourceLoader.GetForCurrentView("ImportExport").GetString("DefaultCategory");
 
         /// <summary>
         /// The format string for the date.
         /// </summary>
-        private static readonly string _dateFormat = ResourceLoader.GetForCurrentView().GetString("DateFormat");
+        private static readonly string _dateFormat =
+            ResourceLoader.GetForCurrentView().GetString("DateFormat");
 
         /// <summary>
         /// Constructor.
@@ -63,7 +65,8 @@ namespace Flavordex.UI.Controls
             }
             if (Settings.ListCategory > 0)
             {
-                CategoryList.SelectedItem = categories.FirstOrDefault(e => e.Model.ID == Settings.ListCategory);
+                CategoryList.SelectedItem =
+                    categories.FirstOrDefault(e => e.Model.ID == Settings.ListCategory);
             }
             CategoryList.Visibility = Visibility.Visible;
         }
@@ -87,8 +90,10 @@ namespace Flavordex.UI.Controls
             }
             if (duplicates > 0)
             {
-                var format = ResourceLoader.GetForCurrentView("ImportExport").GetString("Button/UncheckDuplicates");
-                DuplicateButton.Content = string.Format(format, duplicates, Plurals.GetWord("Duplicates", duplicates));
+                var format = ResourceLoader.GetForCurrentView("ImportExport")
+                    .GetString("Button/UncheckDuplicates");
+                DuplicateButton.Content =
+                    string.Format(format, duplicates, Plurals.GetWord("Duplicates", duplicates));
                 DuplicateButton.Visibility = Visibility.Visible;
             }
         }
@@ -124,11 +129,13 @@ namespace Flavordex.UI.Controls
         /// </summary>
         /// <param name="sender">The Button.</param>
         /// <param name="args">The event arguments.</param>
-        private async void OnPrimaryButtonClicked(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private async void OnPrimaryButtonClicked(ContentDialog sender,
+            ContentDialogButtonClickEventArgs args)
         {
             var deferral = args.GetDeferral();
 
-            var defaultCategory = string.Format(_defaultCategory, DateTime.Now.ToString(_dateFormat));
+            var defaultCategory =
+                string.Format(_defaultCategory, DateTime.Now.ToString(_dateFormat));
             if (CategoryList.SelectedItem != null)
             {
                 defaultCategory = (CategoryList.SelectedItem as CategoryItemViewModel).Model.Name;
@@ -150,7 +157,8 @@ namespace Flavordex.UI.Controls
                     var position = 0;
                     foreach (var photoItem in item.Photos)
                     {
-                        var photo = await PhotoUtilities.AddPhotoAsync(photoItem.Path, item.Entry.ID, position);
+                        var photo = await PhotoUtilities.AddPhotoAsync(photoItem.Path,
+                            item.Entry.ID, position);
                         if (photo == null)
                         {
                             photo = new Models.Photo()

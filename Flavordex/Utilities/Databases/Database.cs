@@ -68,7 +68,11 @@ namespace Flavordex.Utilities.Databases
         /// <param name="version">The database structure version number to set.</param>
         public void SetVersion(long version)
         {
-            using (var stmt = Connection.Prepare(string.Format("PRAGMA user_version = {0};", version)))
+            var sql = string.Format(
+                "PRAGMA user_version = {0};",
+                version
+            );
+            using (var stmt = Connection.Prepare(sql))
             {
                 stmt.Step();
             }
@@ -103,7 +107,8 @@ namespace Flavordex.Utilities.Databases
         /// <param name="where">The where clause.</param>
         /// <param name="whereArgs">The values for the parameters in the where clause.</param>
         /// <returns>The results of the query.</returns>
-        public async Task<ContentValues[]> Query(string table, string[] projection, string where, object[] whereArgs)
+        public async Task<ContentValues[]> Query(string table, string[] projection, string where,
+            object[] whereArgs)
         {
             return await Query(table, projection, where, whereArgs, null);
         }
@@ -117,7 +122,8 @@ namespace Flavordex.Utilities.Databases
         /// <param name="whereArgs">The values for the parameters in the where clause.</param>
         /// <param name="sort">The parameters of the order by clause.</param>
         /// <returns>The results of the query.</returns>
-        public async Task<ContentValues[]> Query(string table, string[] projection, string where, object[] whereArgs, string sort)
+        public async Task<ContentValues[]> Query(string table, string[] projection, string where,
+            object[] whereArgs, string sort)
         {
             return await Query(table, projection, where, whereArgs, sort, null);
         }
@@ -132,15 +138,21 @@ namespace Flavordex.Utilities.Databases
         /// <param name="sort">The parameters of the order by clause.</param>
         /// <param name="limit">The parameters of the limit clause.</param>
         /// <returns>The results of the query.</returns>
-        public async Task<ContentValues[]> Query(string table, string[] projection, string where, object[] whereArgs, string sort, string limit)
+        public async Task<ContentValues[]> Query(string table, string[] projection, string where,
+            object[] whereArgs, string sort, string limit)
         {
             return await Task.Run(() =>
             {
-                var cols = projection == null || projection.Length == 0 ? "*" : string.Join(", ", projection);
-                where = string.IsNullOrWhiteSpace(where) ? "" : " WHERE " + where;
-                sort = string.IsNullOrWhiteSpace(sort) ? "" : " ORDER BY " + sort;
-                limit = string.IsNullOrWhiteSpace(limit) ? "" : " LIMIT " + limit;
-                var sql = string.Format("SELECT {0} FROM {1}{2}{3}{4};", cols, table, where, sort, limit);
+                var cols = projection == null || projection.Length == 0
+                    ? "*" : string.Join(", ", projection);
+                var sql = string.Format(
+                    "SELECT {0} FROM {1}{2}{3}{4};",
+                    cols,
+                    table,
+                    string.IsNullOrWhiteSpace(where) ? "" : " WHERE " + where,
+                    string.IsNullOrWhiteSpace(sort) ? "" : " ORDER BY " + sort,
+                    string.IsNullOrWhiteSpace(limit) ? "" : " LIMIT " + limit
+                );
 
                 using (var stmt = Connection.Prepare(sql))
                 {
@@ -177,9 +189,12 @@ namespace Flavordex.Utilities.Databases
         {
             return await Task.Run(() =>
             {
-                var cols = string.Join(", ", values.Keys);
-                var vals = string.Join(", ", new string('?', values.Count).ToCharArray());
-                var sql = string.Format("INSERT INTO {0} ({1}) VALUES ({2});", table, cols, vals);
+                var sql = string.Format(
+                    "INSERT INTO {0} ({1}) VALUES ({2});",
+                    table,
+                    string.Join(", ", values.Keys),
+                    string.Join(", ", new string('?', values.Count).ToCharArray())
+                );
 
                 using (var stmt = Connection.Prepare(sql))
                 {
@@ -205,23 +220,27 @@ namespace Flavordex.Utilities.Databases
         /// <param name="where">The where clause.</param>
         /// <param name="whereArgs">The values for the parameters in the where clause.</param>
         /// <returns>The number of rows modified.</returns>
-        public async Task<int> Update(string table, ContentValues values, string where, object[] whereArgs)
+        public async Task<int> Update(string table, ContentValues values, string where,
+            object[] whereArgs)
         {
             return await Task.Run(() =>
             {
-                if(whereArgs == null)
+                if (whereArgs == null)
                 {
                     whereArgs = new object[0];
                 }
-                var cols = string.Join(" = ?, ", values.Keys) + " = ?";
                 var args = new object[values.Count + whereArgs.Length];
                 values.Values.CopyTo(args, 0);
-                where = string.IsNullOrWhiteSpace(where) ? "" : " WHERE " + where;
                 if (whereArgs != null)
                 {
                     whereArgs.CopyTo(args, values.Count);
                 }
-                var sql = string.Format("UPDATE {0} SET {1}{2};", table, cols, where);
+                var sql = string.Format(
+                    "UPDATE {0} SET {1}{2};",
+                    table,
+                    string.Join(" = ?, ", values.Keys) + " = ?",
+                    string.IsNullOrWhiteSpace(where) ? "" : " WHERE " + where
+                );
 
                 using (var stmt = Connection.Prepare(sql))
                 {
@@ -247,8 +266,11 @@ namespace Flavordex.Utilities.Databases
         {
             return await Task.Run(() =>
             {
-                where = string.IsNullOrWhiteSpace(where) ? "" : " WHERE " + where;
-                var sql = string.Format("DELETE FROM {0}{1};", table, where);
+                var sql = string.Format(
+                    "DELETE FROM {0}{1};",
+                    table,
+                    string.IsNullOrWhiteSpace(where) ? "" : " WHERE " + where
+                );
 
                 using (var stmt = Connection.Prepare(sql))
                 {

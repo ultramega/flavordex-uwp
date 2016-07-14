@@ -241,7 +241,8 @@ namespace Flavordex.Utilities
                                 await ReadRow(collection, rowMap);
                             }
 
-                            return await new ImportDialog(collection).ShowAsync() == ContentDialogResult.Primary;
+                            var result = await new ImportDialog(collection).ShowAsync();
+                            return result == ContentDialogResult.Primary;
                         }
                     }
                 }
@@ -264,11 +265,13 @@ namespace Flavordex.Utilities
                 {
                     collection.LegacyFormat = Constants.CAT_BEER;
                 }
-                else if (fields.Intersect(LEGACY_FIELDS_COFFEE).Count() == LEGACY_FIELDS_COFFEE.Length)
+                else if (fields.Intersect(LEGACY_FIELDS_COFFEE).Count() ==
+                    LEGACY_FIELDS_COFFEE.Length)
                 {
                     collection.LegacyFormat = Constants.CAT_COFFEE;
                 }
-                else if (fields.Intersect(LEGACY_FIELDS_WHISKEY).Count() == LEGACY_FIELDS_WHISKEY.Length)
+                else if (fields.Intersect(LEGACY_FIELDS_WHISKEY).Count() ==
+                    LEGACY_FIELDS_WHISKEY.Length)
                 {
                     collection.LegacyFormat = Constants.CAT_WHISKEY;
                 }
@@ -288,7 +291,8 @@ namespace Flavordex.Utilities
         /// </summary>
         /// <param name="collection">The ImportCollection.</param>
         /// <param name="rowMap">A map of column names to values.</param>
-        private static async Task ReadRow(ImportCollection collection, Dictionary<string, string> rowMap)
+        private static async Task ReadRow(ImportCollection collection,
+            Dictionary<string, string> rowMap)
         {
             string value;
             rowMap.TryGetValue(Tables.Entries.TITLE, out value);
@@ -399,7 +403,8 @@ namespace Flavordex.Utilities
         /// <param name="collection">The ImportCollection.</param>
         /// <param name="rowMap">A map of column names to values.</param>
         /// <param name="format">The legacy format.</param>
-        private static void ParseLegacyExtras(ImportRecord record, Dictionary<string, string> rowMap, string format)
+        private static void ParseLegacyExtras(ImportRecord record,
+            Dictionary<string, string> rowMap, string format)
         {
             foreach (var item in rowMap)
             {
@@ -475,33 +480,37 @@ namespace Flavordex.Utilities
         /// <param name="collection">The ImportCollection.</param>
         /// <param name="rowMap">A map of column names to values.</param>
         /// <param name="format">The legacy format.</param>
-        private static void ParseLegacyFlavors(ImportRecord record, Dictionary<string, string> rowMap, string format)
+        private static void ParseLegacyFlavors(ImportRecord record,
+            Dictionary<string, string> rowMap, string format)
         {
             string value;
-            if (!rowMap.TryGetValue(Tables.Flavors.TABLE_NAME, out value) || string.IsNullOrWhiteSpace(value))
+            if (!rowMap.TryGetValue(Tables.Flavors.TABLE_NAME, out value)
+                || string.IsNullOrWhiteSpace(value))
             {
                 return;
             }
 
-            string[] names;
+            string resource;
             switch (format)
             {
                 case Constants.CAT_BEER:
-                    names = ResourceLoader.GetForViewIndependentUse("Beer").GetString("FlavorNames").Split(';');
+                    resource = "Beer";
                     break;
                 case Constants.CAT_COFFEE:
-                    names = ResourceLoader.GetForViewIndependentUse("Coffee").GetString("FlavorNames").Split(';');
+                    resource = "Coffee";
                     break;
                 case Constants.CAT_WHISKEY:
-                    names = ResourceLoader.GetForViewIndependentUse("Whiskey").GetString("FlavorNames").Split(';');
+                    resource = "Whiskey";
                     break;
                 case Constants.CAT_WINE:
-                    names = ResourceLoader.GetForViewIndependentUse("Wine").GetString("FlavorNames").Split(';');
+                    resource = "Wine";
                     break;
                 default:
                     return;
             }
 
+            var names = ResourceLoader.GetForViewIndependentUse(resource).GetString("FlavorNames")
+                .Split(';');
             var flavors = value.Split(',');
             if (flavors.Length != names.Length)
             {
@@ -535,7 +544,8 @@ namespace Flavordex.Utilities
                 {
                     var pair = item.Split(':');
                     JsonValue name, value;
-                    if (pair.Length >= 2 && JsonValue.TryParse(pair[0], out name) && JsonValue.TryParse(pair[1], out value))
+                    if (pair.Length >= 2 && JsonValue.TryParse(pair[0], out name)
+                        && JsonValue.TryParse(pair[1], out value))
                     {
                         list.Add(new KeyValuePair<string, JsonValue>(name.GetString(), value));
                     }
@@ -552,7 +562,8 @@ namespace Flavordex.Utilities
         private static void ParsePhotos(ImportRecord record, Dictionary<string, string> rowMap)
         {
             string value;
-            if (!rowMap.TryGetValue(Tables.Photos.TABLE_NAME, out value) || string.IsNullOrWhiteSpace(value))
+            if (!rowMap.TryGetValue(Tables.Photos.TABLE_NAME, out value)
+                || string.IsNullOrWhiteSpace(value))
             {
                 return;
             }
@@ -575,10 +586,12 @@ namespace Flavordex.Utilities
         /// </summary>
         /// <param name="collection">The ImportCollection.</param>
         /// <param name="rowMap">A map of column names to values.</param>
-        private static void ParseLegacyPhotos(ImportRecord record, Dictionary<string, string> rowMap)
+        private static void ParseLegacyPhotos(ImportRecord record,
+            Dictionary<string, string> rowMap)
         {
             string value;
-            if (!rowMap.TryGetValue(Tables.Photos.TABLE_NAME, out value) || string.IsNullOrWhiteSpace(value))
+            if (!rowMap.TryGetValue(Tables.Photos.TABLE_NAME, out value)
+                || string.IsNullOrWhiteSpace(value))
             {
                 return;
             }

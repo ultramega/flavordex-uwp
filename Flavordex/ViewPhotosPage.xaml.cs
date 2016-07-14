@@ -21,7 +21,8 @@ namespace Flavordex
         /// <summary>
         /// Gets the list of photos for the entry.
         /// </summary>
-        public ObservableCollection<PhotoItemViewModel> Photos { get; } = new ObservableCollection<PhotoItemViewModel>();
+        public ObservableCollection<PhotoItemViewModel> Photos { get; } =
+            new ObservableCollection<PhotoItemViewModel>();
 
         /// <summary>
         /// Gets or sets the Visibility of the empty list message.
@@ -32,7 +33,8 @@ namespace Flavordex
             set { SetValue(NoPhotosVisibilityProperty, value); }
         }
         public static readonly DependencyProperty NoPhotosVisibilityProperty =
-            DependencyProperty.Register("NoPhotosVisibility", typeof(Visibility), typeof(ViewPhotosPage), new PropertyMetadata(Visibility.Collapsed));
+            DependencyProperty.Register("NoPhotosVisibility", typeof(Visibility),
+                typeof(ViewPhotosPage), new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
         /// The journal entry.

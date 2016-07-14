@@ -43,7 +43,8 @@ namespace Flavordex
             set { SetValue(EntryProperty, value); }
         }
         public static readonly DependencyProperty EntryProperty =
-            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(AddEntryPage), null);
+            DependencyProperty.Register("Entry", typeof(EntryViewModel), typeof(AddEntryPage),
+                null);
 
         /// <summary>
         /// Gets or sets the Visibility of the photo commands in the CommandBar.
@@ -54,7 +55,8 @@ namespace Flavordex
             set { SetValue(TakePhotoVisibilityProperty, value); }
         }
         public static readonly DependencyProperty TakePhotoVisibilityProperty =
-            DependencyProperty.Register("TakePhotoVisibility", typeof(Visibility), typeof(AddEntryPage), new PropertyMetadata(Visibility.Collapsed));
+            DependencyProperty.Register("TakePhotoVisibility", typeof(Visibility),
+                typeof(AddEntryPage), new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
         /// Gets or sets the list of Flavors in the RadarGraph.
@@ -65,12 +67,14 @@ namespace Flavordex
             set { SetValue(FlavorsProperty, value); }
         }
         public static readonly DependencyProperty FlavorsProperty =
-            DependencyProperty.Register("Flavors", typeof(Collection<RadarItem>), typeof(AddEntryPage), null);
+            DependencyProperty.Register("Flavors", typeof(Collection<RadarItem>),
+                typeof(AddEntryPage), null);
 
         /// <summary>
         /// Gets the list of Photos in the Entry.
         /// </summary>
-        private ObservableCollection<KeyValuePair<StorageFile, BitmapImage>> Photos { get; } = new ObservableCollection<KeyValuePair<StorageFile, BitmapImage>>();
+        private ObservableCollection<KeyValuePair<StorageFile, BitmapImage>> Photos { get; } =
+            new ObservableCollection<KeyValuePair<StorageFile, BitmapImage>>();
 
         /// <summary>
         /// Constructor.
@@ -93,7 +97,8 @@ namespace Flavordex
 
             var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested += OnBackRequested;
-            systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            systemNavigationManager.AppViewBackButtonVisibility =
+                AppViewBackButtonVisibility.Visible;
 
             if (e.Parameter is long && (long)e.Parameter > 0)
             {
@@ -101,13 +106,15 @@ namespace Flavordex
             }
             else
             {
-                PageTitle = ResourceLoader.GetForCurrentView("AddEntry").GetString("Title/SelectCategory");
+                PageTitle =
+                    ResourceLoader.GetForCurrentView("AddEntry").GetString("Title/SelectCategory");
                 var categories = new Collection<CategoryItemViewModel>();
                 foreach (var category in await DatabaseHelper.GetCategoryListAsync())
                 {
                     categories.Add(new CategoryItemViewModel(category));
                 }
-                (FindName("CategoryList") as ListView).ItemsSource = categories.OrderBy(k => k.Name);
+                (FindName("CategoryList") as ListView).ItemsSource =
+                    categories.OrderBy(k => k.Name);
             }
         }
 
@@ -121,7 +128,8 @@ namespace Flavordex
 
             var systemNavigationManager = SystemNavigationManager.GetForCurrentView();
             systemNavigationManager.BackRequested -= OnBackRequested;
-            systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+            systemNavigationManager.AppViewBackButtonVisibility =
+                AppViewBackButtonVisibility.Collapsed;
         }
 
         /// <summary>
@@ -143,7 +151,8 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnTabChanged(object sender, SelectionChangedEventArgs e)
         {
-            PhotoCommandVisibility = Pivot.SelectedIndex == 2 ? Visibility.Visible : Visibility.Collapsed;
+            PhotoCommandVisibility =
+                Pivot.SelectedIndex == 2 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         /// <summary>
@@ -180,7 +189,8 @@ namespace Flavordex
 
                 if (Frame.BackStack.Count > 0)
                 {
-                    var entry = new PageStackEntry(typeof(EntryListPage), Entry.Model.ID, new DrillInNavigationTransitionInfo());
+                    var entry = new PageStackEntry(typeof(EntryListPage), Entry.Model.ID,
+                        new DrillInNavigationTransitionInfo());
                     Frame.BackStack[Frame.BackStackDepth - 1] = entry;
                     Frame.GoBack(new DrillInNavigationTransitionInfo());
                 }
@@ -192,7 +202,8 @@ namespace Flavordex
         /// </summary>
         private void CheckLocation()
         {
-            if (LocationUtilities.Location != null && !string.IsNullOrWhiteSpace(Entry.Location) && Entry.Location != LocationUtilities.LocationName)
+            if (LocationUtilities.Location != null && !string.IsNullOrWhiteSpace(Entry.Location)
+                && Entry.Location != LocationUtilities.LocationName)
             {
                 LocationUtilities.AddLocation(Entry.Location);
             }
@@ -205,7 +216,8 @@ namespace Flavordex
         /// <param name="e">The event arguments.</param>
         private void OnRemovePhoto(object sender, RoutedEventArgs e)
         {
-            var photo = (KeyValuePair<StorageFile, BitmapImage>)(sender as FrameworkElement).DataContext;
+            var photo =
+                (KeyValuePair<StorageFile, BitmapImage>)(sender as FrameworkElement).DataContext;
             Photos.Remove(photo);
         }
 
@@ -252,9 +264,17 @@ namespace Flavordex
         {
             var category = await DatabaseHelper.GetCategoryAsync(categoryId);
 
-            PageTitle = string.Format(ResourceLoader.GetForCurrentView("AddEntry").GetString("Title/AddEntry"), Presets.GetRealCategoryName(category.Name));
+            PageTitle = string.Format(
+                ResourceLoader.GetForCurrentView("AddEntry").GetString("Title/AddEntry"),
+                Presets.GetRealCategoryName(category.Name)
+            );
 
-            var entry = new Entry() { Category = category.Name, CategoryID = categoryId, Date = DateTime.Now };
+            var entry = new Entry()
+            {
+                Category = category.Name,
+                CategoryID = categoryId,
+                Date = DateTime.Now
+            };
             Entry = EntryViewModel.GetInstance(entry);
 
             foreach (var item in await DatabaseHelper.GetCategoryExtrasAsync(categoryId, true))

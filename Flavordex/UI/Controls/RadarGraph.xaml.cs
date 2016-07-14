@@ -44,7 +44,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(ItemsProperty, value); }
         }
         public static readonly DependencyProperty ItemsProperty =
-            DependencyProperty.Register("Items", typeof(Collection<RadarItem>), typeof(RadarGraph), null);
+            DependencyProperty.Register("Items", typeof(Collection<RadarItem>), typeof(RadarGraph),
+                null);
 
         /// <summary>
         /// Gets the currently active items.
@@ -60,7 +61,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(IsInteractiveProperty, value); }
         }
         public static readonly DependencyProperty IsInteractiveProperty =
-            DependencyProperty.Register("IsInteractive", typeof(bool), typeof(RadarGraph), new PropertyMetadata(false));
+            DependencyProperty.Register("IsInteractive", typeof(bool), typeof(RadarGraph),
+                new PropertyMetadata(false));
 
         /// <summary>
         /// The index of the currently selected item.
@@ -76,7 +78,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(SelectedIndexProperty, value); }
         }
         public static readonly DependencyProperty SelectedIndexProperty =
-            DependencyProperty.Register("SelectedIndex", typeof(int), typeof(RadarGraph), new PropertyMetadata(-1));
+            DependencyProperty.Register("SelectedIndex", typeof(int), typeof(RadarGraph),
+                new PropertyMetadata(-1));
 
         /// <summary>
         /// Gets or sets the currently selected RadarItem.
@@ -87,7 +90,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(SelectedItemProperty, value); }
         }
         public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(RadarItem), typeof(RadarGraph), null);
+            DependencyProperty.Register("SelectedItem", typeof(RadarItem), typeof(RadarGraph),
+                null);
 
         /// <summary>
         /// Gets whether the graph currently has data.
@@ -155,7 +159,8 @@ namespace Flavordex.UI.Controls
             RegisterPropertyChangedCallback(IsInteractiveProperty, OnIsInteractivePropertyChanged);
             RegisterPropertyChangedCallback(SelectedIndexProperty, OnSelectedIndexPropertyChanged);
             RegisterPropertyChangedCallback(SelectedItemProperty, OnSelectedItemPropertyChanged);
-            RotateTransform.RegisterPropertyChangedCallback(RotateTransform.AngleProperty, OnAngleChanged);
+            RotateTransform
+                .RegisterPropertyChangedCallback(RotateTransform.AngleProperty, OnAngleChanged);
         }
 
         /// <summary>
@@ -481,7 +486,8 @@ namespace Flavordex.UI.Controls
 
                 if (_items is ObservableCollection<RadarItem>)
                 {
-                    (_items as ObservableCollection<RadarItem>).CollectionChanged -= OnItemsCollectionChanged;
+                    (_items as ObservableCollection<RadarItem>).CollectionChanged -=
+                        OnItemsCollectionChanged;
                 }
             }
 
@@ -489,7 +495,8 @@ namespace Flavordex.UI.Controls
 
             if (Items is ObservableCollection<RadarItem>)
             {
-                (Items as ObservableCollection<RadarItem>).CollectionChanged += OnItemsCollectionChanged;
+                (Items as ObservableCollection<RadarItem>).CollectionChanged +=
+                    OnItemsCollectionChanged;
             }
 
             ReadItems();
@@ -572,7 +579,8 @@ namespace Flavordex.UI.Controls
             if (_selectedIndex > -1 && _selectedIndex < LineGrid.Children.Count)
             {
                 (LineGrid.Children[_selectedIndex] as FrameworkElement).Style = DefaultLineStyle;
-                (LabelCanvas.Children[_selectedIndex] as FrameworkElement).Style = DefaultTextStyle;
+                (LabelCanvas.Children[_selectedIndex] as FrameworkElement).Style =
+                    DefaultTextStyle;
             }
 
             if (!HasItems || SelectedIndex == -1)
@@ -591,8 +599,10 @@ namespace Flavordex.UI.Controls
 
                 if (IsInteractive)
                 {
-                    (LineGrid.Children[SelectedIndex] as FrameworkElement).Style = SelectedLineStyle;
-                    (LabelCanvas.Children[SelectedIndex] as FrameworkElement).Style = SelectedLabelStyle;
+                    (LineGrid.Children[SelectedIndex] as FrameworkElement).Style =
+                        SelectedLineStyle;
+                    (LabelCanvas.Children[SelectedIndex] as FrameworkElement).Style =
+                        SelectedLabelStyle;
                 }
 
                 SelectedPosition = PolygonPoints[SelectedIndex];
@@ -636,8 +646,10 @@ namespace Flavordex.UI.Controls
                 VisualStateManager.GoToState(this, "InteractiveState", true);
                 if (SelectedIndex > -1 && LineGrid.Children.Count > SelectedIndex)
                 {
-                    (LineGrid.Children[SelectedIndex] as FrameworkElement).Style = SelectedLineStyle;
-                    (LabelCanvas.Children[SelectedIndex] as FrameworkElement).Style = SelectedLabelStyle;
+                    (LineGrid.Children[SelectedIndex] as FrameworkElement).Style =
+                        SelectedLineStyle;
+                    (LabelCanvas.Children[SelectedIndex] as FrameworkElement).Style =
+                        SelectedLabelStyle;
                 }
             }
             else
@@ -645,8 +657,10 @@ namespace Flavordex.UI.Controls
                 VisualStateManager.GoToState(this, "NormalState", true);
                 if (SelectedIndex > -1 && LineGrid.Children.Count > SelectedIndex)
                 {
-                    (LineGrid.Children[SelectedIndex] as FrameworkElement).Style = DefaultLineStyle;
-                    (LabelCanvas.Children[SelectedIndex] as FrameworkElement).Style = DefaultTextStyle;
+                    (LineGrid.Children[SelectedIndex] as FrameworkElement).Style =
+                        DefaultLineStyle;
+                    (LabelCanvas.Children[SelectedIndex] as FrameworkElement).Style =
+                        DefaultTextStyle;
                 }
                 SelectedIndex = 0;
             }

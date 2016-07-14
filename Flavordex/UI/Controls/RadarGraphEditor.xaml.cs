@@ -12,13 +12,15 @@ namespace Flavordex.UI.Controls
         /// <summary>
         /// Occurs when the cancel button is clicked.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
+            "CA1009:DeclareEventHandlersCorrectly")]
         public event RoutedEventHandler Cancel = delegate { };
 
         /// <summary>
         /// Occurs when the save button is clicked.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
+            "CA1009:DeclareEventHandlersCorrectly")]
         public event RoutedEventHandler Save = delegate { };
 
         /// <summary>
@@ -30,7 +32,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(TargetProperty, value); }
         }
         public static readonly DependencyProperty TargetProperty =
-            DependencyProperty.Register("Target", typeof(RadarGraph), typeof(RadarGraphEditor), null);
+            DependencyProperty.Register("Target", typeof(RadarGraph), typeof(RadarGraphEditor),
+                null);
 
         /// <summary>
         /// Gets or sets whether to show the Save and Cancel buttons.
@@ -41,7 +44,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(ShowCommandsProperty, value); }
         }
         public static readonly DependencyProperty ShowCommandsProperty =
-            DependencyProperty.Register("ShowCommands", typeof(bool), typeof(RadarGraphEditor), new PropertyMetadata(true));
+            DependencyProperty.Register("ShowCommands", typeof(bool), typeof(RadarGraphEditor),
+                new PropertyMetadata(true));
 
         /// <summary>
         /// A copy of the original values of the RadarItems in the RadarGraph before editing.

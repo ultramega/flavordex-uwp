@@ -36,7 +36,8 @@ namespace Flavordex
             set { SetValue(EnableExportProperty, value); }
         }
         public static readonly DependencyProperty EnableExportProperty =
-            DependencyProperty.Register("EnableExport", typeof(bool), typeof(EntryListPage), new PropertyMetadata(false));
+            DependencyProperty.Register("EnableExport", typeof(bool), typeof(EntryListPage),
+                new PropertyMetadata(false));
 
         /// <summary>
         /// Whether the Settings pane is open.
@@ -71,7 +72,8 @@ namespace Flavordex
             systemNavigationManager.BackRequested += OnBackRequested;
             if (List.SelectedEntry != null)
             {
-                systemNavigationManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+                systemNavigationManager.AppViewBackButtonVisibility =
+                    AppViewBackButtonVisibility.Visible;
             }
 
             Zoom.IsZoomedInViewActive = List.IsCategorySelected;
@@ -116,7 +118,9 @@ namespace Flavordex
             }
             else
             {
-                VisualStateManager.GoToState(this, DetailFrame.SourcePageType != typeof(WelcomePage) ? "NarrowSelectedState" : "NarrowState", false);
+                VisualStateManager.GoToState(this,
+                    DetailFrame.SourcePageType != typeof(WelcomePage)
+                    ? "NarrowSelectedState" : "NarrowState", false);
             }
         }
 
@@ -163,7 +167,8 @@ namespace Flavordex
 
                     if (DetailFrame.SourcePageType == typeof(ViewEntryPage))
                     {
-                        DetailFrame.Navigate(typeof(ViewEntryPage), entryId, new SuppressNavigationTransitionInfo());
+                        DetailFrame.Navigate(typeof(ViewEntryPage), entryId,
+                            new SuppressNavigationTransitionInfo());
                     }
                     else
                     {
@@ -214,11 +219,14 @@ namespace Flavordex
         private void OnDetailFrameNavigated(object sender, NavigationEventArgs e)
         {
             DetailFrame.BackStack.Clear();
-            var visibility = e.SourcePageType != typeof(WelcomePage) ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+            var visibility = e.SourcePageType != typeof(WelcomePage)
+                ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = visibility;
             if (Window.Current.Bounds.Width < 720)
             {
-                VisualStateManager.GoToState(this, e.SourcePageType != typeof(WelcomePage) ? "NarrowSelectedState" : "NarrowState", true);
+                VisualStateManager.GoToState(this,
+                    e.SourcePageType != typeof(WelcomePage)
+                    ? "NarrowSelectedState" : "NarrowState", true);
             }
         }
 
@@ -255,7 +263,8 @@ namespace Flavordex
                 SortRatingButton.IsChecked = false;
             }
 
-            Settings.ListSortDescending = field == Settings.ListSortField ? !Settings.ListSortDescending : false;
+            Settings.ListSortDescending =
+                field == Settings.ListSortField ? !Settings.ListSortDescending : false;
             Settings.ListSortField = field;
         }
 

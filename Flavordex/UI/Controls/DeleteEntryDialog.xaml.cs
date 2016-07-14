@@ -12,7 +12,8 @@ namespace Flavordex.UI.Controls
         /// <summary>
         /// The format string for the dialog message.
         /// </summary>
-        private static readonly string _format = ResourceLoader.GetForCurrentView().GetString("Message/DeleteEntry");
+        private static readonly string _format =
+            ResourceLoader.GetForCurrentView().GetString("Message/DeleteEntry");
 
         /// <summary>
         /// Constructor.

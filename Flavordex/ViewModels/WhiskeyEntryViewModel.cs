@@ -13,7 +13,8 @@ namespace Flavordex.ViewModels
         /// <summary>
         /// The list of whiskey types.
         /// </summary>
-        private static string[] _whiskeyTypes = ResourceLoader.GetForCurrentView("Whiskey").GetString("Types").Split(';');
+        private static string[] _whiskeyTypes =
+            ResourceLoader.GetForCurrentView("Whiskey").GetString("Types").Split(';');
 
         /// <summary>
         /// Gets the list of whiskey type suggestions.

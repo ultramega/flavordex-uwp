@@ -25,17 +25,22 @@ namespace Flavordex
             set { SetValue(DataProperty, value); }
         }
         public static readonly DependencyProperty DataProperty =
-            DependencyProperty.Register("Data", typeof(SearchViewModel), typeof(EntrySearchPage), null);
+            DependencyProperty.Register("Data", typeof(SearchViewModel), typeof(EntrySearchPage),
+                null);
 
         /// <summary>
         /// Gets the list of Categories.
         /// </summary>
-        private ObservableCollection<CategoryItemViewModel> Categories { get; } = new ObservableCollection<CategoryItemViewModel>();
+        private ObservableCollection<CategoryItemViewModel> Categories { get; } =
+            new ObservableCollection<CategoryItemViewModel>();
 
         /// <summary>
         /// The currently selected Category.
         /// </summary>
-        private Category _selectedCategory = new Category() { Name = ResourceLoader.GetForCurrentView("EntryList").GetString("Category/All") };
+        private Category _selectedCategory = new Category()
+        {
+            Name = ResourceLoader.GetForCurrentView("EntryList").GetString("Category/All")
+        };
 
         /// <summary>
         /// The CalendarDatePicker for the start date.
@@ -81,7 +86,8 @@ namespace Flavordex
                     Categories.Add(category);
                 }
             }
-            CategoryComboBox.SelectedItem = Categories.FirstOrDefault(k => k.Model.ID == Data.Entry.Model.CategoryID);
+            CategoryComboBox.SelectedItem =
+                Categories.FirstOrDefault(k => k.Model.ID == Data.Entry.Model.CategoryID);
             CategoryComboBox.SelectionChanged += OnCategoryChanged;
         }
 
@@ -123,7 +129,8 @@ namespace Flavordex
         /// </summary>
         /// <param name="sender">The StartDatePicker.</param>
         /// <param name="args">The event arguments.</param>
-        private void OnStartDateChange(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        private void OnStartDateChange(CalendarDatePicker sender,
+            CalendarDatePickerDateChangedEventArgs args)
         {
             if (args.OldDate.Equals(args.NewDate))
             {
@@ -143,7 +150,8 @@ namespace Flavordex
         /// </summary>
         /// <param name="sender">The EndDatePicker.</param>
         /// <param name="args">The event arguments.</param>
-        private void OnEndDateChange(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        private void OnEndDateChange(CalendarDatePicker sender,
+            CalendarDatePickerDateChangedEventArgs args)
         {
             if (args.OldDate.Equals(args.NewDate))
             {
@@ -162,7 +170,8 @@ namespace Flavordex
         /// </summary>
         /// <param name="sender">The maker AutoSuggestBox.</param>
         /// <param name="args">The event arguments.</param>
-        private void OnMakerSelected(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void OnMakerSelected(AutoSuggestBox sender,
+            AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             var maker = args.ChosenSuggestion as Maker;
             Data.Entry.Origin = maker.Location;
@@ -184,7 +193,9 @@ namespace Flavordex
             });
             if (_selectedCategory.ID > 0)
             {
-                foreach (var extra in await DatabaseHelper.GetCategoryExtrasAsync(_selectedCategory.ID, true))
+                var extras =
+                    await DatabaseHelper.GetCategoryExtrasAsync(_selectedCategory.ID, true);
+                foreach (var extra in extras)
                 {
                     entry.Extras.Add(new EntryExtraItemViewModel(new EntryExtra()
                     {

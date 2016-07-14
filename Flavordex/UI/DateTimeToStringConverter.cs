@@ -12,12 +12,14 @@ namespace Flavordex.UI
         /// <summary>
         /// The format string for dates.
         /// </summary>
-        private static readonly string _dateFormat = ResourceLoader.GetForCurrentView().GetString("DateFormat");
+        private static readonly string _dateFormat =
+            ResourceLoader.GetForCurrentView().GetString("DateFormat");
 
         /// <summary>
         /// The format string for dates with time.
         /// </summary>
-        private static readonly string _dateTimeFormat = ResourceLoader.GetForCurrentView().GetString("DateTimeFormat");
+        private static readonly string _dateTimeFormat =
+            ResourceLoader.GetForCurrentView().GetString("DateTimeFormat");
 
         /// <summary>
         /// Converts a DateTime to a formatted string.
@@ -29,7 +31,8 @@ namespace Flavordex.UI
         /// <returns>The date as a formatted string.</returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var format = parameter is string && (parameter as string).ToLower().Equals("long") ? _dateTimeFormat : _dateFormat;
+            var format = parameter is string && (parameter as string).ToLower().Equals("long")
+                ? _dateTimeFormat : _dateFormat;
             return ((DateTime)value).ToString(format);
         }
 

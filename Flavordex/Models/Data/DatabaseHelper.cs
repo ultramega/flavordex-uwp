@@ -89,7 +89,8 @@ namespace Flavordex.Models.Data
         /// <param name="where">The where clause for the query.</param>
         /// <param name="whereArgs">The arguments for the where clause.</param>
         /// <returns>A Collection of Entries.</returns>
-        public static async Task<Collection<Entry>> GetEntryListAsync(string where, object[] whereArgs)
+        public static async Task<Collection<Entry>> GetEntryListAsync(string where,
+            object[] whereArgs)
         {
             var list = new Collection<Entry>();
 
@@ -103,7 +104,12 @@ namespace Flavordex.Models.Data
                 Tables.Entries.RATING,
                 Tables.Entries.DATE
             };
-            var rows = await Database.Query(Tables.Entries.VIEW_NAME, projection, where, whereArgs);
+            var rows = await Database.Query(
+                Tables.Entries.VIEW_NAME,
+                projection,
+                where,
+                whereArgs
+            );
             foreach (var row in rows)
             {
                 list.Add(_entryCache.Get(row));
@@ -119,9 +125,12 @@ namespace Flavordex.Models.Data
         /// <returns>The Entry.</returns>
         public static async Task<Entry> GetEntryAsync(long entryId)
         {
-            var where = BaseColumns._ID + " = ?";
-            var whereArgs = new object[] { entryId };
-            var rows = await Database.Query(Tables.Entries.VIEW_NAME, null, where, whereArgs);
+            var rows = await Database.Query(
+                Tables.Entries.VIEW_NAME,
+                null,
+                BaseColumns._ID + " = ?",
+                new object[] { entryId }
+            );
             if (rows.Length > 0)
             {
                 return _entryCache.Get(rows[0]);
@@ -138,11 +147,13 @@ namespace Flavordex.Models.Data
         public static async Task<Collection<EntryExtra>> GetEntryExtrasAsync(long entryId)
         {
             var list = new Collection<EntryExtra>();
-
-            var where = Tables.EntriesExtras.ENTRY + " = ?";
-            var whereArgs = new object[] { entryId };
-            var sort = Tables.Extras.POS;
-            var rows = await Database.Query(Tables.EntriesExtras.VIEW_NAME, null, where, whereArgs, sort);
+            var rows = await Database.Query(
+                Tables.EntriesExtras.VIEW_NAME,
+                null,
+                Tables.EntriesExtras.ENTRY + " = ?",
+                new object[] { entryId },
+                Tables.Extras.POS
+            );
             foreach (var row in rows)
             {
                 var item = new EntryExtra();
@@ -161,11 +172,13 @@ namespace Flavordex.Models.Data
         public static async Task<Collection<EntryFlavor>> GetEntryFlavorsAsync(long entryId)
         {
             var list = new Collection<EntryFlavor>();
-
-            var where = Tables.EntriesFlavors.ENTRY + " = ?";
-            var whereArgs = new object[] { entryId };
-            var sort = Tables.EntriesFlavors.POS;
-            var rows = await Database.Query(Tables.EntriesFlavors.TABLE_NAME, null, where, whereArgs, sort);
+            var rows = await Database.Query(
+                Tables.EntriesFlavors.TABLE_NAME,
+                null,
+                Tables.EntriesFlavors.ENTRY + " = ?",
+                new object[] { entryId },
+                Tables.EntriesFlavors.POS
+            );
             foreach (var row in rows)
             {
                 var item = new EntryFlavor();
@@ -184,11 +197,13 @@ namespace Flavordex.Models.Data
         public static async Task<Collection<Photo>> GetEntryPhotosAsync(long entryId)
         {
             var list = new Collection<Photo>();
-
-            var where = Tables.Photos.ENTRY + " = ?";
-            var whereArgs = new object[] { entryId };
-            var sort = Tables.Photos.POS;
-            var rows = await Database.Query(Tables.Photos.TABLE_NAME, null, where, whereArgs, sort);
+            var rows = await Database.Query(
+                Tables.Photos.TABLE_NAME,
+                null,
+                Tables.Photos.ENTRY + " = ?",
+                new object[] { entryId },
+                Tables.Photos.POS
+            );
             foreach (var row in rows)
             {
                 var item = new Photo();
@@ -206,13 +221,14 @@ namespace Flavordex.Models.Data
         /// <returns>The path to the poster photo.</returns>
         public static async Task<string> GetPosterPhotoAsync(long entryId)
         {
-            var projection = new string[]
-            {
-                Tables.Photos.PATH
-            };
-            var where = Tables.Photos.ENTRY + " = ?";
-            var whereArgs = new object[] { entryId };
-            var rows = await Database.Query(Tables.Photos.TABLE_NAME, projection, where, whereArgs, Tables.Photos.POS, "1");
+            var rows = await Database.Query(
+                Tables.Photos.TABLE_NAME,
+                new string[] { Tables.Photos.PATH },
+                Tables.Photos.ENTRY + " = ?",
+                new object[] { entryId },
+                Tables.Photos.POS,
+                "1"
+            );
             if (rows.Length > 0)
             {
                 return rows[0].GetString(Tables.Photos.PATH);
@@ -228,7 +244,8 @@ namespace Flavordex.Models.Data
         /// <param name="extras">The extra fields for the journal entry.</param>
         /// <param name="flavors">The flavors for the journal entry.</param>
         /// <returns>Whether the update was successful.</returns>
-        public static async Task<bool> UpdateEntryAsync(Entry entry, Collection<EntryExtra> extras = null, Collection<EntryFlavor> flavors = null)
+        public static async Task<bool> UpdateEntryAsync(Entry entry,
+            Collection<EntryExtra> extras = null, Collection<EntryFlavor> flavors = null)
         {
             entry.Title = FilterName(entry.Title);
             if (string.IsNullOrEmpty(entry.Title))
@@ -264,7 +281,12 @@ namespace Flavordex.Models.Data
             {
                 values.Remove(Tables.Entries.UUID);
                 values.Remove(Tables.Entries.CAT_ID);
-                await Database.Update(Tables.Entries.TABLE_NAME, values, BaseColumns._ID + " = ?", new object[] { entry.ID });
+                await Database.Update(
+                    Tables.Entries.TABLE_NAME,
+                    values,
+                    BaseColumns._ID + " = ?",
+                    new object[] { entry.ID }
+                );
             }
             else
             {
@@ -308,12 +330,14 @@ namespace Flavordex.Models.Data
             {
                 return;
             }
-
-            var projection = new string[] { BaseColumns._ID };
-            var where = Tables.Cats.NAME + " = ?";
-            var whereArgs = new object[] { entry.Category };
-
-            var rows = await Database.Query(Tables.Cats.TABLE_NAME, projection, where, whereArgs, null, "1");
+            var rows = await Database.Query(
+                Tables.Cats.TABLE_NAME,
+                new string[] { BaseColumns._ID },
+                Tables.Cats.NAME + " = ?",
+                new object[] { entry.Category },
+                null,
+                "1"
+            );
             if (rows.Length > 0)
             {
                 entry.CategoryID = rows[0].GetLong(BaseColumns._ID);
@@ -350,12 +374,13 @@ namespace Flavordex.Models.Data
         /// <returns>The unique title.</returns>
         private static async Task<string> GetUniqueEntryTitle(string title)
         {
-            var projection = new string[] { Tables.Entries.TITLE };
-            var where = Tables.Entries.TITLE + " LIKE ?";
-            var whereArgs = new object[] { title + "%" };
-            var sort = Tables.Entries.TITLE;
-
-            var rows = await Database.Query(Tables.Entries.TABLE_NAME, projection, where, whereArgs, sort);
+            var rows = await Database.Query(
+                Tables.Entries.TABLE_NAME,
+                new string[] { Tables.Entries.TITLE },
+                Tables.Entries.TITLE + " LIKE ?",
+                new object[] { title + "%" },
+                Tables.Entries.TITLE
+            );
             if (rows.Length > 0)
             {
                 string newTitle = title;
@@ -378,10 +403,15 @@ namespace Flavordex.Models.Data
         /// <returns>Whether a journal entry exists with the UUID.</returns>
         public static async Task<bool> EntryUuidExists(string uuid)
         {
-            var projection = new string[] { BaseColumns._ID };
-            var where = Tables.Entries.UUID + " = ?";
-            var whereArgs = new object[] { uuid };
-            return (await Database.Query(Tables.Entries.TABLE_NAME, projection, where, whereArgs, null, "1")).Length > 0;
+            var rows = await Database.Query(
+                Tables.Entries.TABLE_NAME,
+                new string[] { BaseColumns._ID },
+                Tables.Entries.UUID + " = ?",
+                new object[] { uuid },
+                null,
+                "1"
+            );
+            return rows.Length > 0;
         }
 
         /// <summary>
@@ -390,7 +420,8 @@ namespace Flavordex.Models.Data
         /// <param name="entryId">The primary ID of the journal entry.</param>
         /// <param name="categoryId">The primary ID of the category.</param>
         /// <param name="extras">The list of EntryExtras.</param>
-        private static async Task UpdateEntryExtrasAsync(long entryId, long categoryId, Collection<EntryExtra> extras)
+        private static async Task UpdateEntryExtrasAsync(long entryId, long categoryId,
+            Collection<EntryExtra> extras)
         {
             if (extras == null)
             {
@@ -403,7 +434,11 @@ namespace Flavordex.Models.Data
             {
                 if (!extra.IsPreset && string.IsNullOrWhiteSpace(extra.Value))
                 {
-                    await Database.Delete(Tables.EntriesExtras.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { extra.ID });
+                    await Database.Delete(
+                        Tables.EntriesExtras.TABLE_NAME,
+                        BaseColumns._ID + " = ?",
+                        new object[] { extra.ID }
+                    );
                     continue;
                 }
                 await GetExtraIdAsync(categoryId, extra);
@@ -427,12 +462,14 @@ namespace Flavordex.Models.Data
             {
                 return;
             }
-
-            var projection = new string[] { BaseColumns._ID };
-            var where = Tables.Extras.CAT + " = ? AND " + Tables.Extras.NAME + " = ?";
-            var whereArgs = new object[] { categoryId, extra.Name };
-
-            var rows = await Database.Query(Tables.Extras.TABLE_NAME, projection, where, whereArgs, null, "1");
+            var rows = await Database.Query(
+                Tables.Extras.TABLE_NAME,
+                new string[] { BaseColumns._ID },
+                Tables.Extras.CAT + " = ? AND " + Tables.Extras.NAME + " = ?",
+                new object[] { categoryId, extra.Name },
+                null,
+                "1"
+            );
             if (rows.Length > 0)
             {
                 extra.ExtraID = rows[0].GetLong(BaseColumns._ID);
@@ -461,12 +498,14 @@ namespace Flavordex.Models.Data
         /// <returns>The next sorting position for an extra field.</returns>
         private static async Task<long> GetNextExtraPositionAsync(long categoryId)
         {
-            var projection = new string[] { Tables.Extras.POS };
-            var where = Tables.Extras.CAT + " = ?";
-            var whereArgs = new object[] { categoryId };
-            var sort = Tables.Extras.POS + " DESC";
-
-            var rows = await Database.Query(Tables.Extras.TABLE_NAME, projection, where, whereArgs, sort, "1");
+            var rows = await Database.Query(
+                Tables.Extras.TABLE_NAME,
+                new string[] { Tables.Extras.POS },
+                Tables.Extras.CAT + " = ?",
+                new object[] { categoryId },
+                Tables.Extras.POS + " DESC",
+                "1"
+            );
             if (rows.Length > 0)
             {
                 return rows[0].GetLong(Tables.Extras.POS) + 1;
@@ -480,14 +519,19 @@ namespace Flavordex.Models.Data
         /// </summary>
         /// <param name="entryId">The primary ID of the journal entry.</param>
         /// <param name="flavors">The list of EntryFlavors.</param>
-        public static async Task UpdateEntryFlavorsAsync(long entryId, Collection<EntryFlavor> flavors)
+        public static async Task UpdateEntryFlavorsAsync(long entryId,
+            Collection<EntryFlavor> flavors)
         {
             if (flavors == null)
             {
                 return;
             }
 
-            await Database.Delete(Tables.EntriesFlavors.TABLE_NAME, Tables.EntriesFlavors.ENTRY + " = ?", new object[] { entryId });
+            await Database.Delete(
+                Tables.EntriesFlavors.TABLE_NAME,
+                Tables.EntriesFlavors.ENTRY + " = ?",
+                new object[] { entryId }
+            );
 
             var position = 0;
             foreach (var flavor in flavors)
@@ -509,7 +553,12 @@ namespace Flavordex.Models.Data
         {
             if (photo.ID > 0)
             {
-                await Database.Update(Tables.Photos.TABLE_NAME, photo.GetData(), BaseColumns._ID + " = ?", new object[] { photo.ID });
+                await Database.Update(
+                    Tables.Photos.TABLE_NAME,
+                    photo.GetData(),
+                    BaseColumns._ID + " = ?",
+                    new object[] { photo.ID }
+                );
             }
             else
             {
@@ -528,7 +577,12 @@ namespace Flavordex.Models.Data
         /// <returns>Whether the Photo was successfully deleted.</returns>
         public static async Task<bool> DeletePhotoAsync(Photo photo)
         {
-            if (await Database.Delete(Tables.Photos.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { photo.ID }) > 0)
+            var changed = await Database.Delete(
+                Tables.Photos.TABLE_NAME,
+                BaseColumns._ID + " = ?",
+                new object[] { photo.ID }
+            );
+            if (changed > 0)
             {
                 RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, photo));
                 photo.Deleted();
@@ -549,10 +603,12 @@ namespace Flavordex.Models.Data
             values.Remove(Tables.Entries.MAKER_ID);
             values.Remove(Tables.Entries.ORIGIN);
 
-            var projection = new string[] { BaseColumns._ID };
-            var where = Tables.Makers.NAME + " = ? AND " + Tables.Makers.LOCATION + " = ?";
-            var whereArgs = new object[] { name, location };
-            var rows = await Database.Query(Tables.Makers.TABLE_NAME, projection, where, whereArgs);
+            var rows = await Database.Query(
+                Tables.Makers.TABLE_NAME,
+                new string[] { BaseColumns._ID },
+                Tables.Makers.NAME + " = ? AND " + Tables.Makers.LOCATION + " = ?",
+                new object[] { name, location }
+            );
             if (rows.Length > 0)
             {
                 values.SetLong(Tables.Entries.MAKER, rows[0].GetLong(BaseColumns._ID));
@@ -564,7 +620,8 @@ namespace Flavordex.Models.Data
                     { Tables.Makers.NAME, name },
                     { Tables.Makers.LOCATION, location }
                 };
-                values.SetLong(Tables.Entries.MAKER, await Database.Insert(Tables.Makers.TABLE_NAME, newMaker));
+                values.SetLong(Tables.Entries.MAKER,
+                    await Database.Insert(Tables.Makers.TABLE_NAME, newMaker));
             }
         }
 
@@ -575,7 +632,12 @@ namespace Flavordex.Models.Data
         /// <returns>Whether the journal entry was successfully deleted.</returns>
         public static async Task<bool> DeleteEntryAsync(Entry entry)
         {
-            if (await Database.Delete(Tables.Entries.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { entry.ID }) > 0)
+            var changed = await Database.Delete(
+                Tables.Entries.TABLE_NAME,
+                BaseColumns._ID + " = ?",
+                new object[] { entry.ID }
+            );
+            if (changed > 0)
             {
                 entry.Deleted();
                 RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, entry));
@@ -614,9 +676,12 @@ namespace Flavordex.Models.Data
         /// <returns>The Category.</returns>
         public static async Task<Category> GetCategoryAsync(long categoryId)
         {
-            var where = BaseColumns._ID + " = ?";
-            var whereArgs = new object[] { categoryId };
-            var rows = await Database.Query(Tables.Cats.VIEW_NAME, null, where, whereArgs);
+            var rows = await Database.Query(
+                Tables.Cats.VIEW_NAME,
+                null,
+                BaseColumns._ID + " = ?",
+                new object[] { categoryId }
+            );
             foreach (var row in rows)
             {
                 return _categoryCache.Get(row);
@@ -630,7 +695,8 @@ namespace Flavordex.Models.Data
         /// </summary>
         /// <param name="categoryId">The primary ID of the category.</param>
         /// <param name="filterDeleted">Whether to exclude deleted extra fields.</param>
-        public static async Task<Collection<Extra>> GetCategoryExtrasAsync(long categoryId, bool filterDeleted = false)
+        public static async Task<Collection<Extra>> GetCategoryExtrasAsync(long categoryId,
+            bool filterDeleted = false)
         {
             var list = new Collection<Extra>();
 
@@ -639,9 +705,13 @@ namespace Flavordex.Models.Data
             {
                 where += " AND " + Tables.Extras.DELETED + " = 0";
             }
-            var whereArgs = new object[] { categoryId };
-            var sort = Tables.Extras.POS;
-            var rows = await Database.Query(Tables.Extras.TABLE_NAME, null, where, whereArgs, sort);
+            var rows = await Database.Query(
+                Tables.Extras.TABLE_NAME,
+                null,
+                where,
+                new object[] { categoryId },
+                Tables.Extras.POS
+            );
             foreach (var row in rows)
             {
                 var item = new Extra();
@@ -661,10 +731,13 @@ namespace Flavordex.Models.Data
         {
             var list = new Collection<Flavor>();
 
-            var where = Tables.Flavors.CAT + " = ?";
-            var whereArgs = new object[] { categoryId };
-            var sort = Tables.Flavors.POS;
-            var rows = await Database.Query(Tables.Flavors.TABLE_NAME, null, where, whereArgs, sort);
+            var rows = await Database.Query(
+                Tables.Flavors.TABLE_NAME,
+                null,
+                Tables.Flavors.CAT + " = ?",
+                new object[] { categoryId },
+                Tables.Flavors.POS
+            );
             foreach (var row in rows)
             {
                 var item = new Flavor();
@@ -682,9 +755,11 @@ namespace Flavordex.Models.Data
         /// <param name="extras">The extra fields for the category.</param>
         /// <param name="flavors">The flavors for the category.</param>
         /// <returns>Whether the update was successful.</returns>
-        public static async Task<bool> UpdateCategoryAsync(Category category, Collection<Extra> extras, Collection<Flavor> flavors)
+        public static async Task<bool> UpdateCategoryAsync(Category category,
+            Collection<Extra> extras, Collection<Flavor> flavors)
         {
-            var action = category.ID == 0 ? RecordChangedAction.Insert : RecordChangedAction.Update;
+            var action =
+                category.ID == 0 ? RecordChangedAction.Insert : RecordChangedAction.Update;
             category.Updated = DateTime.Now;
             category.IsSynced = false;
 
@@ -706,7 +781,12 @@ namespace Flavordex.Models.Data
 
                 if (action == RecordChangedAction.Update)
                 {
-                    await Database.Update(Tables.Cats.TABLE_NAME, values, BaseColumns._ID + " = ?", new object[] { category.ID });
+                    await Database.Update(
+                        Tables.Cats.TABLE_NAME,
+                        values,
+                        BaseColumns._ID + " = ?",
+                        new object[] { category.ID }
+                    );
                 }
                 else
                 {
@@ -736,7 +816,8 @@ namespace Flavordex.Models.Data
         /// </summary>
         /// <param name="categoryId">The primary ID of the category.</param>
         /// <param name="extras">The list of Extras.</param>
-        private static async Task UpdateCategoryExtrasAsync(long categoryId, Collection<Extra> extras)
+        private static async Task UpdateCategoryExtrasAsync(long categoryId,
+            Collection<Extra> extras)
         {
             if (extras == null)
             {
@@ -756,11 +837,20 @@ namespace Flavordex.Models.Data
                 {
                     if (extra.IsDeleted || string.IsNullOrWhiteSpace(extra.Name))
                     {
-                        await Database.Delete(Tables.Extras.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { extra.ID });
+                        await Database.Delete(
+                            Tables.Extras.TABLE_NAME,
+                            BaseColumns._ID + " = ?",
+                            new object[] { extra.ID }
+                        );
                     }
                     else
                     {
-                        await Database.Update(Tables.Extras.TABLE_NAME, extra.GetData(), BaseColumns._ID + " = ?", new object[] { extra.ID });
+                        await Database.Update(
+                            Tables.Extras.TABLE_NAME,
+                            extra.GetData(),
+                            BaseColumns._ID + " = ?",
+                            new object[] { extra.ID }
+                        );
                     }
                 }
                 else if (!string.IsNullOrWhiteSpace(extra.Name))
@@ -780,14 +870,19 @@ namespace Flavordex.Models.Data
         /// </summary>
         /// <param name="categoryId">The primary ID of the category.</param>
         /// <param name="flavors">The list of Flavors.</param>
-        private static async Task UpdateCategoryFlavorsAsync(long categoryId, Collection<Flavor> flavors)
+        private static async Task UpdateCategoryFlavorsAsync(long categoryId,
+            Collection<Flavor> flavors)
         {
             if (flavors == null)
             {
                 return;
             }
 
-            await Database.Delete(Tables.Flavors.TABLE_NAME, Tables.Flavors.CAT + " = ?", new object[] { categoryId });
+            await Database.Delete(
+                Tables.Flavors.TABLE_NAME,
+                Tables.Flavors.CAT + " = ?",
+                new object[] { categoryId }
+            );
 
             foreach (var flavor in flavors)
             {
@@ -803,15 +898,23 @@ namespace Flavordex.Models.Data
         /// <returns>Whether the category was successfully deleted.</returns>
         public static async Task<bool> DeleteCategoryAsync(Category category)
         {
-            var projection = new string[] { BaseColumns._ID };
-            var where = Tables.Entries.CAT + " = ?";
-            var whereArgs = new object[] { category.ID };
-            var rows = await Database.Query(Tables.Entries.TABLE_NAME, projection, where, whereArgs);
+            var rows = await Database.Query(
+                Tables.Entries.TABLE_NAME,
+                new string[] { BaseColumns._ID },
+                Tables.Entries.CAT + " = ?",
+                new object[] { category.ID }
+            );
 
-            if (await Database.Delete(Tables.Cats.TABLE_NAME, BaseColumns._ID + " = ?", new object[] { category.ID }) > 0)
+            var changed = await Database.Delete(
+                Tables.Cats.TABLE_NAME,
+                BaseColumns._ID + " = ?",
+                new object[] { category.ID }
+            );
+            if (changed > 0)
             {
                 category.Deleted();
-                RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, category));
+                RecordChanged(null,
+                    new RecordChangedEventArgs(RecordChangedAction.Delete, category));
 
                 foreach (var item in rows)
                 {
@@ -820,7 +923,8 @@ namespace Flavordex.Models.Data
                     if (entry != null)
                     {
                         entry.Deleted();
-                        RecordChanged(null, new RecordChangedEventArgs(RecordChangedAction.Delete, entry));
+                        RecordChanged(null,
+                            new RecordChangedEventArgs(RecordChangedAction.Delete, entry));
                     }
 
                     await PhotoUtilities.DeleteThumbnailAsync(id);
@@ -838,7 +942,14 @@ namespace Flavordex.Models.Data
         public static async Task<Collection<Maker>> GetMakersAsync()
         {
             var list = new Collection<Maker>();
-            var rows = await Database.Query(Tables.Makers.TABLE_NAME, null, null, null, Tables.Makers.NAME);
+
+            var rows = await Database.Query(
+                Tables.Makers.TABLE_NAME,
+                null,
+                null,
+                null,
+                Tables.Makers.NAME
+            );
             foreach (var row in rows)
             {
                 list.Add(new Maker()
@@ -847,6 +958,7 @@ namespace Flavordex.Models.Data
                     Location = row.GetString(Tables.Makers.LOCATION)
                 });
             }
+
             return list;
         }
 
@@ -857,6 +969,7 @@ namespace Flavordex.Models.Data
         public static async Task<Collection<Location>> GetLocationListAsync()
         {
             var list = new Collection<Location>();
+
             var rows = await Database.Query(Tables.Locations.TABLE_NAME);
             foreach (var row in rows)
             {
@@ -864,6 +977,7 @@ namespace Flavordex.Models.Data
                 location.SetData(row);
                 list.Add(location);
             }
+
             return list;
         }
 

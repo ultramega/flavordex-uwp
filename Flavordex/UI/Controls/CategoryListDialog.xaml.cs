@@ -16,7 +16,8 @@ namespace Flavordex.UI.Controls
         /// <summary>
         /// Gets the list of Categories to display.
         /// </summary>
-        private ObservableCollection<CategoryItemViewModel> Categories = new ObservableCollection<CategoryItemViewModel>();
+        private ObservableCollection<CategoryItemViewModel> Categories =
+            new ObservableCollection<CategoryItemViewModel>();
 
         /// <summary>
         /// Constructor.

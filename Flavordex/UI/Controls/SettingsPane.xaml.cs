@@ -20,7 +20,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(DetectLocationProperty, value); }
         }
         public static readonly DependencyProperty DetectLocationProperty =
-            DependencyProperty.Register("DetectLocation", typeof(bool), typeof(SettingsPane), new PropertyMetadata(false));
+            DependencyProperty.Register("DetectLocation", typeof(bool), typeof(SettingsPane),
+                new PropertyMetadata(false));
 
         /// <summary>
         /// Gets or sets the Visibility of the Detect Location ToggleSwitch.
@@ -31,7 +32,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(DetectLocationVisibilityProperty, value); }
         }
         public static readonly DependencyProperty DetectLocationVisibilityProperty =
-            DependencyProperty.Register("DetectLocationVisibility", typeof(Visibility), typeof(SettingsPane), new PropertyMetadata(Visibility.Visible));
+            DependencyProperty.Register("DetectLocationVisibility", typeof(Visibility),
+                typeof(SettingsPane), new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
         /// A reference to the CategoryListDialog.
@@ -108,7 +110,8 @@ namespace Flavordex.UI.Controls
         /// <param name="dp">The DetectLocation property.</param>
         private async void OnDetectLocationChanged(DependencyObject sender, DependencyProperty dp)
         {
-            if (DetectLocation && await Geolocator.RequestAccessAsync() != GeolocationAccessStatus.Allowed)
+            if (DetectLocation
+                && await Geolocator.RequestAccessAsync() != GeolocationAccessStatus.Allowed)
             {
                 DetectLocation = false;
                 FlyoutBase.ShowAttachedFlyout(DetectLocationToggle);

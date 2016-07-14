@@ -14,7 +14,8 @@ namespace Flavordex.UI.Controls
         /// <summary>
         /// Occurs when the Return key is pressed in the TextBox.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
+            "CA1009:DeclareEventHandlersCorrectly")]
         public event RoutedEventHandler Return = delegate { };
 
         /// <summary>
@@ -37,7 +38,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(DeletedProperty, value); }
         }
         public static readonly DependencyProperty DeletedProperty =
-            DependencyProperty.Register("Deleted", typeof(bool), typeof(FieldEditor), new PropertyMetadata(false));
+            DependencyProperty.Register("Deleted", typeof(bool), typeof(FieldEditor),
+                new PropertyMetadata(false));
 
         /// <summary>
         /// Gets or sets the placeholder text of the field.
@@ -48,7 +50,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(PlaceholderTextProperty, value); }
         }
         public static readonly DependencyProperty PlaceholderTextProperty =
-            DependencyProperty.Register("PlaceholderText", typeof(string), typeof(FieldEditor), null);
+            DependencyProperty.Register("PlaceholderText", typeof(string), typeof(FieldEditor),
+                null);
 
         /// <summary>
         /// Gets or sets the maximum length of the value of the field.
@@ -59,7 +62,8 @@ namespace Flavordex.UI.Controls
             set { SetValue(MaxLengthProperty, value); }
         }
         public static readonly DependencyProperty MaxLengthProperty =
-            DependencyProperty.Register("MaxLength", typeof(int), typeof(FieldEditor), new PropertyMetadata(0));
+            DependencyProperty.Register("MaxLength", typeof(int), typeof(FieldEditor),
+                new PropertyMetadata(0));
 
         /// <summary>
         /// Constructor.

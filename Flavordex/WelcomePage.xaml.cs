@@ -19,7 +19,8 @@ namespace Flavordex
             {
                 var format = ResourceLoader.GetForCurrentView().GetString("Message/Version");
                 var version = Package.Current.Id.Version;
-                return string.Format(format, version.Major, version.Minor, version.Build, version.Revision);
+                return string.Format(format, version.Major, version.Minor, version.Build,
+                    version.Revision);
             }
         }
 

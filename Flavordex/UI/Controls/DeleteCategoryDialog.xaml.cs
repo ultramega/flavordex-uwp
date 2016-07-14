@@ -13,12 +13,14 @@ namespace Flavordex.UI.Controls
         /// <summary>
         /// The format string for the dialog message.
         /// </summary>
-        private static readonly string _messageFormat = ResourceLoader.GetForCurrentView().GetString("Message/ConfirmDeleteCategory");
+        private static readonly string _messageFormat =
+            ResourceLoader.GetForCurrentView().GetString("Message/ConfirmDeleteCategory");
 
         /// <summary>
         /// The format string for the confirmation check box message.
         /// </summary>
-        private static readonly string _confirmMessageFormat = ResourceLoader.GetForCurrentView().GetString("Message/DeleteCategoryEntries");
+        private static readonly string _confirmMessageFormat =
+            ResourceLoader.GetForCurrentView().GetString("Message/DeleteCategoryEntries");
 
         /// <summary>
         /// Gets the dialog message.
@@ -40,7 +42,8 @@ namespace Flavordex.UI.Controls
             Message = string.Format(_messageFormat, category.Name);
             if (category.EntryCount > 0)
             {
-                ConfirmMessage = string.Format(_confirmMessageFormat, category.EntryCount, Plurals.GetWord("entries", category.EntryCount));
+                ConfirmMessage = string.Format(_confirmMessageFormat, category.EntryCount,
+                    Plurals.GetWord("entries", category.EntryCount));
             }
             else
             {
