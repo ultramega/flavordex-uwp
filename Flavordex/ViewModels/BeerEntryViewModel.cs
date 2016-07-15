@@ -50,6 +50,20 @@ namespace Flavordex.ViewModels
         }
 
         /// <summary>
+        /// Gets the list of beer serving type options for the search form.
+        /// </summary>
+        public string[] SearchServingTypes
+        {
+            get
+            {
+                var list = new string[_servingTypes.Length + 1];
+                list[0] = ResourceLoader.GetForCurrentView("Search").GetString("Any");
+                _servingTypes.CopyTo(list, 1);
+                return list;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the style of beer.
         /// </summary>
         public string Style
@@ -79,7 +93,6 @@ namespace Flavordex.ViewModels
             }
             set
             {
-                value = Math.Max(0, Math.Min(value, _servingTypes.Length - 1));
                 SetExtra(Tables.Extras.Beer.SERVING, value);
                 RaisePropertyChanged();
                 RaisePropertyChanged("ServingTypeName");

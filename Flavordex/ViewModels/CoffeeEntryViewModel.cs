@@ -28,6 +28,20 @@ namespace Flavordex.ViewModels
         }
 
         /// <summary>
+        /// Gets the list of brewing method options for the search form.
+        /// </summary>
+        public string[] SearchBrewMethods
+        {
+            get
+            {
+                var list = new string[_brewMethods.Length + 1];
+                list[0] = ResourceLoader.GetForCurrentView("Search").GetString("Any");
+                _brewMethods.CopyTo(list, 1);
+                return list;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the name of the roaster.
         /// </summary>
         public string Roaster
@@ -88,7 +102,6 @@ namespace Flavordex.ViewModels
             }
             set
             {
-                value = Math.Max(0, Math.Min(value, _brewMethods.Length - 1));
                 SetExtra(Tables.Extras.Coffee.BREW_METHOD, value);
                 RaisePropertyChanged();
                 RaisePropertyChanged("IsEspresso");

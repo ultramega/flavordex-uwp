@@ -250,9 +250,15 @@ namespace Flavordex.ViewModels
             {
                 case Tables.Extras.Beer.SERVING:
                 case Tables.Extras.Coffee.BREW_METHOD:
-                    if (extra.Value != "0")
+                    if (!string.IsNullOrWhiteSpace(extra.Value) && extra.Value != "0")
                     {
-                        ParseExtraField(extra, Comparison.Equal);
+                        var offset = int.Parse(extra.Value) - 1;
+                        var offsetExtra = new EntryExtraItemViewModel(new EntryExtra()
+                        {
+                            ExtraID = extra.Model.ExtraID,
+                            Value = offset.ToString()
+                        });
+                        ParseExtraField(offsetExtra, Comparison.Equal);
                     }
                     return true;
             }

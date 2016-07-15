@@ -126,7 +126,7 @@
 
                 <ComboBox
                     x:Uid="ms-resource:///Beer/Input/ServingType"
-                    ItemsSource="{x:Bind ServingTypes}"
+                    ItemsSource="{x:Bind SearchServingTypes}"
                     SelectedIndex="{x:Bind ServingType, Mode=TwoWay}" />
 
                 <ContentControl
@@ -217,7 +217,7 @@
 
                 <ComboBox
                     x:Uid="ms-resource:///Coffee/Input/BrewMethod"
-                    ItemsSource="{x:Bind BrewMethods}"
+                    ItemsSource="{x:Bind SearchBrewMethods}"
                     SelectedIndex="{x:Bind BrewMethod, Mode=TwoWay}" />
 
                 <ContentControl
