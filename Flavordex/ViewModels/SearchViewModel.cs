@@ -104,6 +104,10 @@ namespace Flavordex.ViewModels
             set
             {
                 _minimumRating = value;
+                if (MinimumRating > MaximumRating)
+                {
+                    MaximumRating = MinimumRating;
+                }
                 RaisePropertyChanged();
             }
         }
@@ -125,6 +129,10 @@ namespace Flavordex.ViewModels
             set
             {
                 _maximumRating = value;
+                if (MinimumRating > MaximumRating)
+                {
+                    MinimumRating = MaximumRating;
+                }
                 RaisePropertyChanged();
             }
         }
