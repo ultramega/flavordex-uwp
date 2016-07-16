@@ -226,7 +226,11 @@ namespace Flavordex.ViewModels
             {
                 if (ExtractionTime.HasValue)
                 {
-                    return (ExtractionTime.Value / 60).ToString();
+                    var minutes = ExtractionTime.Value / 60;
+                    if (minutes > 0)
+                    {
+                        return minutes.ToString();
+                    }
                 }
                 return null;
             }
@@ -248,7 +252,11 @@ namespace Flavordex.ViewModels
             {
                 if (ExtractionTime.HasValue)
                 {
-                    return (ExtractionTime.Value % 60).ToString("D2");
+                    var seconds = ExtractionTime.Value % 60;
+                    if (seconds > 0)
+                    {
+                        return seconds.ToString("D2");
+                    }
                 }
                 return null;
             }
@@ -257,7 +265,7 @@ namespace Flavordex.ViewModels
                 var seconds = 0;
                 int.TryParse(value, out seconds);
                 var currentTime = ExtractionTime.HasValue ? ExtractionTime.Value : 0;
-                ExtractionTime = ExtractionTime - currentTime % 60 + seconds;
+                ExtractionTime = currentTime - currentTime % 60 + seconds;
             }
         }
 
