@@ -11,35 +11,15 @@ namespace Flavordex.ViewModels
     public class CoffeeEntryViewModel : EntryViewModel
     {
         /// <summary>
-        /// The list of brewing method options.
+        /// The index of the espresso brew method.
         /// </summary>
-        private static string[] _brewMethods =
+        private int _espressoIndex = 4;
+
+        /// <summary>
+        /// Gets or sets the list of brewing method options.
+        /// </summary>
+        public string[] BrewMethods { get; private set; } =
             ResourceLoader.GetForCurrentView("Coffee").GetString("BrewMethods").Split(';');
-
-        /// <summary>
-        /// Gets the list of brewing method options.
-        /// </summary>
-        public string[] BrewMethods
-        {
-            get
-            {
-                return _brewMethods;
-            }
-        }
-
-        /// <summary>
-        /// Gets the list of brewing method options for the search form.
-        /// </summary>
-        public string[] SearchBrewMethods
-        {
-            get
-            {
-                var list = new string[_brewMethods.Length + 1];
-                list[0] = ResourceLoader.GetForCurrentView("Search").GetString("Any");
-                _brewMethods.CopyTo(list, 1);
-                return list;
-            }
-        }
 
         /// <summary>
         /// Gets or sets the name of the roaster.
@@ -102,6 +82,7 @@ namespace Flavordex.ViewModels
             }
             set
             {
+                value = Math.Max(0, Math.Min(BrewMethods.Length - 1, value));
                 SetExtra(Tables.Extras.Coffee.BREW_METHOD, value);
                 RaisePropertyChanged();
                 RaisePropertyChanged("IsEspresso");
@@ -117,7 +98,7 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return BrewMethod == 4;
+                return BrewMethod == _espressoIndex;
             }
         }
 
@@ -128,7 +109,7 @@ namespace Flavordex.ViewModels
         {
             get
             {
-                return _brewMethods[BrewMethod];
+                return BrewMethods[BrewMethod];
             }
         }
 
@@ -332,5 +313,18 @@ namespace Flavordex.ViewModels
         /// </summary>
         /// <param name="entry">The Entry to represent.</param>
         public CoffeeEntryViewModel(Entry entry) : base(entry) { }
+
+        /// <summary>
+        /// Adds the Any option to the list of brew methods.
+        /// </summary>
+        public override void EnableSearchMode()
+        {
+            base.EnableSearchMode();
+            var brewMethods = new string[BrewMethods.Length + 1];
+            brewMethods[0] = ResourceLoader.GetForCurrentView("Search").GetString("Any");
+            BrewMethods.CopyTo(brewMethods, 1);
+            BrewMethods = brewMethods;
+            _espressoIndex = 5;
+        }
     }
 }

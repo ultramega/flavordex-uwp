@@ -7,7 +7,6 @@ using System.Linq;
 using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace Flavordex
 {
@@ -191,6 +190,7 @@ namespace Flavordex
                 Category = _selectedCategory.Name,
                 CategoryID = _selectedCategory.ID
             });
+            entry.EnableSearchMode();
             if (_selectedCategory.ID > 0)
             {
                 var extras =

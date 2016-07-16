@@ -313,5 +313,10 @@ namespace Flavordex.ViewModels
                 extra.Value = value != null ? value.ToString() : "";
             }
         }
+
+        /// <summary>
+        /// Makes any adjustments to the ViewModel to be used in the search form.
+        /// </summary>
+        public virtual void EnableSearchMode() { }
     }
 }
