@@ -190,6 +190,7 @@ namespace Flavordex
                 Category = _selectedCategory.Name,
                 CategoryID = _selectedCategory.ID
             });
+            entry.SetMakers(await DatabaseHelper.GetMakersAsync());
             entry.EnableSearchMode();
             if (_selectedCategory.ID > 0)
             {
