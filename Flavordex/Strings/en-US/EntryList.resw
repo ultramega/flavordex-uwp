@@ -93,6 +93,9 @@
   <data name="Title.EntriesList" xml:space="preserve">
     <value>{0} Entries</value>
   </data>
+  <data name="Title.SearchResults" xml:space="preserve">
+    <value>Search Results</value>
+  </data>
   <data name="Title.Sort.Text" xml:space="preserve">
     <value>Sort by…</value>
   </data>

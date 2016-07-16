@@ -32,6 +32,11 @@ namespace Flavordex.ViewModels
             _resources.GetString("Title/EntriesList");
 
         /// <summary>
+        /// The title for the search results list.
+        /// </summary>
+        private static readonly string _searchTitle = _resources.GetString("Title/SearchResults");
+
+        /// <summary>
         /// The category name for the unfiltered entry list.
         /// </summary>
         private static readonly string _all = _resources.GetString("All");
@@ -270,7 +275,11 @@ namespace Flavordex.ViewModels
                 SortList();
 
                 var category = Categories.FirstOrDefault(e => e.Model.ID == Settings.ListCategory);
-                if (category != null)
+                if (_search != null)
+                {
+                    ListTitle = _searchTitle;
+                }
+                else if (category != null)
                 {
                     ListTitle = string.Format(_entriesTitleFormat,
                         category.Model.ID == 0 ? _all : category.Name);
@@ -280,7 +289,6 @@ namespace Flavordex.ViewModels
             {
                 ListTitle = _categoriesTitle;
                 _search = null;
-
             }
 
             RaisePropertyChanged("EmptyListVisibility");
