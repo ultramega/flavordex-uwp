@@ -200,12 +200,12 @@ namespace Flavordex.ViewModels
                 if (_startDate.HasValue)
                 {
                     _where.Append(Tables.Entries.DATE).Append(" >= ? AND ");
-                    _whereArgs.Add(_startDate.Value);
+                    _whereArgs.Add(GetTimestamp(_startDate.Value.DateTime));
                 }
                 if (_endDate.HasValue)
                 {
                     _where.Append(Tables.Entries.DATE).Append(" < ? AND ");
-                    _whereArgs.Add(_endDate.Value.AddDays(1));
+                    _whereArgs.Add(GetTimestamp(_endDate.Value.AddDays(1).DateTime));
                 }
             }
 
@@ -322,6 +322,16 @@ namespace Flavordex.ViewModels
                 _where.Remove(_where.Length - 4, 4);
                 _where.Append("LIMIT 1) AND ");
             }
+        }
+
+        /// <summary>
+        /// Converts a DateTime to a Unix timestamp in milliseconds.
+        /// </summary>
+        /// <param name="dateTime">The DateTime object.</param>
+        /// <returns>The Unix timestamp in milliseconds.</returns>
+        private static long GetTimestamp(DateTime dateTime)
+        {
+            return (dateTime.Ticks - 621355968000000000) / TimeSpan.TicksPerMillisecond;
         }
     }
 }
