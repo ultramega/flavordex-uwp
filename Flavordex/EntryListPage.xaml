@@ -191,7 +191,8 @@
 
                 <CommandBar
                     x:Name="ListCommandBar"
-                    Content="{x:Bind List.ListTitle, Mode=OneWay}">
+                    Content="{x:Bind List.ListTitle, Mode=OneWay}"
+                    SizeChanged="OnCommandBarSizeChanged">
                     <CommandBar.ContentTemplate>
                         <DataTemplate>
                             <StackPanel
@@ -231,11 +232,13 @@
 
                         <AppBarButton
                             x:Uid="ms-resource:///EntryList/Command/Search"
+                            x:Name="SearchButton"
                             Icon="Find"
                             Click="OnSearchClick" />
 
                         <AppBarButton
                             x:Uid="ms-resource:///EntryList/Command/Sort"
+                            x:Name="SortButton"
                             Visibility="{Binding IsZoomedInViewActive, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Zoom}"
                             Icon="Sort">
                             <AppBarButton.Flyout>

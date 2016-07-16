@@ -125,6 +125,38 @@ namespace Flavordex
         }
 
         /// <summary>
+        /// Moves CommandBar items between the primary and secondary commands depending on the
+        /// width of the CommandBar when its size changes.
+        /// </summary>
+        /// <param name="sender">The ListCommandBar.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnCommandBarSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var threshold = 400;
+            if (e.NewSize.Width < threshold
+                && (e.PreviousSize.Width == 0 || e.PreviousSize.Width >= threshold))
+            {
+                if (ListCommandBar.PrimaryCommands.Remove(SearchButton))
+                {
+                    ListCommandBar.PrimaryCommands.Remove(SortButton);
+                    ListCommandBar.SecondaryCommands.Insert(0, SortButton);
+                    ListCommandBar.SecondaryCommands.Insert(0, SearchButton);
+                }
+            }
+            else if (e.NewSize.Width > threshold && e.PreviousSize.Width <= threshold)
+            {
+                if (ListCommandBar.SecondaryCommands.Remove(SearchButton))
+                {
+                    ListCommandBar.SecondaryCommands.Remove(SortButton);
+                    ListCommandBar.PrimaryCommands.Add(SearchButton);
+                    ListCommandBar.PrimaryCommands.Add(SortButton);
+                    SearchButton.IsEnabled = SortButton.IsEnabled = true;
+                }
+            }
+
+        }
+
+        /// <summary>
         /// Deselects the selected item when the back button is pressed.
         /// </summary>
         /// <param name="sender">The SystemNavigationManager.</param>
