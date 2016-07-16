@@ -69,7 +69,10 @@ namespace Flavordex
             if (Data == null)
             {
                 Data = new SearchViewModel();
-                LoadForm();
+                if (Settings.ListCategory > -1)
+                {
+                    Data.Entry.Model.CategoryID = Settings.ListCategory;
+                }
             }
 
             if (Categories.Count == 0)
@@ -87,7 +90,6 @@ namespace Flavordex
             }
             CategoryComboBox.SelectedItem =
                 Categories.FirstOrDefault(k => k.Model.ID == Data.Entry.Model.CategoryID);
-            CategoryComboBox.SelectionChanged += OnCategoryChanged;
         }
 
         /// <summary>

@@ -522,7 +522,8 @@
                     x:Name="CategoryComboBox"
                     HorizontalAlignment="Stretch"
                     Margin="0,0,0,6"
-                    ItemsSource="{x:Bind Categories}">
+                    ItemsSource="{x:Bind Categories}"
+                    SelectionChanged="OnCategoryChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate
                             x:DataType="vm:CategoryItemViewModel">
