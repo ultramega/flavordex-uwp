@@ -192,6 +192,30 @@
                 <CommandBar
                     x:Name="ListCommandBar"
                     Content="{x:Bind List.ListTitle, Mode=OneWay}">
+                    <CommandBar.ContentTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Margin="12,8,0,0">
+                                <Button
+                                    Visibility="{Binding IsZoomedInViewActive, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Zoom}"
+                                    Background="Transparent"
+                                    Margin="-10,-2,2,0"
+                                    Click="OnListBackArrowClick">
+                                    <SymbolIcon
+                                        Margin="-4,1"
+                                        Symbol="Back" />
+                                </Button>
+
+                                <TextBlock
+                                    Style="{ThemeResource SubtitleTextBlockStyle}"
+                                    TextWrapping="NoWrap"
+                                    TextTrimming="CharacterEllipsis"
+                                    Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </CommandBar.ContentTemplate>
+
                     <CommandBar.PrimaryCommands>
                         <AppBarButton
                             x:Uid="ms-resource:///EntryList/Command/AddCategory"
@@ -281,8 +305,7 @@
                 <SemanticZoom
                     Grid.Row="1"
                     x:Name="Zoom"
-                    IsZoomedInViewActive="{x:Bind List.IsCategorySelected, Mode=OneWay}"
-                    IsZoomOutButtonEnabled="{Binding Visibility, ElementName=ExportBar, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=!}">
+                    IsZoomedInViewActive="{x:Bind List.IsCategorySelected, Mode=OneWay}">
                     <SemanticZoom.ZoomedOutView>
                         <ListView
                             ItemContainerStyle="{StaticResource ListItemStyle}"

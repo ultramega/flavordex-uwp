@@ -540,5 +540,15 @@ namespace Flavordex
             FindName("SettingsPane");
             SplitView.IsPaneOpen = true;
         }
+
+        /// <summary>
+        /// Returns the list to the categories list when the back arrow button is pressed.
+        /// </summary>
+        /// <param name="sender">The back arrow Button.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnListBackArrowClick(object sender, RoutedEventArgs e)
+        {
+            Settings.ListCategory = -1;
+        }
     }
 }
