@@ -506,10 +506,16 @@
             VerticalScrollBarVisibility="Auto">
             <StackPanel
                 Margin="12">
-                <TextBlock
-                    x:Uid="ms-resource:///Search/Title"
-                    Style="{ThemeResource TitleTextBlockStyle}"
-                    HorizontalAlignment="Center" />
+                <Border
+                    Height="48"
+                    Margin="-12,-12,-12,0"
+                    Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+                    <TextBlock
+                        x:Uid="ms-resource:///Search/Title"
+                        Style="{ThemeResource TitleTextBlockStyle}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                </Border>
 
                 <ComboBox
                     x:Uid="ms-resource:///Search/Input/Category"
