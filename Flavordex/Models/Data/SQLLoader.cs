@@ -23,7 +23,7 @@
 using Flavordex.Utilities.Databases;
 using SQLitePCL;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Windows.ApplicationModel.Resources;
 using Windows.Storage;
@@ -64,7 +64,7 @@ namespace Flavordex.Models.Data
         public void OnCreate(SQLiteConnection conn)
         {
             var delim = "\n--";
-            var stmts = new ArrayList();
+            var stmts = new List<string>();
             stmts.AddRange(Regex.Split(Schema, delim));
             stmts.AddRange(Regex.Split(Views, delim));
             stmts.AddRange(Regex.Split(Triggers, delim));
