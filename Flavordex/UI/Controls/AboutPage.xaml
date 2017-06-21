@@ -89,8 +89,8 @@
         <HyperlinkButton
             Grid.Row="3"
             Grid.Column="1"
-            Content="http://flavordex.com/"
-            NavigateUri="http://flavordex.com/" />
+            Content="http://flavordex.ultramegasoft.com/"
+            NavigateUri="http://flavordex.ultramegasoft.com/" />
 
         <TextBlock
             Grid.Row="4"
