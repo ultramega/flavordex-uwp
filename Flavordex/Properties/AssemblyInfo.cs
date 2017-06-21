@@ -27,12 +27,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Flavordex")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Flavordex Tasting Journal")]
+[assembly: AssemblyDescription("Flavordex is a highly customizable tasting journal.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("UltraMega Software")]
 [assembly: AssemblyProduct("Flavordex")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
