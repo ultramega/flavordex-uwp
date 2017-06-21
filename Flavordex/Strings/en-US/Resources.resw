@@ -61,6 +61,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About.Copyright.Text" xml:space="preserve">
+    <value>Copyright © 2016 UltraMega Software</value>
+  </data>
   <data name="About.Header.Text" xml:space="preserve">
     <value>About Flavordex</value>
   </data>
@@ -138,9 +141,6 @@
   </data>
   <data name="Message.ConfirmDeleteCategory" xml:space="preserve">
     <value>Are you sure you want to delete the {0} category?</value>
-  </data>
-  <data name="Message.Copyright" xml:space="preserve">
-    <value>Copyright © {0} UltraMega Software</value>
   </data>
   <data name="Message.DeleteCategoryEntries" xml:space="preserve">
     <value>Delete {0} {1} from this category.</value>

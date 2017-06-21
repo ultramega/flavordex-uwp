@@ -57,18 +57,6 @@ namespace Flavordex.UI.Controls
         }
 
         /// <summary>
-        /// Gets the copyright message.
-        /// </summary>
-        private string Copyright
-        {
-            get
-            {
-                var format = ResourceLoader.GetForCurrentView().GetString("Message/Copyright");
-                return string.Format(format, DateTime.Now.Year);
-            }
-        }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         public AboutPage()

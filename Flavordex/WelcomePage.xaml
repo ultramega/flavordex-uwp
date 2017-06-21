@@ -75,9 +75,9 @@
                 Text="{x:Bind Version}" />
 
             <TextBlock
+                x:Uid="About/Copyright"
                 Style="{ThemeResource CaptionTextBlockStyle}"
-                HorizontalAlignment="Center"
-                Text="{x:Bind Copyright}" />
+                HorizontalAlignment="Center" />
         </StackPanel>
     </Grid>
 </Page>
