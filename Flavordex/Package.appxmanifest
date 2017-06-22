@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="34386UltraMegaSoftware.FlavordexTastingJournal" Publisher="CN=UltraMega Software" Version="1.1.2.0" />
-  <mp:PhoneIdentity PhoneProductId="62e8392e-4adc-435d-80b7-d8efe347a918" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="34386UltraMegaSoftware.FlavordexTastingJournal" Publisher="CN=4EBF1613-6E41-4B47-AAE8-942568085E9D" Version="1.1.2.0" />
+  <mp:PhoneIdentity PhoneProductId="49902259-82ee-45e6-a5ff-f3e26146bd48" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Flavordex Tasting Journal</DisplayName>
     <PublisherDisplayName>UltraMega Software</PublisherDisplayName>
