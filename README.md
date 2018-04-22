@@ -2,6 +2,7 @@
 
 Flavordex is a customizable tasting journal for Windows 10.
 
+   * [Microsoft Store Page](https://www.microsoft.com/store/apps/9nblggh5rhrx)
    * [Android Version](https://github.com/ultramega/flavordex)
 
 ## License
